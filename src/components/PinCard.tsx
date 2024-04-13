@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BoardType, UserState } from "../Types/types";
-import { RiUnpinFill } from "react-icons/ri";
-import { FaRegHeart } from "react-icons/fa";
-// import { FaHeart } from "react-icons/fa";
-import { MdOutlineArrowOutward } from "react-icons/md";
-import { MdOutlineFileDownload } from "react-icons/md";
-import config from "../config";
-import { BsFillPinAngleFill } from "react-icons/bs";
+
+
 import useAuth from "../hooks/useAuth";
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import ChooseBoardPopover from "./ChooseBoardPopover";
-import ShowBoardName from "./ShowBoardName";
-import BoardModel from "./BoardModel";
+import {  useAppSelector } from "../hooks/reduxHooks";
+
 import HomePinHoverCard from "./HomePinHoverCard";
 import AllPinsBoardHoverCard from "./AllPinsBoardHoverCard";
 type Props = {
@@ -50,6 +41,10 @@ const PinCard = (props: Props) => {
       }}
       onMouseLeave={() => {
         setIsHover(false);
+        // setCardClicked(false);
+      }}
+      onClick={() => {
+        setCardClicked(true);
       }}
     >
       {imageUrl?.includes("video") ? (

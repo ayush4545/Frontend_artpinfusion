@@ -96,7 +96,7 @@ const EditBoardPopup = (props: Props) => {
         onClose={onClose}
         title="Edit your board"
         showClose={true}
-        widthHeightStyle="w-1/3 h-5/6"
+        widthHeightStyle="w-1/3 h-4/6"
       >
         <div className="w-full flex item-center flex-col p-10">
           <div className="flex flex-col  gap-2">
@@ -128,15 +128,11 @@ const EditBoardPopup = (props: Props) => {
               onChange={handleChange}
             />
           </div>
-
-          <div className="mt-10">
-            <p className="tex-sm">Action</p>
-            <button className="bg-transparent text-xl font-semibold mt-3 w-full text-left" onClick={handleDeleteBoard}>
+        </div>
+        <div className="absolute bottom-0 shadow-2xl w-full flex items-center justify-between py-4 px-3 border-t-2 border-gray-300">
+           <button className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]" onClick={handleDeleteBoard}>
               Delete board
             </button>
-          </div>
-        </div>
-        <div className="absolute bottom-2 w-full flex items-center justify-end py-5 px-3">
           <button
             className={`bg-[#FF8C00]  text-white rounded-[20px] p-2 px-4 ${
               (boardName === inputs?.boardName &&
