@@ -163,12 +163,24 @@ const PinDetails = () => {
 
   useEffect(() => {
     if (isPinSaved) {
-      if (pinData?.pin?.boards.length > 0) {
-        let board = pinData?.pin?.boards[pinData?.pin?.boards.length - 1];
-        setSelectedBoardDetails({
-          boardName: board?.boardName,
-          boardId: board?._id,
-        });
+      if (pinData?.pin?.boards?.length > 0) {
+        const board = loggedInUser?.board.filter((board)=>{
+          return pinData?.pin?.boards?.some(
+             (b1) => b1?._id === board?._id
+           );
+         })
+         console.log("if me arha hboard id wala",board);
+         if(board.length > 0){
+          setSelectedBoardDetails({
+           boardName: board[0]?.boardName,
+           boardId: board[0]?._id,
+         });
+         }else{
+           setSelectedBoardDetails({
+             boardName: "Profile",
+             boardId: null,
+           });
+         } 
       }
     } else {
       setSelectedBoardDetails({

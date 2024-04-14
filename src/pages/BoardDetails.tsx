@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
-import { useAppSelector } from "../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import axios from "axios";
 import config from "../config";
 import { PinType, UserState } from "../Types/types";
@@ -10,6 +10,7 @@ import Pins from "../components/Pins";
 import { createPortal } from "react-dom";
 import Modal from "../components/Modal";
 import Loader from "../components/Loader";
+import { setHoverOn } from "../redux/hoverOn.slice";
 
 type BoardData = {
   boardName: string;
@@ -19,13 +20,14 @@ type BoardData = {
   description?:string
 };
 const BoardDetails = () => {
-  const { state } = useLocation();
+  const { state ,pathname} = useLocation();
   const loggedInUser = useAppSelector((state) => state.user);
+  const dispatch=useAppDispatch()   
   const [openPinsModel, setOpenPinsModel] = useState(false);
   const [boardData, setBoardData] = useState<BoardData | null>(null);
   const { BACKEND_END_POINTS } = config.constant.api;
   const [openFollowersModel, setOpenFollowersModel] = useState(false);
-  console.log("board state", state);
+  console.log("board state", state,pathname);
 
   const fetchBoardDetails = async () => {
     try {
@@ -37,6 +39,11 @@ const BoardDetails = () => {
       if (resData.statusCode === 200) {
         const { boardName, creatorBy, pins, _id, description=''} = resData.data;
         setBoardData({ boardName, creatorBy, pins, _id,description });
+        if(pathname.includes(loggedInUser?.username)){
+          dispatch(setHoverOn("allPins"))
+        }else{
+          dispatch(setHoverOn("homePin"))
+        }
       }
       console.log("boardData", resData);
     } catch (error) {

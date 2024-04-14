@@ -4,15 +4,16 @@ import config from "../config";
 import axios from "axios";
 import { UserState } from "../Types/types";
 import { FiShare } from "react-icons/fi";
-import { useAppSelector } from "../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import FollowersOrFollowing from "../components/FollowersOrFollowing";
 import Saved from "../components/Saved";
 import useAuth from "../hooks/useAuth";
 import Loader from "../components/Loader";
+import { setHoverOn } from "../redux/hoverOn.slice";
 
 const Pins = React.lazy(() => import("../components/Pins"));
 const UserDetails = () => {
-  const { state } = useLocation();
+  const { state,pathname } = useLocation();
   const { BACKEND_END_POINTS } = config.constant.api;
   const { getCookie } = config.utils.cookies;
   const loggedInUser = useAppSelector((state) => state.user);
@@ -27,6 +28,7 @@ const UserDetails = () => {
   >(null);
   const pins = userData?.pins;
   const isAuthenticate=useAuth()
+  const dispatch= useAppDispatch()
   const navigate=useNavigate()
   console.log("userData", userData);
 
@@ -39,6 +41,11 @@ const UserDetails = () => {
         setSelectedTab(
           loggedInUser?._id !== resData.data?._id ? "created" : "saved"
         );
+        if(pathname.includes(loggedInUser?.username)){
+          dispatch(setHoverOn("allPins"))
+        }else{
+          dispatch(setHoverOn("homePin"))
+        }
 
         setIsFollowing(() => {
           const index = resData.data.followers

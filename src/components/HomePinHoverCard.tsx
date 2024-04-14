@@ -31,7 +31,7 @@ const HomePinHoverCard = (props) => {
     boardId: null,
   });
   const [isPinSaved, setIsPinSaved] = useState<boolean>(false);
-
+  
   useEffect(() => {
     if (loggedInUser?.savedPins?.length > 0) {
       setIsPinSaved(() => {
@@ -48,13 +48,25 @@ const HomePinHoverCard = (props) => {
 
   useEffect(() => {
     if (isPinSaved) {
+      console.log(1000,boards, loggedInUser?.board)
       if (boards && boards?.length > 0) {
-        const board = boards[boards.length - 1];
-        console.log("if me arha hboard id wala",selectedBoardDetails);
-        setSelectedBoardDetails({
-          boardName: board?.boardName,
-          boardId: board?._id,
+        const board = loggedInUser?.board.filter((board)=>{
+         return boards?.some(
+            (b1) => b1?._id === board?._id
+          );
+        })
+        console.log("if me arha hboard id wala",board);
+        if(board.length > 0){
+         setSelectedBoardDetails({
+          boardName: board[0]?.boardName,
+          boardId: board[0]?._id,
         });
+        }else{
+          setSelectedBoardDetails({
+            boardName: "Profile",
+            boardId: null,
+          });
+        }
       }
     } else {
       setSelectedBoardDetails({
