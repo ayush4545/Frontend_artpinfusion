@@ -87,7 +87,7 @@ const BoardChip = (props: BoardChipProps) => {
     <div
       className={` bg-[#efefef] absolute ${leftSideMargin} border-r-[1px] border-[#f7f7f7] hover:bg-[#d5d5d5] overflow-hidden`}
     >
-      {imageUrl && (
+      {imageUrl && !imageUrl.includes("video") && (
         <img
           src={imageUrl}
           alt={pinTitle}

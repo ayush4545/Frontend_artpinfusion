@@ -77,6 +77,7 @@ const AllPinsBoardHoverCard = (props: Props) => {
           title="Delete Pin"
           pinId={pinId}
           onClose={() => {
+            setCardClicked(false);
             setOpenEditModel(false);
           }}
         />

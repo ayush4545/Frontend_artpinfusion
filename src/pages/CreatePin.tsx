@@ -4,13 +4,11 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import config from "../config";
 import CreatePinChooseBoard from "../components/CreatePinChooseBoard";
-import { useAppSelector } from "../hooks/reduxHooks";
 
 type pinData = {
   title: string;
   description: string;
   tags: string;
-  board: string;
   link: string;
 };
 const CreatePin = () => {

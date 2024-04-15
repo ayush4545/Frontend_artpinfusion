@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import config from "../config";
 import axios from "axios";
 import { UserState } from "../Types/types";
@@ -30,7 +30,7 @@ const UserDetails = () => {
   const isAuthenticate=useAuth()
   const dispatch= useAppDispatch()
   const navigate=useNavigate()
-  console.log("userData", userData);
+  console.log("userData", isNotLoggedInUser);
 
   const fetchUser = async () => {
     try {
@@ -111,6 +111,8 @@ const UserDetails = () => {
       console.log("follow user", error);
     }
   };
+
+  
 
   return (
     <div className="w-screen absolute top-[12vh] dark:bg-[#282828]">
@@ -211,6 +213,11 @@ const UserDetails = () => {
                   } font-semibold dark:text-white`}
                   onClick={() => {
                     setSelectedTab("created");
+                    if(pathname.includes(loggedInUser?.username)){
+                      dispatch(setHoverOn("created"))
+                    }else{
+                      dispatch(setHoverOn("homePin"))
+                    }
                   }}
                 >
                   Created
@@ -224,6 +231,11 @@ const UserDetails = () => {
                   } font-semibold dark:text-white`}
                   onClick={() => {
                     setSelectedTab("saved");
+                    if(pathname.includes(loggedInUser?.username)){
+                      dispatch(setHoverOn("allPins"))
+                    }else{
+                      dispatch(setHoverOn("homePin"))
+                    }
                   }}
                 >
                   Saved
@@ -239,10 +251,15 @@ const UserDetails = () => {
                     <Pins pins={pins} gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"/>
                   </Suspense>
                 ) : (
-                  <p className="text-center">No pin created yet</p>
+                  <div className="text-center">
+                    <p className="text-center">Nothing to show...yet! Pins you create will live here</p>
+                    <Link to="/create-pin" className="rounded-3xl px-3 py-2 font-bold cursor-pointer bg-[#FF8C00] hover:bg-[#FF5E0E] text-white">
+                      Create Pin
+                    </Link>
+                  </div>
                 ))}
 
-              {selectedTab === "saved" && ((!isNotLoggedInUser || userData?.savedPins?.length >0) ?  (
+              {selectedTab === "saved" && ((isNotLoggedInUser || userData?.savedPins?.length > 0) ?  (
                 <Saved userData={userData} isNotLoggedInUser={isNotLoggedInUser}/>
               ) :(
                 <p className="text-center">{userData?.name} hasn't saved any pins yet</p>

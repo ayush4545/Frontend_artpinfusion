@@ -7,6 +7,7 @@ import {  useAppSelector } from "../hooks/reduxHooks";
 
 import HomePinHoverCard from "./HomePinHoverCard";
 import AllPinsBoardHoverCard from "./AllPinsBoardHoverCard";
+import EditCreatePin from "./EditCreatePin";
 type Props = {
   imageUrl: string;
   user?: UserState;
@@ -83,6 +84,9 @@ const PinCard = (props: Props) => {
 
               {
                 hoverOn === "allPins" && <AllPinsBoardHoverCard imageUrl={imageUrl} title={title} setCardClicked={setCardClicked} pinId={_id}/>
+              }
+              {
+                hoverOn === "created" && <EditCreatePin  setCardClicked={setCardClicked} pinId={_id}/>
               }
             </>
           ) : (
