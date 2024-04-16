@@ -1,5 +1,6 @@
 const BACKEND_API_URL="http://localhost:8000/api/v1"
 
+
 const BACKEND_END_POINTS={
     GOOGLE_USER:`${BACKEND_API_URL}/users/googleUser`,
     GET_LOGINED_USER:`${BACKEND_API_URL}/users/getUser`,
@@ -18,7 +19,9 @@ const BACKEND_END_POINTS={
     REMOVE_SAVE_PIN: `${BACKEND_API_URL}/pins/removeSavePin`,
     GET_SAVED_PINS: `${BACKEND_API_URL}/pins/savedPins`,
     UPDATE_BOARD_DETAILS: `${BACKEND_API_URL}/boards/updateDetails`,
-    DELETE_BOARD: `${BACKEND_API_URL}/boards/deleteBoard`
+    DELETE_BOARD: `${BACKEND_API_URL}/boards/deleteBoard`,
+    UPDATE_PIN_DETAILS: `${BACKEND_API_URL}/pins/updatePinDetails`,
+    DELETE_PIN: `${BACKEND_API_URL}/pins/deletePin`,
 }
 
 export {BACKEND_END_POINTS}

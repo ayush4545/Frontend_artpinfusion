@@ -100,19 +100,61 @@ const EditCreatePinModal = (props: Props) => {
           state: { isNeedToLogin: true },
         });
       }
-
-      let body={
+      const body={
         title: pinInput?.title === undefined ? pinDetails?.title : pinInput?.title,
         description: pinInput?.description === undefined ? pinDetails?.description : pinInput?.description,
-        boardId: selectedBoard?.boardId
+        boardId: checkingBoardChange() ?  selectedBoard?.boardId : null,
+        pinId: pinId
       }
+     
+      const res=await axios.put(BACKEND_END_POINTS?.UPDATE_PIN_DETAILS,body,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      const resData= await res?.data
 
+      if(resData.statusCode === 200){
+        toastPopup("Pin details is updated","success")
+        onClose()
+      }
+      console.log("resData",resData)
 
       console.log("dcsdcscdd",body)
     } catch (error) {
-      console.log("update pin details error",error)
+      toastPopup("Some problem while updating pin details","error") 
     }
   }
+
+  const handleDeletePin=async()=>{
+    try {
+      if (!isAuthenticate) {
+        return navigate(`/`, {
+          state: { isNeedToLogin: true },
+        });
+      }
+
+      const res=await axios.delete(`${BACKEND_END_POINTS?.DELETE_PIN}/${pinId}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      const resData= await res?.data
+      console.log("delete resData",resData)
+      if(resData.statusCode === 200){
+        saveUserInRedux.useSaveLoginUserAndAccessToken(
+          { _doc: { ...resData.data } },
+          dispatch
+        );
+        toastPopup("Pin deleted successfully","success") 
+        onClose()
+        window.location.reload()
+      }
+    } catch (error) {
+      toastPopup("Some problem while deleting pin","error") 
+    }
+  }
+  
   const getModel = () => {
     return (
       <Modal
@@ -236,7 +278,7 @@ const EditCreatePinModal = (props: Props) => {
               <div className="flex items-center gap-5">
                 <button
                   className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]"
-                  onClick={onClose}
+                  onClick={handleDeletePin}
                 >
                   Delete
                 </button>

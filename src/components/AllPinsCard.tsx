@@ -36,7 +36,7 @@ const PinChip=(props:PinChipProps)=>{
   const {leftSideMargin,imageUrl,pinTitle}=props
     return  <div className={`w-3/5 h-full bg-[#efefef] rounded-2xl absolute ${leftSideMargin} border-r-[1px] border-[#f7f7f7] hover:bg-[#d5d5d5] overflow-hidden`}>
       {
-        imageUrl && (
+        imageUrl && !imageUrl.includes("video") && (
           <img src={imageUrl} alt={pinTitle} className='w-full h-full object-cover rounded-2xl'/>
         )
       }
