@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Modal from "./Modal";
 import config from "../config";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { PiPlusBold } from "react-icons/pi";
 import CreateBoardWithPin from "./CreateBoardWithPin";
+import SearchBoard from "./SearchBoard";
 
 type Props = {
   onClose: () => void;
@@ -32,6 +33,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
   const [showFirstModel, setShowFirstModel] = useState(true);
   const [userBoards, setUserBoards] = useState(loggedInUser?.board);
   const [modelTitle, setModelTitle] = useState("Create Board");
+  const originalBoards = useRef(null);
   const [selectedBoardDetails, setSelectedBoardDetails] = useState({
     boardName: "",
     boardId: "",
@@ -62,6 +64,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
             return true;
           });
           console.log("34523", filteredBoards);
+          originalBoards.current = filteredBoards;
           return filteredBoards;
         });
       }
@@ -167,12 +170,12 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                   </div>
 
                   <div className="lg:col-span-2 w-full h-full">
-                    <input
-                      className="outline-none border-2 border-gray-400 rounded-3xl  py-2 pl-4 w-full h-14"
-                      id="search"
-                      name="search"
-                      placeholder="Search"
-                      type="search"
+                    <SearchBoard
+                      styles={
+                        "outline-none border-2 border-gray-400 rounded-3xl  py-2 pl-4 w-full h-14"
+                      }
+                      setBoards={setUserBoards}
+                      originalBoards={originalBoards}
                     />
 
                     <div className="mt-3 p-2">

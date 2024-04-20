@@ -3,17 +3,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import config from "../config";
 import axios from "axios";
 import { UserState } from "../Types/types";
-import { FiShare } from "react-icons/fi";
+import { MdShare } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import FollowersOrFollowing from "../components/FollowersOrFollowing";
 import Saved from "../components/Saved";
 import useAuth from "../hooks/useAuth";
 import Loader from "../components/Loader";
 import { setHoverOn } from "../redux/hoverOn.slice";
+import ShareModal from "../components/ShareModal";
 
 const Pins = React.lazy(() => import("../components/Pins"));
 const UserDetails = () => {
-  const { state,pathname } = useLocation();
+  const { state, pathname } = useLocation();
   const { BACKEND_END_POINTS } = config.constant.api;
   const { getCookie } = config.utils.cookies;
   const loggedInUser = useAppSelector((state) => state.user);
@@ -23,13 +24,14 @@ const UserDetails = () => {
     isNotLoggedInUser ? "created" : "saved"
   );
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [openShareModal, setOpenShareModal] = useState<boolean>(false);
   const [selectedFollow, setSelectedFollow] = useState<
     "followers" | "followedUsers" | null
   >(null);
   const pins = userData?.pins;
-  const isAuthenticate=useAuth()
-  const dispatch= useAppDispatch()
-  const navigate=useNavigate()
+  const isAuthenticate = useAuth();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   console.log("userData", isNotLoggedInUser);
 
   const fetchUser = async () => {
@@ -41,10 +43,10 @@ const UserDetails = () => {
         setSelectedTab(
           loggedInUser?._id !== resData.data?._id ? "created" : "saved"
         );
-        if(pathname.includes(loggedInUser?.username)){
-          dispatch(setHoverOn("allPins"))
-        }else{
-          dispatch(setHoverOn("homePin"))
+        if (pathname.includes(loggedInUser?.username)) {
+          dispatch(setHoverOn("allPins"));
+        } else {
+          dispatch(setHoverOn("homePin"));
         }
 
         setIsFollowing(() => {
@@ -70,10 +72,10 @@ const UserDetails = () => {
   }, [state]);
 
   const handleFollow = async () => {
-    if(!isAuthenticate){
-      return navigate(`/`,{
-        state:{isNeedToLogin:true}
-    })
+    if (!isAuthenticate) {
+      return navigate(`/`, {
+        state: { isNeedToLogin: true },
+      });
     }
     try {
       const token = getCookie("accessToken");
@@ -111,8 +113,6 @@ const UserDetails = () => {
       console.log("follow user", error);
     }
   };
-
-  
 
   return (
     <div className="w-screen absolute top-[12vh] dark:bg-[#282828]">
@@ -175,17 +175,29 @@ const UserDetails = () => {
                 {isNotLoggedInUser ? (
                   <div
                     title="share"
-                    className="rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer"
+                    className="rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer relative"
+                    onClick={() => {
+                      setOpenShareModal(prev=>!prev);
+                    }}
                   >
-                    <FiShare className="text-black text-2xl dark:text-white" />
+                    <MdShare className="text-black text-2xl dark:text-white" />
+                    {openShareModal && <ShareModal onClose={()=>{setOpenShareModal(false)}} leftTopStyle="-top-5 -left-[212px]"/>}
                   </div>
                 ) : (
-                  <button className="bg-[#E9E9E9] hover:bg-[#dad9d9]  rounded-[20px] p-2 px-4 mr-2 font-semibold">
-                    Share
-                  </button>
+                  <div className="relative">
+                    <button
+                      className={`${openShareModal ? "bg-black text-white dark:bg-white dark:text-black" : "bg-[#E9E9E9] hover:bg-[#dad9d9]"}  rounded-[20px] p-2 px-4 mr-2 font-semibold`}
+                      onClick={() => {
+                        setOpenShareModal(prev=>!prev);
+                      }}
+                    >
+                      Share
+                    </button>
+                    {openShareModal && <ShareModal onClose={()=>setOpenShareModal(false)} leftTopStyle="-top-5 -left-[212px] "/>}
+                  </div>
                 )}
 
-                {isNotLoggedInUser ? (
+                {isNotLoggedInUser && (
                   <button
                     className={`${
                       isFollowing
@@ -195,10 +207,6 @@ const UserDetails = () => {
                     onClick={handleFollow}
                   >
                     {isFollowing ? "Following" : "Follow"}
-                  </button>
-                ) : (
-                  <button className="bg-[#E9E9E9] hover:bg-[#dad9d9]  rounded-[20px] p-2 px-4 mr-2 font-semibold">
-                    Edit Profile
                   </button>
                 )}
               </div>
@@ -213,10 +221,10 @@ const UserDetails = () => {
                   } font-semibold dark:text-white`}
                   onClick={() => {
                     setSelectedTab("created");
-                    if(pathname.includes(loggedInUser?.username)){
-                      dispatch(setHoverOn("created"))
-                    }else{
-                      dispatch(setHoverOn("homePin"))
+                    if (pathname.includes(loggedInUser?.username)) {
+                      dispatch(setHoverOn("created"));
+                    } else {
+                      dispatch(setHoverOn("homePin"));
                     }
                   }}
                 >
@@ -231,10 +239,10 @@ const UserDetails = () => {
                   } font-semibold dark:text-white`}
                   onClick={() => {
                     setSelectedTab("saved");
-                    if(pathname.includes(loggedInUser?.username)){
-                      dispatch(setHoverOn("allPins"))
-                    }else{
-                      dispatch(setHoverOn("homePin"))
+                    if (pathname.includes(loggedInUser?.username)) {
+                      dispatch(setHoverOn("allPins"));
+                    } else {
+                      dispatch(setHoverOn("homePin"));
                     }
                   }}
                 >
@@ -248,23 +256,36 @@ const UserDetails = () => {
               {selectedTab === "created" &&
                 (pins && pins.length > 0 ? (
                   <Suspense fallback={<Loader />}>
-                    <Pins pins={pins} gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"/>
+                    <Pins
+                      pins={pins}
+                      gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
+                    />
                   </Suspense>
                 ) : (
                   <div className="text-center">
-                    <p className="text-center">Nothing to show...yet! Pins you create will live here</p>
-                    <Link to="/create-pin" className="rounded-3xl px-3 py-2 font-bold cursor-pointer bg-[#FF8C00] hover:bg-[#FF5E0E] text-white">
+                    <p className="text-center">
+                      Nothing to show...yet! Pins you create will live here
+                    </p>
+                    <Link
+                      to="/create-pin"
+                      className="rounded-3xl px-3 py-2 font-bold cursor-pointer bg-[#FF8C00] hover:bg-[#FF5E0E] text-white"
+                    >
                       Create Pin
                     </Link>
                   </div>
                 ))}
 
-              {selectedTab === "saved" && ((isNotLoggedInUser || userData?.savedPins?.length > 0) ?  (
-                <Saved userData={userData} isNotLoggedInUser={isNotLoggedInUser}/>
-              ) :(
-                <p className="text-center">{userData?.name} hasn't saved any pins yet</p>
-              ))
-            }
+              {selectedTab === "saved" &&
+                (isNotLoggedInUser || userData?.savedPins?.length > 0 ? (
+                  <Saved
+                    userData={userData}
+                    isNotLoggedInUser={isNotLoggedInUser}
+                  />
+                ) : (
+                  <p className="text-center">
+                    {userData?.name} hasn't saved any pins yet
+                  </p>
+                ))}
             </div>
           </>
         ) : (

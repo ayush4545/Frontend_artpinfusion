@@ -61,7 +61,7 @@ const Header = () => {
           ArtPinFusion
         </Link>
 
-        {isAuthenticate ? (
+        {isAuthenticate && (
           <div className="flex item-center font-bold gap-[32px]">
             <Link
               to={routePaths.HOME}
@@ -73,16 +73,7 @@ const Header = () => {
             >
               Home
             </Link>
-            <Link
-              to={routePaths.EXPLORE}
-              className={`rounded-3xl p-2 ${
-                pathname === routePaths.EXPLORE
-                  ? "bg-slate-900 text-white  dark:bg-[#E9E9E9] dark:text-black"
-                  : "hover:bg-[#E9E9E9]"
-              }`}
-            >
-              Explore
-            </Link>
+            
             <Link
               to={routePaths.CREATE_PIN}
               className={`rounded-3xl p-2 ${
@@ -94,30 +85,7 @@ const Header = () => {
               Create
             </Link>
           </div>
-        ) : (
-          <div className="flex item-center font-bold gap-[32px]">
-            <Link
-              to={routePaths.WATCH}
-              className={`rounded-3xl p-2 ${
-                pathname === routePaths.WATCH
-                  ? "bg-slate-900 text-white  dark:bg-[#E9E9E9] dark:text-black"
-                  : "hover:bg-[#E9E9E9]"
-              }`}
-            >
-              Watch
-            </Link>
-            <Link
-              to={routePaths.EXPLORE}
-              className={`rounded-3xl p-2 ${
-                pathname === routePaths.EXPLORE
-                  ? "bg-slate-900 text-white  dark:bg-[#E9E9E9] dark:text-black"
-                  : "hover:bg-[#E9E9E9]"
-              }`}
-            >
-              Explore
-            </Link>
-          </div>
-        )}
+        ) }
       </div>
 
       {/* center of header */}

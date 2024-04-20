@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   FaArrowLeft,
-  FaRegHeart,
   FaArrowDown,
-  FaChevronDown,
 } from "react-icons/fa6";
 import { MdOutlineArrowOutward, MdOutlineFileDownload } from "react-icons/md";
 import { RiUnpinFill } from "react-icons/ri";
+import { MdShare } from "react-icons/md";
 import axios from "axios";
 import config from "../config";
 import Pins from "../components/Pins";
@@ -18,6 +17,7 @@ import useAuth from "../hooks/useAuth";
 import ChooseBoardPopover from "../components/ChooseBoardPopover";
 import ShowBoardName from "../components/ShowBoardName";
 import Loader from "../components/Loader";
+import ShareModal from "../components/ShareModal";
 type PinData = {
   pin: PinType;
   exploreMore: PinType[];
@@ -34,6 +34,7 @@ const PinDetails = () => {
   const loggedInUser = useAppSelector((state) => state.user);
   const [pinData, setPinData] = useState<PinData | null>(null);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [openShareModel,setOpenShareModel]=useState<boolean>(false)
   const isAuthenticate = useAuth();
   const [isPinSaved, setIsPinSaved] = useState<boolean>(false);
   const [selectedBoardDetails, setSelectedBoardDetails] = useState({
@@ -192,6 +193,7 @@ const PinDetails = () => {
 
   const handleWindowClick = () => {
     setOpenBoardPopover(false);
+    setOpenShareModel(false)
   };
 
   useEffect(() => {
@@ -330,6 +332,17 @@ const PinDetails = () => {
                   >
                     <MdOutlineFileDownload className="text-black text-2xl dark:text-white" />
                   </div>
+                  <div
+                    className="relative rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setOpenShareModel(prev=>!prev)
+                    }}
+                    title="Share"
+                  >
+                    <MdShare className="text-black text-2xl dark:text-white" />
+                    {openShareModel && <ShareModal onClose={()=>{setOpenShareModel(false)}} leftTopStyle="top-4 left-10"/>}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 relative">
@@ -362,13 +375,7 @@ const PinDetails = () => {
                       />
                     </div>
                   )}
-                  <div
-                    title="like pin"
-                    className="rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer"
-                  >
-                    <FaRegHeart className="text-black text-2xl dark:text-white" />
-                    {/* <FaHeart/> */}
-                  </div>
+                  
                 </div>
               </div>
 

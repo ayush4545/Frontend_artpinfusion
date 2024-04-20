@@ -20,7 +20,7 @@ const CreatePin = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [openBoardDropDown, setOpenBoardDropDown] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(null);
-  const [btnDisabled,setBtnDisabled]=useState<boolean>(false)
+  const [btnDisabled, setBtnDisabled] = useState<boolean>(false);
   const [pinData, setPinData] = useState<pinData>({
     title: "",
     description: "",
@@ -72,13 +72,13 @@ const CreatePin = () => {
     formData.set("description", pinData.title);
     formData.set("tags", String(pinData.tags.split(",")));
     formData.set("pinUrl", files[0]);
-    if(selectedBoard?.boardId){
-      formData.set("boardId",selectedBoard?.boardId)
+    if (selectedBoard?.boardId) {
+      formData.set("boardId", selectedBoard?.boardId);
     }
 
     const token = getCookie("accessToken");
     try {
-      setBtnDisabled(true)
+      setBtnDisabled(true);
       const res = await axios.post(BACKEND_END_POINTS.CREATE_PIN, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -96,9 +96,9 @@ const CreatePin = () => {
         tags: "",
         link: "",
       });
-      setSelectedBoard(null)
+      setSelectedBoard(null);
       imageRef.current = null;
-      setBtnDisabled(false)
+      setBtnDisabled(false);
     } catch (error) {
       console.log("create pin error", error);
       if (error.response.status === 401) {
@@ -118,8 +118,12 @@ const CreatePin = () => {
     }
   };
 
-  const handleWindowClick = () => {
-    setOpenBoardDropDown(false);
+  const handleWindowClick = (e) => {
+    console.log(e.target.id)
+    if(e.target.id !== "search"){
+
+      setOpenBoardDropDown(false);
+    }
   };
 
   useEffect(() => {
@@ -137,7 +141,9 @@ const CreatePin = () => {
         {selectedImage && (
           <div>
             <button
-              className={`bg-[#FF8C00] ${btnDisabled ? 'opacity-80': 'hover:bg-[#FF5E0E] '}text-white rounded-[20px] p-2 px-4 font-semibold`}
+              className={`bg-[#FF8C00] ${
+                btnDisabled ? "opacity-80" : "hover:bg-[#FF5E0E] "
+              }text-white rounded-[20px] p-2 px-4 font-semibold`}
               onClick={handleCreatePin}
               disabled={btnDisabled}
             >
@@ -260,27 +266,38 @@ const CreatePin = () => {
               }`}
               id="board"
               onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
+                e.preventDefault();
+                e.stopPropagation();
                 setOpenBoardDropDown((prev) => !prev);
               }}
             >
-              {selectedBoard ?<div className='w-full rounded-md  font-semibold flex gap-3 items-center'>
-                            <div className='w-7 aspect-square flex justify-center items-center bg-[#e9e9e9] rounded-lg'>
-                              {
-                                selectedBoard?.pinImage && (
-                                    <img src={selectedBoard?.pinImage} alt={selectedBoard?.pinTitle} className='w-full aspect-square rounded-md object-contain'/>
-                                )
-                              }  
-                            </div>
-                            <p className='text-md font-medium'>
-                             {selectedBoard.boardName}
-                            </p>
-                         </div>: <span>Choose a board</span>}
+              {selectedBoard ? (
+                <div className="w-full rounded-md  font-semibold flex gap-3 items-center">
+                  <div className="w-7 aspect-square flex justify-center items-center bg-[#e9e9e9] rounded-lg">
+                    {selectedBoard?.pinImage && (
+                      <img
+                        src={selectedBoard?.pinImage}
+                        alt={selectedBoard?.pinTitle}
+                        className="w-full aspect-square rounded-md object-contain"
+                      />
+                    )}
+                  </div>
+                  <p className="text-md font-medium">
+                    {selectedBoard.boardName}
+                  </p>
+                </div>
+              ) : (
+                <span>Choose a board</span>
+              )}
               <FaChevronDown />
             </div>
 
-            {openBoardDropDown && <CreatePinChooseBoard setSelectedBoard={setSelectedBoard} setOpenBoardDropDown={setOpenBoardDropDown}/>}
+            {openBoardDropDown && (
+              <CreatePinChooseBoard
+                setSelectedBoard={setSelectedBoard}
+                setOpenBoardDropDown={setOpenBoardDropDown}
+              />
+            )}
           </div>
 
           <div className="flex flex-col w-4/5 gap-2 mt-3">

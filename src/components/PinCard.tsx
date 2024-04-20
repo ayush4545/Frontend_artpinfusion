@@ -36,12 +36,12 @@ const PinCard = (props: Props) => {
 
   return (
     <div
-      className="relative rounded-3xl  cursor-pointer mb-3"
+      className="relative rounded-3xl  cursor-pointer mb-3 w-5/6 lg:w-full"
       onMouseEnter={() => {
         setIsHover(true);
       }}
       onMouseLeave={() => {
-        setIsHover(false);
+        setIsHover(false); 
         // setCardClicked(false);
       }}
       onClick={() => {

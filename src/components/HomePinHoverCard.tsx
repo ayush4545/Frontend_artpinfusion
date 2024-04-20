@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineArrowOutward, MdOutlineFileDownload } from "react-icons/md";
 import downloadFile from "../config/utils/downloadFile";
-import { FaRegHeart } from "react-icons/fa";
 import { RiUnpinFill } from "react-icons/ri";
 import { BsFillPinAngleFill } from "react-icons/bs";
 import ShowBoardName from "./ShowBoardName";
@@ -12,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import config from "../config";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+
 
 const HomePinHoverCard = (props) => {
   const { boardId, setCardClicked, _id, boards, link, user, title, imageUrl } =
@@ -190,13 +190,6 @@ const HomePinHoverCard = (props) => {
             ) : (
               <BsFillPinAngleFill className="text-black text-lg" />
             )}
-          </div>
-          <div
-            title="like pin"
-            className="hidden rounded-full w-8 aspect-square bg-[#e9e9e9] lg:flex items-center justify-center hover:bg-[#d7d5d5] transition-all cursor-pointer"
-          >
-            <FaRegHeart className="text-black text-lg" />
-            {/* <FaHeart/> */}
           </div>
         </div>
 
