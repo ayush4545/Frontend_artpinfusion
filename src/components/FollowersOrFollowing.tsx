@@ -7,6 +7,7 @@ import config from "../config";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   title: string;
@@ -139,4 +140,4 @@ const FollowListComp = (props: FollowListProps) => {
     </div>
   );
 };
-export default FollowersOrFollowing;
+export default WithErrorBoundariesWrapper(FollowersOrFollowing);

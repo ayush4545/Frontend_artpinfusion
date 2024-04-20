@@ -3,6 +3,7 @@ import { IoAddCircle } from "react-icons/io5";
 import { useAppSelector } from "../hooks/reduxHooks";
 import BoardModel from "./BoardModel";
 import SearchBoard from "./SearchBoard";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   setSelectedBoard: () => void;
@@ -105,4 +106,4 @@ const CreatePinChooseBoard = (props: Props) => {
   );
 };
 
-export default CreatePinChooseBoard;
+export default WithErrorBoundariesWrapper(CreatePinChooseBoard);

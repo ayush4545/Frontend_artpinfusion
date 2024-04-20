@@ -11,6 +11,7 @@ import axios from "axios";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 type Props = {
   onClose: () => void;
   handleSwitchToSignUp: ()=> void
@@ -160,4 +161,4 @@ const LogIn = (props: Props) => {
   return createPortal(getLoginModal(), document.body);
 };
 
-export default LogIn;
+export default WithErrorBoundariesWrapper(LogIn);

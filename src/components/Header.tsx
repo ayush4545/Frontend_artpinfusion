@@ -6,9 +6,9 @@ import { useAppSelector } from "../hooks/reduxHooks";
 import useAuth from "../hooks/useAuth";
 import config from "../config";
 import { FaChevronDown } from "react-icons/fa";
-import SearchBar from "./SearchBar";
 import RightSidePopup from "./RightSidePopup";
 import ModeToggle from "./ModeToggle";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 
 const Header = () => {
@@ -87,10 +87,6 @@ const Header = () => {
           </div>
         ) }
       </div>
-
-      {/* center of header */}
-
-      {isAuthenticate && <SearchBar />}
 
       {/* right side of header */}
 
@@ -202,4 +198,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default WithErrorBoundariesWrapper(Header);

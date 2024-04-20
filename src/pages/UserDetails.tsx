@@ -11,6 +11,7 @@ import useAuth from "../hooks/useAuth";
 import Loader from "../components/Loader";
 import { setHoverOn } from "../redux/hoverOn.slice";
 import ShareModal from "../components/ShareModal";
+import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
 
 const Pins = React.lazy(() => import("../components/Pins"));
 const UserDetails = () => {
@@ -304,4 +305,4 @@ const UserDetails = () => {
   );
 };
 
-export default UserDetails;
+export default WithErrorBoundariesWrapper( UserDetails);

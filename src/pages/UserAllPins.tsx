@@ -6,6 +6,7 @@ import config from '../config'
 import { setHoverOn } from '../redux/hoverOn.slice'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import Loader from '../components/Loader'
+import {WithErrorBoundariesWrapper} from '../components/WithErrorBoundaries'
 const Pins = lazy(()=>import('../components/Pins')) 
 
 const UserAllPins = () => {
@@ -64,4 +65,4 @@ const UserAllPins = () => {
   )
 }
 
-export default UserAllPins
+export default WithErrorBoundariesWrapper(UserAllPins);

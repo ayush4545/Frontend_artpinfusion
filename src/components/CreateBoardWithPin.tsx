@@ -5,6 +5,7 @@ import { PinType } from "../Types/types";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useAppDispatch } from "../hooks/reduxHooks";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   pinId: string;
@@ -226,4 +227,4 @@ const CreateBoardWithPin = (props: Props) => {
   );
 };
 
-export default CreateBoardWithPin;
+export default WithErrorBoundariesWrapper(CreateBoardWithPin);

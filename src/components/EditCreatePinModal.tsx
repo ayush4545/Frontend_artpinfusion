@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import CreatePinChooseBoard from "./CreatePinChooseBoard";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   onClose: () => void;
@@ -303,4 +304,4 @@ const EditCreatePinModal = (props: Props) => {
   return createPortal(getModel(), document.body);
 };
 
-export default EditCreatePinModal;
+export default WithErrorBoundariesWrapper(EditCreatePinModal);

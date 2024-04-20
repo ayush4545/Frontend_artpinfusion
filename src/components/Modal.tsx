@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   onClose: () => void;
@@ -43,4 +44,4 @@ const Modal = (props: Props) => {
   );
 };
 
-export default Modal;
+export default WithErrorBoundariesWrapper( Modal);

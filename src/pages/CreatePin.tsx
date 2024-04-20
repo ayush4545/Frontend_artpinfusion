@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import config from "../config";
 import CreatePinChooseBoard from "../components/CreatePinChooseBoard";
+import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
 
 type pinData = {
   title: string;
@@ -321,4 +322,4 @@ const CreatePin = () => {
   );
 };
 
-export default CreatePin;
+export default WithErrorBoundariesWrapper(CreatePin);

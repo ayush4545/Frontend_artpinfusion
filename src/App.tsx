@@ -15,7 +15,8 @@ import UserDetails from "./pages/UserDetails";
 import WithAuthentication from "./components/WithAuthentication";
 import BoardDetails from "./pages/BoardDetails";
 import UserAllPins from "./pages/UserAllPins";
-import Loader from "./components/Loader";
+import NotFoundPage from "./components/NotFound";
+import {WithErrorBoundariesWrapper} from "./components/WithErrorBoundaries";
 
 function App() {
   const { GET_LOGINED_USER } = config.constant.api.BACKEND_END_POINTS;
@@ -51,8 +52,8 @@ function App() {
       component: <UserAllPins/>
     },
     {
-      path: "/*",
-      component: <h1>404 not found</h1>,
+      path: "*",
+      component: <NotFoundPage/>,
     },
   ];
 
@@ -110,11 +111,10 @@ function App() {
           {routes.map((route) => {
             return (
               <Route
-                exact={true}
+                exact
                 key={route.path}
                 path={route.path}
                 element={route.component}
-                loader={<Loader/>}
               />
             );
           })}
@@ -124,4 +124,4 @@ function App() {
   );
 }
 
-export default App;
+export default WithErrorBoundariesWrapper(App);

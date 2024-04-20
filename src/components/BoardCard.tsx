@@ -5,6 +5,7 @@ import { MdEdit } from "react-icons/md";
 import EditBoardPopup from "./EditBoardPopup";
 import useAuth from "../hooks/useAuth";
 import { useAppSelector } from "../hooks/reduxHooks";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 type Props = {
   board: BoardType;
   username: string;
@@ -36,7 +37,7 @@ const BoardCard = (props: Props) => {
       >
         <div className="w-full h-4/6  relative rounded-2xl overflow-hidden  cursor-pointer">
           {pinsArr.map((val) => (
-            <BoardChip
+          <BoardChip
               leftSideMargin={pinStyle[val]}
               imageUrl={pins[val]?.imageUrl}
               pinTitle={pins[val]?.title}
@@ -98,4 +99,4 @@ const BoardChip = (props: BoardChipProps) => {
   );
 };
 
-export default BoardCard;
+export default WithErrorBoundariesWrapper(BoardCard);

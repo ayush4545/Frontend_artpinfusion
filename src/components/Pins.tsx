@@ -2,16 +2,16 @@ import React from "react";
 import { PinType } from "../Types/types";
 import PinCard from "./PinCard";
 import { Link } from "react-router-dom";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   pins: PinType[];
   gridStyle: string;
   boardId?: string;
-  hoverOn:string
 };
 
 const Pins = (props: Props) => {
-  const { pins, gridStyle, boardId,hoverOn } = props;
+  const { pins, gridStyle, boardId} = props;
   console.log(pins);
   return (
     <div className={gridStyle}>
@@ -26,7 +26,6 @@ const Pins = (props: Props) => {
             _id={pin._id}
             boardId={boardId}
             boards={pin?.boards}
-            hoverOn={hoverOn}
           />
         </Link>
       ))}
@@ -34,4 +33,4 @@ const Pins = (props: Props) => {
   );
 };
 
-export default Pins;
+export default WithErrorBoundariesWrapper(Pins);

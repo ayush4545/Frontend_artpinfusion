@@ -3,6 +3,7 @@ import { MdOutlineFileDownload, MdDelete } from "react-icons/md";
 import { downloadFile } from "../config/utils";
 import AllPinsBoardSavePinModel from "./AllPinsBoardSavePinModel";
 import AllPinsBoardEditSavePinModel from "./AllPinsBoardEditSavePinModel";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   pinId: string;
@@ -86,4 +87,4 @@ const AllPinsBoardHoverCard = (props: Props) => {
   );
 };
 
-export default AllPinsBoardHoverCard;
+export default WithErrorBoundariesWrapper(AllPinsBoardHoverCard);

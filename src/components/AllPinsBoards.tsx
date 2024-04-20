@@ -2,6 +2,7 @@ import React from 'react'
 import AllPinsCard from './AllPinsCard'
 import { UserState } from '../Types/types'
 import BoardCard from './BoardCard'
+import { WithErrorBoundariesWrapper } from './WithErrorBoundaries'
 
 type Props={
   userData:UserState
@@ -19,4 +20,4 @@ const AllPinsBoards = (props:Props) => {
   )
 }
 
-export default AllPinsBoards
+export default WithErrorBoundariesWrapper(AllPinsBoards);

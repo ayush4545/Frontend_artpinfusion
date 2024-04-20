@@ -9,6 +9,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import useAuth from "../hooks/useAuth";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 type Props = {
   onClose: () => void;
   title: string;
@@ -213,4 +214,4 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
   };
   return createPortal(getModel(), document.body);
 };
-export default AllPinsBoardEditSavePinModel;
+export default WithErrorBoundariesWrapper(AllPinsBoardEditSavePinModel);

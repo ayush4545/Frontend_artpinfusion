@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import config from "../config";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 
 const HomePinHoverCard = (props) => {
@@ -266,4 +267,4 @@ const HomePinHoverCard = (props) => {
   );
 };
 
-export default HomePinHoverCard;
+export default WithErrorBoundariesWrapper(HomePinHoverCard);

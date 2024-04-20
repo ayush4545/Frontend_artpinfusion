@@ -3,6 +3,7 @@ import { UserState } from '../Types/types'
 import CreateBoardPinButton from './CreateBoardPinButton'
 import Pins from './Pins'
 import AllPinsBoards from "./AllPinsBoards"
+import { WithErrorBoundariesWrapper } from './WithErrorBoundaries'
 type Props={
     userData:UserState,
     isNotLoggedInUser:boolean
@@ -38,4 +39,4 @@ const Saved = (props:Props) => {
   )
 }
 
-export default Saved
+export default WithErrorBoundariesWrapper(Saved)

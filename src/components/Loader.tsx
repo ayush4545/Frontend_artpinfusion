@@ -1,4 +1,5 @@
 import React from 'react'
+import { WithErrorBoundariesWrapper } from './WithErrorBoundaries'
 
 const Loader = () => {
   return (
@@ -9,4 +10,4 @@ const Loader = () => {
   )
 }
 
-export default Loader
+export default WithErrorBoundariesWrapper( Loader);

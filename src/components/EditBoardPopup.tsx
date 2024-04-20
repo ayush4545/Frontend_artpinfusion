@@ -6,6 +6,7 @@ import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   onClose: () => void;
@@ -156,4 +157,4 @@ const EditBoardPopup = (props: Props) => {
   return createPortal(getEditBoardModel(), document.body);
 };
 
-export default EditBoardPopup;
+export default WithErrorBoundariesWrapper(EditBoardPopup);

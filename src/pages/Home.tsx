@@ -8,6 +8,7 @@ import { PinType } from "../Types/types";
 import { setHoverOn } from "../redux/hoverOn.slice";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import Loader from "../components/Loader";
+import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 
 const LIMIT = 20;
 const Home = () => {
@@ -105,7 +106,7 @@ const Home = () => {
               ) : <Loader/>
             }
 
-            {loading && <Loader />}
+            {/* {loading && <Loader />} */}
           </div>
         )}
       </main>
@@ -113,4 +114,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default WithErrorBoundariesWrapper( Home);

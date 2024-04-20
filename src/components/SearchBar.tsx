@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ImSearch } from "react-icons/im";
 import { IoMdCloseCircle } from "react-icons/io";
+import { WithErrorBoundariesWrapper } from './WithErrorBoundaries';
 
 const SearchBar = () => {
     const [isSearchFocused,setIsSearchFocused]=useState(false)
@@ -33,4 +34,4 @@ const SearchBar = () => {
   )
 }
 
-export default SearchBar
+export default WithErrorBoundariesWrapper(SearchBar)

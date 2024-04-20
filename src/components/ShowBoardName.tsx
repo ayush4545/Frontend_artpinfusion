@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaChevronDown } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import { WithErrorBoundariesWrapper } from './WithErrorBoundaries';
 
 const ShowBoardName = (props) => {
     const {loggedInUser,boardId=null,isPinSaved,selectedBoardDetails,setOpenBoardPopover,setCardClicked=()=>{}}=props
@@ -86,4 +87,4 @@ const ShowBoardName = (props) => {
   )
 }
 
-export default ShowBoardName
+export default WithErrorBoundariesWrapper(ShowBoardName)

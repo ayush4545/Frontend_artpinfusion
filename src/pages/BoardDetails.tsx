@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 import Modal from "../components/Modal";
 import Loader from "../components/Loader";
 import { setHoverOn } from "../redux/hoverOn.slice";
-
+import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
 type BoardData = {
   boardName: string;
   creatorBy: UserState;
@@ -233,4 +233,4 @@ const BoardPinsModel = (props: Props) => {
   return createPortal(boardPinsModel(), document.body);
 };
 
-export default BoardDetails;
+export default WithErrorBoundariesWrapper(BoardDetails);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MdEdit } from "react-icons/md";
 import EditCreatePinModal from "./EditCreatePinModal";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   pinId: string;
@@ -39,5 +40,5 @@ const EditCreatePin = (props: Props) => {
   );
 };
 
-export default EditCreatePin;
+export default WithErrorBoundariesWrapper(EditCreatePin);
 

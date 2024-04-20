@@ -12,6 +12,7 @@ import useAuth from "../hooks/useAuth";
 import { PiPlusBold } from "react-icons/pi";
 import CreateBoardWithPin from "./CreateBoardWithPin";
 import SearchBoard from "./SearchBoard";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props = {
   onClose: () => void;
@@ -253,4 +254,4 @@ const AllPinsBoardSavePinModel = (props: Props) => {
   return createPortal(getModel(), document.body);
 };
 
-export default AllPinsBoardSavePinModel;
+export default WithErrorBoundariesWrapper(AllPinsBoardSavePinModel);

@@ -3,6 +3,7 @@ import { PiPlusBold } from "react-icons/pi";
 import config from "../config";
 import { Link } from "react-router-dom";
 import BoardModel from "./BoardModel";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 const CreateBoardPinButton = ({showBoard,top}:{showBoard:boolean,top:string}) => {
   const { routePaths } = config.constant.routes;
   const [open, setOpen] = useState<boolean>(false);
@@ -77,4 +78,4 @@ const CreateBoardPinButton = ({showBoard,top}:{showBoard:boolean,top:string}) =>
   );
 };
 
-export default CreateBoardPinButton;
+export default WithErrorBoundariesWrapper(CreateBoardPinButton);

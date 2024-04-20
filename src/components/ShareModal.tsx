@@ -1,5 +1,6 @@
 import React from "react";
 import { BsWhatsapp } from "react-icons/bs";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props={
   onClose : ()=> void,
@@ -34,4 +35,4 @@ const ShareModal = (props:Props) => {
     </div>
   );
 };
-export default ShareModal;
+export default WithErrorBoundariesWrapper(ShareModal);

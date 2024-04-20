@@ -1,5 +1,6 @@
 import React, { MutableRefObject, useState } from "react";
 import { BoardType } from "../Types/types";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props={
   styles:string,
@@ -35,4 +36,4 @@ const SearchBoard = (props:Props) => {
   );
 };
 
-export default SearchBoard;
+export default WithErrorBoundariesWrapper(SearchBoard);

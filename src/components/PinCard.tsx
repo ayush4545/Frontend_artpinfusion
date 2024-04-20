@@ -8,6 +8,7 @@ import {  useAppSelector } from "../hooks/reduxHooks";
 import HomePinHoverCard from "./HomePinHoverCard";
 import AllPinsBoardHoverCard from "./AllPinsBoardHoverCard";
 import EditCreatePin from "./EditCreatePin";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 type Props = {
   imageUrl: string;
   user?: UserState;
@@ -16,7 +17,6 @@ type Props = {
   _id: string;
   boardId?: string;
   boards?: BoardType[];
-  hoverOn: string;
 };
 const PinCard = (props: Props) => {
   const {
@@ -26,8 +26,7 @@ const PinCard = (props: Props) => {
     title = "",
     _id,
     boardId,
-    boards,
-    // hoverOn,
+    boards
   } = props;
   const [isHover, setIsHover] = useState(false);
   const isAuthenticate = useAuth();
@@ -100,4 +99,4 @@ const PinCard = (props: Props) => {
   );
 };
 
-export default PinCard;
+export default WithErrorBoundariesWrapper(PinCard);

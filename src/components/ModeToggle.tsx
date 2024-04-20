@@ -1,6 +1,7 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { toggleMode } from "../redux/darkMode.slice";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 const ModeToggle = () => {
     const dispatch=useAppDispatch()
@@ -15,4 +16,4 @@ const ModeToggle = () => {
   );
 };
 
-export default ModeToggle;
+export default WithErrorBoundariesWrapper(ModeToggle);

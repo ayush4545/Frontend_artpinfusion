@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { PinType } from '../Types/types';
+import { WithErrorBoundariesWrapper } from './WithErrorBoundaries';
 
 type Props={
   pins:PinType[],
@@ -43,4 +44,4 @@ const PinChip=(props:PinChipProps)=>{
     </div>
 }
 
-export default AllPinsCard
+export default WithErrorBoundariesWrapper(AllPinsCard)

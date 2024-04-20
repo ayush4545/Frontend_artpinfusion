@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaChevronDown } from "react-icons/fa";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 const HeroSection = () => {
   return (
     <div
@@ -54,4 +55,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default WithErrorBoundariesWrapper(HeroSection);

@@ -7,7 +7,8 @@ import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import CreateBoardWithPin from "./CreateBoardWithPin";
-import { UserState } from "../Types/types";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+
 
 type Props = {
   onClose: () => void;
@@ -134,4 +135,4 @@ const BoardModel = (props: Props) => {
   return createPortal(getBoardModel(), document.body);
 };
 
-export default BoardModel;
+export default WithErrorBoundariesWrapper(BoardModel);

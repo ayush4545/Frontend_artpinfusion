@@ -1,9 +1,10 @@
-import React, { ReactEventHandler, useEffect, useState } from "react";
+import React, { ReactEventHandler } from "react";
 import { RxCountdownTimer } from "react-icons/rx";
 import { PiPlusBold } from "react-icons/pi";
-import { BoardType, PinType } from "../Types/types";
-import BoardModel from "./BoardModel";
+import {  PinType } from "../Types/types";
+
 import BoardCardWithSaveBtn from "./BoardCardWithSaveBtn";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 type Props = {
   boards?: {
     boardName: string;
@@ -85,4 +86,4 @@ const ChooseBoardPopover = (props: Props) => {
 };
 
 
-export default ChooseBoardPopover;
+export default WithErrorBoundariesWrapper(ChooseBoardPopover);

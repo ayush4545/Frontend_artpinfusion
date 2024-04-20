@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BoardType } from '../Types/types'
+import { WithErrorBoundariesWrapper } from './WithErrorBoundaries'
 
 type BoardProps={
     board: BoardType,
@@ -53,4 +54,4 @@ const BoardCardWithSaveBtn = (props:BoardProps) => {
     );
 }
 
-export default BoardCardWithSaveBtn
+export default WithErrorBoundariesWrapper(BoardCardWithSaveBtn)

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import config from "../config";
 import axios from "axios";
 import { rem, removeUser } from "../redux/user.slice";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 type Props={
   setShowPopup: React.Dispatch<React.SetStateAction<boolean>>
@@ -64,4 +65,4 @@ const RightSidePopup = (props : Props) => {
   );
 };
 
-export default RightSidePopup;
+export default WithErrorBoundariesWrapper(RightSidePopup)
