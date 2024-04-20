@@ -8,7 +8,8 @@ type routePathsType={
     USER: string,
     PIN: string,
     BOARD:string,
-    ALL_PINS:string
+    ALL_PINS:string,
+    ABOUT_US:string
 }
 
 
@@ -22,7 +23,8 @@ const routePaths:routePathsType={
     USER:"/:username",
     PIN: "/pins/:id",
     BOARD:"/:username/:boardName",
-    ALL_PINS:"/:username/pins"
+    ALL_PINS:"/:username/pins",
+    ABOUT_US:"/about"
 }
 
 export {routePaths}

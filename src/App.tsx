@@ -17,6 +17,7 @@ import BoardDetails from "./pages/BoardDetails";
 import UserAllPins from "./pages/UserAllPins";
 import NotFoundPage from "./components/NotFound";
 import {WithErrorBoundariesWrapper} from "./components/WithErrorBoundaries";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
   const { GET_LOGINED_USER } = config.constant.api.BACKEND_END_POINTS;
@@ -50,6 +51,10 @@ function App() {
     {
       path: routePaths?.ALL_PINS,
       component: <UserAllPins/>
+    },
+    {
+      path: routePaths?.ABOUT_US,
+      component: <AboutUs/>
     },
     {
       path: "*",
@@ -92,7 +97,7 @@ function App() {
 
   console.log("modeValue",modeValue)
   return (
-    <div className={`w-screen h-auto ${modeValue.darkMode ? "dark" : ''}`}>
+    <div className={`w-screen h-auto ${modeValue.darkMode ? "dark" : ''} scrollbar-thin scrollbar-track-gray-400/20 scrollbar-thumb-[#f7ab0a]/80`}>
       <BrowserRouter>
         <Header />
         <ToastContainer

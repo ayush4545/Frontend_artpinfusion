@@ -10,16 +10,17 @@ import { useAppDispatch } from "../hooks/reduxHooks";
 import Loader from "../components/Loader";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 
-const LIMIT = 20;
+const LIMIT = 10;
 const Home = () => {
   const isAuthenticate = useAuth();
   const { BACKEND_END_POINTS } = config.constant.api;
   const { toastPopup } = config.utils.toastMessage;
-  console.log(isAuthenticate);
-  const [page, setPage] = useState(1);
+  const page=useRef(1)
   const containerRef = useRef(null);
-  const [pins, setPins] = useState<PinType[] | null>(null);
+  const [pins, setPins] = useState<PinType[]>([]);
+  const newPins=useRef([])
   const [loading, setLoading] = useState(false);
+  const isAllPinsComing=useRef(false)
   const dispatch = useAppDispatch();
   const [isAuthenticateValue, setIsAuthenticatedValue] =
     useState(isAuthenticate);
@@ -29,28 +30,30 @@ const Home = () => {
   }, [isAuthenticate]);
 
   const fetchPins = async () => {
+    console.log(123,page,newPins)
     try {
-      setLoading(true);
       const res = await axios.get(
-        `${BACKEND_END_POINTS.Get_ALL_PINS}?page=${page}&limit=${LIMIT}`
+        `${BACKEND_END_POINTS.Get_ALL_PINS}?page=${page?.current}&limit=${LIMIT}`
       );
       const resData = await res.data;
       if (resData?.data?.length) {
-        const initialPins= pins ? pins : []
-        const newPins = [...new Set([...initialPins, ...resData.data])];
-        setPins(newPins);
-        setPage((prevPage) => prevPage + 1);
+        // const initialPins= pins ? pins : []
+        console.log(234,pins)
+        const setOfPins = [...new Set([...newPins?.current, ...resData.data])];
+        newPins.current=setOfPins
+        setPins(setOfPins);
+        page.current +=1
+      }else{
+        isAllPinsComing.current=true
       }
 
-      setLoading(false);
-      console.log("pins", resData);
     } catch (error) {
       toastPopup("Something went wrong", "error");
+      
+    }finally{
       setLoading(false);
     }
   };
-
-  console.log("pins", pins);
 
   useEffect(() => {
     if (isAuthenticateValue) {
@@ -60,26 +63,25 @@ const Home = () => {
   }, []);
 
   const handleScroll = () => {
-    // if (
-    //   window.innerHeight + document.documentElement.scrollTop >=
-    //   document.documentElement.scrollHeight - 30
-    // ) {
-    //   fetchPins();
-    // }
-
-    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-    console.log("scrollTop", containerRef, scrollTop);
-    if (containerRef && scrollHeight - scrollTop >= clientHeight && !loading) {
+    if (
+      !isAllPinsComing.current &&
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.scrollHeight - 30
+    ) {
+      console.log("height",window.innerHeight + document.documentElement.scrollTop,document.documentElement.scrollHeight - 60)
+      setLoading(true)
       fetchPins();
     }
-  };
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
 
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <>
@@ -106,7 +108,7 @@ const Home = () => {
               ) : <Loader/>
             }
 
-            {/* {loading && <Loader />} */}
+            {loading && <Loader />}
           </div>
         )}
       </main>
@@ -114,4 +116,4 @@ const Home = () => {
   );
 };
 
-export default WithErrorBoundariesWrapper( Home);
+export default WithErrorBoundariesWrapper(Home);

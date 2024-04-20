@@ -12,6 +12,7 @@ import Loader from "../components/Loader";
 import { setHoverOn } from "../redux/hoverOn.slice";
 import ShareModal from "../components/ShareModal";
 import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
+import NotFound from "../components/NotFound";
 
 const Pins = React.lazy(() => import("../components/Pins"));
 const UserDetails = () => {
@@ -33,7 +34,7 @@ const UserDetails = () => {
   const isAuthenticate = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  console.log("userData", isNotLoggedInUser);
+  console.log("userData", isNotLoggedInUser,state);
 
   const fetchUser = async () => {
     try {
@@ -290,7 +291,12 @@ const UserDetails = () => {
             </div>
           </>
         ) : (
-          <Loader />
+          <>
+          {
+            state ?  <Loader /> : <NotFound />
+          }
+          
+          </>
         )}
       </div>
 

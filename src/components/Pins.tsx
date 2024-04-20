@@ -12,7 +12,6 @@ type Props = {
 
 const Pins = (props: Props) => {
   const { pins, gridStyle, boardId} = props;
-  console.log(pins);
   return (
     <div className={gridStyle}>
       {pins.map((pin) => (
