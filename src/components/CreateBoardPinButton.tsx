@@ -4,7 +4,12 @@ import config from "../config";
 import { Link } from "react-router-dom";
 import BoardModel from "./BoardModel";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-const CreateBoardPinButton = ({showBoard,top}:{showBoard:boolean,top:string}) => {
+
+type Props={
+  showBoard:boolean,
+  top:string
+}
+const CreateBoardPinButton = ({showBoard,top}:Props) => {
   const { routePaths } = config.constant.routes;
   const [open, setOpen] = useState<boolean>(false);
   const [openBoard, setOpenBoard] = useState(false);
@@ -40,7 +45,7 @@ const CreateBoardPinButton = ({showBoard,top}:{showBoard:boolean,top:string}) =>
         </div>
 
         {open && (
-          <div className={`absolute shadow-2xl w-44 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white -left-48 ${top} rounded-xl dark:shadow-md p-3 dark:text-white`}>
+          <div className={`absolute shadow-2xl w-44 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white -left[-50%] -translate-x-[50%] lg:translate-x-0 lg:-left-48 md:top-0 lg:${top} rounded-xl dark:shadow-md p-3 dark:text-white z-10`}>
             <p className="text-sm p-2">Create</p>
 
             <Link to={routePaths.CREATE_PIN} className="-mt-2">

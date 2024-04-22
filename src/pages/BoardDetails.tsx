@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import axios from "axios";
@@ -12,6 +12,8 @@ import Modal from "../components/Modal";
 import Loader from "../components/Loader";
 import { setHoverOn } from "../redux/hoverOn.slice";
 import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
+import { PiPlusBold } from "react-icons/pi";
+import ViewOption from "../components/ViewOption";
 type BoardData = {
   boardName: string;
   creatorBy: UserState;
@@ -21,12 +23,15 @@ type BoardData = {
 };
 const BoardDetails = () => {
   const { state ,pathname} = useLocation();
+  const {routePaths} = config.constant.routes
   const loggedInUser = useAppSelector((state) => state.user);
   const dispatch=useAppDispatch()   
   const [openPinsModel, setOpenPinsModel] = useState(false);
   const [boardData, setBoardData] = useState<BoardData | null>(null);
   const { BACKEND_END_POINTS } = config.constant.api;
   const [openFollowersModel, setOpenFollowersModel] = useState(false);
+  const navigate=useNavigate()
+  const selectedViewOptions=useAppSelector(state=>state.viewOption)
   console.log("board state", state,pathname);
 
   const fetchBoardDetails = async () => {
@@ -63,6 +68,8 @@ const BoardDetails = () => {
     // return ()={}
   }, [state]);
   return (
+    <>
+  
     <div className="w-screen absolute top-[12vh] dark:bg-[#282828] p-5 -z-10">
       {boardData ? (
         <>
@@ -114,9 +121,13 @@ const BoardDetails = () => {
           </div>
 
           {boardData?.creatorBy?._id === loggedInUser?._id && (
-            <p className="text-lg font-semibold my-5 dark:text-white">
+            <div className="flex items-center justify-between">
+              <p className="text-lg font-semibold my-5 dark:text-white">
               {boardData?.pins?.length} pins
-            </p>
+             </p>
+             <ViewOption isBoard={true} top="-top-16" />
+            </div>
+            
           )}
 
           {/* show pins */}
@@ -124,7 +135,7 @@ const BoardDetails = () => {
             <div className="mt-5 w-full">
               <Pins
                 pins={boardData?.pins}
-                gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
+                gridStyle={selectedViewOptions ==="standard" ?"columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6" : "columns-2 gap-4 lg:gap-4 sm:columns-4 lg:columns-6 xl:columns-8" }
               />
             </div>
           ) : (
@@ -155,6 +166,13 @@ const BoardDetails = () => {
           />
         )}
     </div>
+    
+    <div className="fixed bottom-5 left-[50%] -translate-x-[50%] w-14 h-14 rounded-full bg-white shadow-3xl flex items-center justify-center cursor-pointer" onClick={()=>{
+      navigate(routePaths?.CREATE_PIN)
+    }}>
+      <PiPlusBold className="text-3xl"/>
+    </div>
+    </>
   );
 };
 

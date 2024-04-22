@@ -1,7 +1,8 @@
 import { configureStore,combineReducers } from '@reduxjs/toolkit'
 import userReducer from "./user.slice";
 import darkModeReducer from "./darkMode.slice"
-import hoverOnReducer from "./hoverOn.slice"
+import hoverOnReducer from "./hoverOn.slice";
+import viewOptionReducer from "./viewOptions.slice";
 import storageSession from 'redux-persist/lib/storage/session';
 import { persistReducer, persistStore } from 'redux-persist';
 
@@ -13,7 +14,8 @@ const persistConfig = {
 const rootReducer = combineReducers({ 
   user: userReducer,
   mode: darkModeReducer,
-  hoverOn: hoverOnReducer
+  hoverOn: hoverOnReducer,
+  viewOption:viewOptionReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
