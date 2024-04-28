@@ -6,12 +6,15 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
   pinId: string;
-  setSelectedBoardDetails: () => void;
+  setSelectedBoardDetails : ({
+    boardName,
+    boardId
+  }:{boardName:string,boardId:string})=> void;
   onClose: () => void;
-  setModelTitle : ()=> void
+  setModelTitle : (boardName:string)=> void
 };
 const CreateBoardWithPin = (props: Props) => {
   const { pinId, setSelectedBoardDetails, onClose,setModelTitle } = props;
@@ -76,7 +79,7 @@ const CreateBoardWithPin = (props: Props) => {
         console.log("user after board create", resData.data);
         setSelectedBoardDetails({
           boardName: boardDetails?.boardName,
-          boardIs: resData?.data?.boardId,
+          boardId: resData?.data?.boardId,
         });
         setIsPinSaved(true)
         setModelTitle("Board Created")
@@ -107,6 +110,9 @@ const CreateBoardWithPin = (props: Props) => {
               ) : (
                 <img
                   src={pinDetails?.imageUrl}
+                  onError={(e)=>{
+                    e.target.src=ErrorImage
+                   }}
                   alt={pinDetails?.title || pinDetails?.description}
                   className="w-full h-full object-cover rounded-2xl"
                 />
@@ -130,6 +136,9 @@ const CreateBoardWithPin = (props: Props) => {
               ) : (
                 <img
                   src={pinDetails?.imageUrl}
+                  onError={(e)=>{
+                    e.target.src=ErrorImage
+                   }}
                   alt={pinDetails?.title || pinDetails?.description}
                   className="w-full h-full object-cover rounded-2xl"
                 />
@@ -180,6 +189,9 @@ const CreateBoardWithPin = (props: Props) => {
                       pinDetails?.user?.avatar?.length > 10 ? (
                         <img
                           src={pinDetails?.user?.avatar}
+                          onError={(e)=>{
+                            e.target.src=ErrorImage
+                           }}
                           alt={pinDetails?.user?.name}
                           className="w-10 h-full rounded-full object-cover"
                         />

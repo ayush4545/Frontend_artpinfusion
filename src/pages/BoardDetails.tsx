@@ -14,6 +14,7 @@ import { setHoverOn } from "../redux/hoverOn.slice";
 import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
 import { PiPlusBold } from "react-icons/pi";
 import ViewOption from "../components/ViewOption";
+import ErrorImage from "../assets/404Page.gif"
 type BoardData = {
   boardName: string;
   creatorBy: UserState;
@@ -84,9 +85,12 @@ const BoardDetails = () => {
             </div>
 
             <div className="flex flex-col items-center">
-              <Link to={`/${boardData?.creatorBy?.username}`}>
+              <Link to={`/${boardData?.creatorBy?.username}`}state={boardData?.creatorBy?._id}>
                 <img
                   src={boardData?.creatorBy?.avatar}
+                  onError={(e) => {
+                    e.target.src = ErrorImage;
+                  }}
                   alt={boardData?.creatorBy?.name}
                   className="w-14 aspect-square rounded-full object-cover"
                 />
@@ -135,7 +139,7 @@ const BoardDetails = () => {
             <div className="mt-5 w-full">
               <Pins
                 pins={boardData?.pins}
-                gridStyle={selectedViewOptions ==="standard" ?"columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6" : "columns-2 gap-4 lg:gap-4 sm:columns-4 lg:columns-6 xl:columns-8" }
+                gridStyle={selectedViewOptions ==="standard" ?"columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6" : "columns-2 gap-4 lg:gap-4 sm:columns-4 lg:columns-6 xl:columns-8" }
               />
             </div>
           ) : (

@@ -78,7 +78,7 @@ const LogIn = (props: Props) => {
 
   const getLoginModal = (): ReactElement => {
     return (
-      <Modal onClose={onClose} isSignupPage={false} title={"Welcome to ArtPinFusion"} showClose={true} widthHeightStyle="w-1/3 h-auto">
+      <Modal onClose={onClose} isSignupPage={false} title={"Welcome to PinIt"} showClose={true} widthHeightStyle=" w-[90%] sm:w-2/3 lg:w-1/3 h-auto">
         <div className="grid place-items-center mt-10 items-center w-full">
           <form className="w-full grid place-items-center" onSubmit={handleSubmit(onSubmitHandler)} >
             <div className="flex flex-col gap-3 w-[55%]">
@@ -152,7 +152,7 @@ const LogIn = (props: Props) => {
           </button>
 
           <p className="mt-5 font-bold cursor-pointer" onClick={handleSwitchToSignUp}>
-            Not on ArtPinFusion yet ? Sign up
+            Not on PinIt yet ? Sign up
           </p>
         </div>
       </Modal>

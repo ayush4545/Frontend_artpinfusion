@@ -24,7 +24,7 @@ const Saved = (props:Props) => {
           <div className='w-full'>
             <Pins
                 pins={userData?.savedPins}
-                gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
+                gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
               />
           </div>
         )

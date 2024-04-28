@@ -13,7 +13,7 @@ import { setHoverOn } from "../redux/hoverOn.slice";
 import ShareModal from "../components/ShareModal";
 import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
 import NotFound from "../components/NotFound";
-
+import ErrorImage from "../assets/404Page.gif"
 const Pins = React.lazy(() => import("../components/Pins"));
 const UserDetails = () => {
   const { state, pathname } = useLocation();
@@ -125,6 +125,9 @@ const UserDetails = () => {
               {userData?.avatar && userData?.avatar.length > 10 ? (
                 <img
                   src={userData?.avatar}
+                  onError={(e) => {
+                    e.target.src = ErrorImage;
+                  }}
                   alt={userData.name}
                   className="w-[120px] aspect-square rounded-full object-cover border-2 border-[#282828] dark:border-white"
                 />
@@ -260,7 +263,7 @@ const UserDetails = () => {
                   <Suspense fallback={<Loader />}>
                     <Pins
                       pins={pins}
-                      gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
+                      gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
                     />
                   </Suspense>
                 ) : (

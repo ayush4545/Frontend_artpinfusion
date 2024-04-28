@@ -12,7 +12,7 @@ import config from "../config";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 
 const HomePinHoverCard = (props) => {
   const { boardId, setCardClicked, _id, boards, link, user, title, imageUrl } =
@@ -201,6 +201,9 @@ const HomePinHoverCard = (props) => {
             {user?.avatar && user.avatar.length > 0 ? (
               <img
                 src={user?.avatar}
+                onError={(e) => {
+                  e.target.src = ErrorImage;
+                }}
                 alt={user?.name}
                 className="w-8 aspect-square rounded-full object-cover overflow-hidden"
               />

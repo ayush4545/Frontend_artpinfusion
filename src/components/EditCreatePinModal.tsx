@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Modal from "./Modal";
 import config from "../config";
-import { PinType } from "../Types/types";
+import { BoardType, PinType } from "../Types/types";
 import axios from "axios";
 import Loader from "./Loader";
 import { FaChevronDown } from "react-icons/fa6";
@@ -11,17 +11,24 @@ import CreatePinChooseBoard from "./CreatePinChooseBoard";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
   onClose: () => void;
   title: string;
   pinId: string;
 };
+
+type SelectedBoard={
+  boardName: string;
+  pinImage: string | null;
+  pinTitle: string | null | undefined;
+  boardId: string;
+}
 const EditCreatePinModal = (props: Props) => {
   const { onClose, title, pinId } = props;
   const { BACKEND_END_POINTS } = config.constant.api;
   const [pinDetails, setPinDetails] = useState<PinType | null>(null);
-  const [selectedBoard, setSelectedBoard] = useState(null);
+  const [selectedBoard, setSelectedBoard] = useState<null | SelectedBoard>(null);
   const { getCookie } = config.utils.cookies;
   const { toastPopup } = config.utils.toastMessage;
   const saveUserInRedux = config.utils.saveUserInReduxAndSetAccessToken;
@@ -48,7 +55,7 @@ const EditCreatePinModal = (props: Props) => {
         })
         const board=loggedInUser?.board.filter((board)=>{
           return resData.data?.pin?.boards?.some(
-             (b1) => b1?._id === board?._id
+             (b1:BoardType) => b1?._id === board?._id
            );
          })
          if(board.length){
@@ -82,7 +89,7 @@ const EditCreatePinModal = (props: Props) => {
   const checkingBoardChange=()=>{
     if(selectedBoard && selectedBoard?.boardId){
       
-      const board=pinDetails?.boards?.filter((board)=>board?._id === selectedBoard?.boardId)
+      const board=pinDetails?.boards?.filter((board:BoardType)=>board?._id === selectedBoard?.boardId)
       console.log(209,board)
       if(!board?.length){
         return true
@@ -189,6 +196,9 @@ const EditCreatePinModal = (props: Props) => {
                   ) : (
                     <img
                       src={pinDetails?.imageUrl}
+                      onError={(e)=>{
+                        e.target.src=ErrorImage
+                       }}
                       alt={pinDetails?.title || pinDetails?.description}
                       className="w-full h-full object-cover rounded-2xl"
                     />
@@ -244,6 +254,9 @@ const EditCreatePinModal = (props: Props) => {
                           {!selectedBoard?.pinImage?.includes("video") && (
                             <img
                               src={selectedBoard?.pinImage}
+                              onError={(e)=>{
+                                e.target.src=ErrorImage
+                               }}
                               alt={selectedBoard?.pinTitle}
                               className="w-full aspect-square rounded-md object-cover"
                             />

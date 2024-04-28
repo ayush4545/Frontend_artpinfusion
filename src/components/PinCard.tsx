@@ -4,7 +4,7 @@ import { BoardType, UserState } from "../Types/types";
 
 import useAuth from "../hooks/useAuth";
 import {  useAppSelector } from "../hooks/reduxHooks";
-
+import ErrorImage from "../assets/404Page.gif"
 import HomePinHoverCard from "./HomePinHoverCard";
 import AllPinsBoardHoverCard from "./AllPinsBoardHoverCard";
 import EditCreatePin from "./EditCreatePin";
@@ -41,7 +41,13 @@ const PinCard = (props: Props) => {
       }}
       onMouseLeave={() => {
         setIsHover(false); 
-        // setCardClicked(false);
+      }}
+
+      onTouchStart={() => {
+        setIsHover(true);
+      }}
+      onTouchEnd={() => {
+        setIsHover(false); 
       }}
       onClick={() => {
         setCardClicked(true);
@@ -59,7 +65,10 @@ const PinCard = (props: Props) => {
       ) : (
         <img
           src={imageUrl}
-          alt=""
+          onError={(e) => {
+            e.target.src = ErrorImage;
+          }}
+          alt="pin"
           className="w-full object-cover h-full  rounded-3xl"
         />
       )}

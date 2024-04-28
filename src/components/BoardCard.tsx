@@ -3,9 +3,9 @@ import { BoardType } from "../Types/types";
 import { Link } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import EditBoardPopup from "./EditBoardPopup";
-import useAuth from "../hooks/useAuth";
 import { useAppSelector } from "../hooks/reduxHooks";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
   board: BoardType;
   username: string;
@@ -16,8 +16,8 @@ const BoardCard = (props: Props) => {
   const [isHover, setIsHover] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const pinsArr = [...Array(3).keys()];
-  const [boardName,setBoardName]=useState(board?.boardName)
-  const loggedInUser = useAppSelector(state=>state?.user)
+  const [boardName, setBoardName] = useState(board?.boardName);
+  const loggedInUser = useAppSelector((state) => state?.user);
   const pinStyle = [
     "w-2/3 h-full left-0",
     "w-1/3 h-1/2 right-0 top-0",
@@ -34,10 +34,16 @@ const BoardCard = (props: Props) => {
         }}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
+        onTouchStart={() => {
+          setIsHover(true);
+        }}
+        onTouchEnd={() => {
+          setIsHover(false);
+        }}
       >
         <div className="w-full h-4/6  relative rounded-2xl overflow-hidden  cursor-pointer">
           {pinsArr.map((val) => (
-          <BoardChip
+            <BoardChip
               leftSideMargin={pinStyle[val]}
               imageUrl={pins[val]?.imageUrl}
               pinTitle={pins[val]?.title}
@@ -59,8 +65,8 @@ const BoardCard = (props: Props) => {
             </div>
           )}
         </div>
-        <p className="font-semibold text-xl mx-2 mt-2">{boardName}</p>
-        <p className="mx-2 text-sm">{board?.pins?.length} pins</p>
+        <p className="font-semibold text-xl mx-2 mt-2 dark:text-white">{boardName}</p>
+        <p className="mx-2 text-sm dark:text-white">{board?.pins?.length} pins</p>
       </Link>
 
       {/* Edit board modal */}
@@ -91,6 +97,9 @@ const BoardChip = (props: BoardChipProps) => {
       {imageUrl && !imageUrl.includes("video") && (
         <img
           src={imageUrl}
+          onError={(e)=>{
+            e.target.src=ErrorImage
+           }}
           alt={pinTitle}
           className="w-full h-full object-cover"
         />

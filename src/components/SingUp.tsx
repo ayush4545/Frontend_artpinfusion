@@ -16,7 +16,7 @@ import { useAppDispatch } from "../hooks/reduxHooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
   onClose: () => void;
   handleSwitchToLogin: () => void;
@@ -126,7 +126,7 @@ const SignUp = (props: Props) => {
 
   const getLoginModal = (): ReactElement => {
     return (
-      <Modal onClose={onClose} isSignupPage={true} title="Welcome to ArtPinFusion" showClose={true} widthHeightStyle="w-1/3 h-auto">
+      <Modal onClose={onClose} isSignupPage={true} title="Welcome to PinIt" showClose={true} widthHeightStyle=" w-[90%] sm:w-2/3 lg:w-1/3 h-auto">
         <div className="grid place-items-center mt-5 items-center w-full">
           <form
             className="w-full grid place-items-center"
@@ -143,6 +143,9 @@ const SignUp = (props: Props) => {
               {image ? (
                 <img
                   src={image as string}
+                  onError={(e) => {
+                    e.target.src = ErrorImage;
+                  }}
                   alt="user"
                   className="object-cover w-full h-full rounded-full border-2 border-orange-600"
                 />

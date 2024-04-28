@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { PinType } from '../Types/types';
 import { WithErrorBoundariesWrapper } from './WithErrorBoundaries';
-
+import ErrorImage from "../assets/404Page.gif"
 type Props={
   pins:PinType[],
   username:string,
@@ -22,8 +22,8 @@ const AllPinsCard = (props:Props) => {
          })
         }
       </div>
-      <p className='font-semibold text-xl mx-2 mt-2'>All Pins</p>
-      <p className='mx-2 text-sm'>{pins?.length} pins</p>
+      <p className='font-semibold text-xl mx-2 mt-2 dark:text-white'>All Pins</p>
+      <p className='mx-2 text-sm dark:text-white'>{pins?.length} pins</p>
     </Link>
   )
 };
@@ -38,7 +38,13 @@ const PinChip=(props:PinChipProps)=>{
     return  <div className={`w-3/5 h-full bg-[#efefef] rounded-2xl absolute ${leftSideMargin} border-r-[1px] border-[#f7f7f7] hover:bg-[#d5d5d5] overflow-hidden`}>
       {
         imageUrl && !imageUrl.includes("video") && (
-          <img src={imageUrl} alt={pinTitle} className='w-full h-full object-cover rounded-2xl'/>
+          <img 
+          src={imageUrl}
+           alt={pinTitle}
+           onError={(e)=>{
+            e.target.src=ErrorImage
+           }}
+           className='w-full h-full object-cover rounded-2xl'/>
         )
       }
     </div>

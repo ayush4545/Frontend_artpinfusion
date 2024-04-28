@@ -30,7 +30,7 @@ const ViewOption = (props:Props) => {
   return (
     <div className='relative'>
                  <div
-          className={`w-12 aspect-square rounded-full ${
+          className={`w-8 lg:w-10 aspect-square rounded-full ${
             open
               ? "bg-black text-white dark:bg-white dark:text-black"
               : "hover:bg-[#e9e9e9] dark:bg-white"
@@ -41,17 +41,17 @@ const ViewOption = (props:Props) => {
              setOpen((prev) => !prev)
             }}
         >
-          <LuSettings2 className="font-extrabold text-3xl" />
+          <LuSettings2 className="font-extrabold text-xl lg:text-2xl" />
         </div>
 
         {open && (
-          <div className={`absolute shadow-2xl w-44 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white -left[-50%] -translate-x-[50%] lg:translate-x-0 lg:-left-48 lg:${top} rounded-xl dark:shadow-md p-3 dark:text-white`}>
+          <div className={`absolute shadow-2xl w-44 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white -left[-50%] -translate-x-[50%] lg:translate-x-0 lg:-left-48 lg:${top} rounded-xl dark:shadow-md p-3 dark:text-white z-50`}>
             <p className="text-sm p-2">View Options</p>
 
             
               <button
               type="button"
-               className={`w-full text-left rounded-md px-3 py-2  font-semibold ${selectedViewOptions === "standard" ? "bg-orange-500 text-white" :"hover:bg-[#e9e9e9] dark:hover:text-white"}`} onClick={()=>{
+               className={`w-full text-left rounded-md px-3 py-2  font-semibold ${selectedViewOptions === "standard" ? "bg-orange-500 text-white" :"hover:bg-[#e9e9e9] dark:hover:text-black"}`} onClick={()=>{
                 dispatch(setViewOptions("standard"))
                 // setOpen(false)
               }}>
@@ -60,7 +60,7 @@ const ViewOption = (props:Props) => {
             
                 <button
                 type="button"
-                className={`w-full text-left rounded-md px-3 py-2 hover:bg-[#e9e9e9] dark:hover:text-white font-semibold mt-2 ${selectedViewOptions === "compact" && "bg-[#e9e9e9]"}`}
+                className={`w-full text-left rounded-md px-3 py-2  font-semibold mt-2 ${selectedViewOptions === "compact" ? "bg-orange-500 text-white " :"hover:bg-[#e9e9e9] dark:hover:text-black"}`}
                 onClick={()=>{
                     dispatch(setViewOptions("compact"))
                   }}

@@ -30,7 +30,7 @@ const CreateBoardPinButton = ({showBoard,top}:Props) => {
     <>
       <div className="relative">
         <div
-          className={`w-12 aspect-square rounded-full ${
+          className={`w-8 lg:w-10 aspect-square rounded-full ${
             open
               ? "bg-black text-white dark:bg-white dark:text-black"
               : "hover:bg-[#e9e9e9] dark:bg-white"
@@ -41,7 +41,7 @@ const CreateBoardPinButton = ({showBoard,top}:Props) => {
              setOpen((prev) => !prev)
             }}
         >
-          <PiPlusBold className="font-extrabold text-3xl" />
+          <PiPlusBold className="font-extrabold text-xl lg:text-2xl" />
         </div>
 
         {open && (
@@ -49,14 +49,14 @@ const CreateBoardPinButton = ({showBoard,top}:Props) => {
             <p className="text-sm p-2">Create</p>
 
             <Link to={routePaths.CREATE_PIN} className="-mt-2">
-              <div className="w-full rounded-md px-3 py-2 hover:bg-[#e9e9e9] font-semibold">
+              <div className="w-full rounded-md px-3 py-2 hover:bg-[#e9e9e9] font-semibold dark:hover:text-black">
                 Pin
               </div>
             </Link>
             {
               showBoard && (
                 <button
-                className="w-full rounded-md px-3 py-2 hover:bg-[#e9e9e9] text-left font-semibold"
+                className="w-full rounded-md px-3 py-2 hover:bg-[#e9e9e9] text-left font-semibold dark:hover:text-black"
                 onClick={() => {
                   setOpenBoard(true);
                 }}

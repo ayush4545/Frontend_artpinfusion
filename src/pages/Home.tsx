@@ -64,6 +64,7 @@ const Home = () => {
 
   const handleScroll = () => {
     if (
+      isAuthenticateValue &&
       !isAllPinsComing.current &&
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.scrollHeight - 30
@@ -100,7 +101,7 @@ const Home = () => {
                   pins.length > 0 ?
                   <Pins
                   pins={pins}
-                  gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
+                  gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
                 /> : 
                 <h2 className="text-center font-bold text-4xl mt-10 text-gray-700">
                 No pins found

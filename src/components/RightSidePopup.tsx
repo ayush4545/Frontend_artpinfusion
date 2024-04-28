@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../config";
 import axios from "axios";
-import { rem, removeUser } from "../redux/user.slice";
+import {  removeUser } from "../redux/user.slice";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 type Props={
   setShowPopup: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -35,7 +35,7 @@ const RightSidePopup = (props : Props) => {
     }
   }
   return (
-    <div className="absolute lg:w-[20vw] bg-white right-1 top-12 shadow-3xl rounded-lg z-40 p-2" tabIndex={1} 
+    <div className="absolute w-[50vw] sm:w-[30vw] lg:w-[20vw] bg-white right-1 top-12 shadow-3xl rounded-lg z-40 p-2" tabIndex={1} 
     onClick={(e)=>{
      e.stopPropagation()
      e.preventDefault()
@@ -48,12 +48,15 @@ const RightSidePopup = (props : Props) => {
         <img
           src={user?.imgUrl}
           alt={user.name}
+          onError={(e) => {
+            e.target.src = ErrorImage;
+          }}
           className="object-cover rounded-full w-[60px] aspect-square"
         />
-        <div>
+        <div className="w-full overflow-hidden">
           <p className="font-bold">{user?.name}</p>
           <p className="text-sm">Personal</p>
-          <p className="text-sm text-wrap">{user?.emailId}</p>
+          <p className="text-[12px] lg:text-sm text-wrap w-full whitespace-normal">{user?.emailId}</p>
         </div>
       </Link>
       <p className="text-sm my-3 pl-3">More Options</p>

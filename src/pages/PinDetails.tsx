@@ -18,6 +18,7 @@ import ChooseBoardPopover from "../components/ChooseBoardPopover";
 import ShowBoardName from "../components/ShowBoardName";
 import Loader from "../components/Loader";
 import ShareModal from "../components/ShareModal";
+import ErrorImage from "../assets/404Page.gif"
 type PinData = {
   pin: PinType;
   exploreMore: PinType[];
@@ -280,14 +281,14 @@ const PinDetails = () => {
           navigate(-1);
         }}
       >
-        <FaArrowLeft className="text-black text-xl dark:text-white" />
+        <FaArrowLeft className="text-black text-xl" />
       </div>
 
       {/* main content */}
-      <div className="flex items-center justify-center w-full h-screen">
+      <div className="flex items-center justify-center w-screen h-[80%] py-5">
         {pinData && pinData?.pin ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 w-3/5  overflow-hidden rounded-3xl shadow-2xl px-2 pt-3 pb-3 dark:shadow-white dark:shadow-lg">
-            <div className="w-full h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 w-3/5   rounded-3xl shadow-2xl px-2 pt-3 pb-3 dark:shadow-white dark:shadow-lg">
+            <div className="w-full h-full p-2">
               {pinData?.pin?.imageUrl?.includes("video") ? (
                 <video
                   controls
@@ -300,14 +301,17 @@ const PinDetails = () => {
               ) : (
                 <img
                   src={pinData?.pin?.imageUrl}
+                  onError={(e) => {
+                    e.target.src = ErrorImage;
+                  }}
                   alt={pinData?.pin?.title}
-                  className="w-full rounded-3xl h-full ml-2 flex-1 object-contain"
+                  className="w-full rounded-3xl h-full  object-cover"
                 />
               )}
             </div>
 
             <div className="w-full">
-              <div className="mt-5 flex items-center justify-between">
+              <div className="mt-5 flex items-center justify-between flex-wrap">
                 <div className="flex items-center gap-3">
                   {pinData.pin.sourceLink !== "" && (
                     <a
@@ -358,15 +362,15 @@ const PinDetails = () => {
                     onClick={handleSavePin}
                   >
                     {isPinSaved ? (
-                      <RiUnpinFill className="text-black text-lg" />
+                      <RiUnpinFill className="text-black text-lg dark:text-white" />
                     ) : (
-                      <BsFillPinAngleFill className="text-black text-lg" />
+                      <BsFillPinAngleFill className="text-black text-lg dark:text-white" />
                     )}
                   </div>
 
                   {/* board popover */}
                   {openBoardPopover && (
-                    <div className="absolute top-12">
+                    <div className="absolute top-12 left-[50%] -translate-x-[50%] z-50 lg:left-0 lg:translate-x-0">
                       <ChooseBoardPopover
                         handleSave={handleSavePin}
                         boards={loggedInUser?.board}
@@ -400,7 +404,7 @@ const PinDetails = () => {
               </div>
 
               {/* user */}
-              <div className="ml-3 mt-4 flex items-center justify-between">
+              <div className="ml-3 mt-4 flex items-center justify-between flex-wrap gap-5">
                 <div className="flex items-center gap-2">
                   <Link
                     to={{
@@ -412,6 +416,9 @@ const PinDetails = () => {
                     pinData?.pin?.user?.avatar.length > 0 ? (
                       <img
                         src={pinData?.pin?.user?.avatar}
+                        onError={(e) => {
+                          e.target.src = ErrorImage;
+                        }}
                         alt={pinData?.pin?.user?.name}
                         className="w-10 aspect-square rounded-full object-cover"
                       />
@@ -446,7 +453,7 @@ const PinDetails = () => {
                         isFollowing
                           ? "bg-black dark:bg-white dark:text-black text-white"
                           : "bg-[#E9E9E9] hover:bg-[#dad9d9]"
-                      }  rounded-[20px] p-2 px-4 mr-2 font-semibold`}
+                      }  rounded-[20px] p-2 px-4 mr-2 font-semibold flex-1 md:flex-none sm:flex-none lg:flex-none`}
                       onClick={handleFollow}
                     >
                       {isFollowing ? "Following" : "Follow"}
@@ -462,21 +469,24 @@ const PinDetails = () => {
 
       {pinData && pinData?.exploreMore && pinData.exploreMore?.length > 0 && (
         <div
-          className="fixed bottom-12 right-10 w-12 aspect-square rounded-full  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer animate-bounce"
+          className="fixed bottom-12 right-10 w-12 aspect-square rounded-full  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer animate-bounce bg-white"
           onClick={handleScroll}
         >
-          <FaArrowDown className="text-black text-xl dark:text-white" />
+          <FaArrowDown className="text-black text-xl" />
         </div>
       )}
       {/* Explore more pins */}
 
       {pinData && pinData?.exploreMore && pinData.exploreMore?.length > 0 && (
         <div className="w-full snap-start mt-2" id="moreToExplore">
-          <h4 className="text-center">More to explore</h4>
+          <h4 className="text-center lg:text-lg dark:text-white">More to explore</h4>
+          <div className="mt-10 p-4">
           <Pins
-            pins={pinData.exploreMore}
-            gridStyle="columns-1 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
+            pins={pinData?.exploreMore}
+            gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
           />
+           </div>
+         
         </div>
       )}
     </div>

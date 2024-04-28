@@ -4,10 +4,20 @@ import { useAppSelector } from "../hooks/reduxHooks";
 import BoardModel from "./BoardModel";
 import SearchBoard from "./SearchBoard";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
-  setSelectedBoard: () => void;
-  setOpenBoardDropDown: () => void;
+  setSelectedBoard: ({
+    boardName,
+    pinImage,
+    pinTitle,
+    boardId,
+  }:{
+  boardName: string;
+  pinImage: string | null;
+  pinTitle: string | null | undefined;
+  boardId: string;
+  }) => void;
+  setOpenBoardDropDown: (value:boolean) => void;
 };
 const CreatePinChooseBoard = (props: Props) => {
   const { setSelectedBoard, setOpenBoardDropDown } = props;
@@ -72,6 +82,9 @@ const CreatePinChooseBoard = (props: Props) => {
                       !board.pins[0]?.imageUrl.includes("video") && (
                         <img
                           src={board.pins[0]?.imageUrl}
+                          onError={(e)=>{
+                            e.target.src=ErrorImage
+                           }}
                           alt={board.pins[0]?.title}
                           className="w-full aspect-square rounded-md object-cover"
                         />

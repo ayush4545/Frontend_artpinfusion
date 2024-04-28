@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { BoardType } from '../Types/types'
 import { WithErrorBoundariesWrapper } from './WithErrorBoundaries'
-
+import ErrorImage from "../assets/404Page.gif"
 type BoardProps={
     board: BoardType,
-    handleSave : ()=> void,
-    setSelectedBoardDetails : ()=> void,
+    handleSave : (e:any,selectedBoardId:number|string)=> void,
+    setSelectedBoardDetails : ({
+      boardName,
+      boardId
+    }:{boardName:string,boardId:string})=> void,
     pinId: string
   }
 const BoardCardWithSaveBtn = (props:BoardProps) => {
@@ -40,6 +43,9 @@ const BoardCardWithSaveBtn = (props:BoardProps) => {
             {board?.pins?.length > 0 && !board?.pins[0]?.imageUrl?.includes("video") && (
               <img
                 src={board?.pins[0]?.imageUrl}
+                onError={(e)=>{
+                  e.target.src=ErrorImage
+                 }}
                 alt={board?.boardName}
                 className="h-full w-full rounded-md object-cover"
               />

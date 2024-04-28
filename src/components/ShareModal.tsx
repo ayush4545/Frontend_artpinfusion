@@ -9,13 +9,13 @@ type Props={
 const ShareModal = (props:Props) => {
    const {onClose,leftTopStyle}=props
   return (
-    <div className={`w-52  shadow-2xl rounded-lg absolute border-[1px] border-gray-300 p-3 bg-white ${leftTopStyle}`}>
+    <div className={`w-52  shadow-2xl rounded-lg absolute border-[1px] border-gray-300 p-3 bg-white ${leftTopStyle} z-50`}>
       <p className="text-center font-semibold text-lg">Share</p>
       <div className="flex items-center gap-5 mt-5 justify-center">
         <button
           className="flex flex-col items-center gap-2"
           onClick={()=>{
-            window.open(`https://web.whatsapp.com/send?text=I found some funny pins for you in artPinFusion!%0A${window.location.href}`) 
+            window.open(`https://web.whatsapp.com/send?text=I found some funny pins for you in PinIt!%0A${window.location.href}`) 
             onClose()
           }}
         >

@@ -8,7 +8,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
   title: string;
   onClose: () => void;
@@ -109,6 +109,9 @@ const FollowListComp = (props: FollowListProps) => {
         {user.avatar && user.avatar.length > 10 ? (
           <img
             src={user?.avatar}
+            onError={(e)=>{
+              e.target.src=ErrorImage
+             }}
             alt={user?.name}
             className="rounded-full w-14 aspect-square object-cover"
           />

@@ -97,7 +97,7 @@ const EditBoardPopup = (props: Props) => {
         onClose={onClose}
         title="Edit your board"
         showClose={true}
-        widthHeightStyle="w-1/3 h-4/6"
+        widthHeightStyle="w-2/3 lg:w-1/3 h-4/6"
       >
         <div className="w-full flex item-center flex-col p-10">
           <div className="flex flex-col  gap-2">

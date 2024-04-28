@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Modal from "./Modal";
 import config from "../config";
-import { PinType } from "../Types/types";
+import { BoardType, PinType } from "../Types/types";
 import axios from "axios";
 import Loader from "./Loader";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
@@ -13,7 +13,7 @@ import { PiPlusBold } from "react-icons/pi";
 import CreateBoardWithPin from "./CreateBoardWithPin";
 import SearchBoard from "./SearchBoard";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
   onClose: () => void;
   title: string;
@@ -34,7 +34,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
   const [showFirstModel, setShowFirstModel] = useState(true);
   const [userBoards, setUserBoards] = useState(loggedInUser?.board);
   const [modelTitle, setModelTitle] = useState("Create Board");
-  const originalBoards = useRef(null);
+  const originalBoards = useRef<BoardType[] | null>(null);
   const [selectedBoardDetails, setSelectedBoardDetails] = useState({
     boardName: "",
     boardId: "",
@@ -52,19 +52,12 @@ const AllPinsBoardSavePinModel = (props: Props) => {
         setUserBoards((prevBoards) => {
           const filteredBoards = prevBoards?.filter((board) => {
             if (resData?.data?.pin?.boards?.length) {
-              console.log(
-                456,
-                board,
-                resData?.data?.pin?.boards,
-                resData?.data?.pin?.boards?.every((b1) => b1?._id !== board._id)
-              );
               return resData?.data?.pin?.boards?.every(
-                (b1) => b1?._id !== board._id
+                (b1:BoardType) => b1?._id !== board._id
               );
             }
             return true;
           });
-          console.log("34523", filteredBoards);
           originalBoards.current = filteredBoards;
           return filteredBoards;
         });
@@ -163,6 +156,9 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                       ) : (
                         <img
                           src={pinDetails?.imageUrl}
+                          onError={(e)=>{
+                            e.target.src=ErrorImage
+                           }}
                           alt={pinDetails?.title || pinDetails?.description}
                           className="w-full h-full object-cover rounded-2xl"
                         />

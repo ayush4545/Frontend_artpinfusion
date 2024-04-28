@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Modal from "./Modal";
 import config from "../config";
-import { PinType } from "../Types/types";
+import { BoardType, PinType } from "../Types/types";
 import axios from "axios";
 import Loader from "./Loader";
 import { FaChevronDown } from "react-icons/fa";
@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import useAuth from "../hooks/useAuth";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import ErrorImage from "../assets/404Page.gif"
 type Props = {
   onClose: () => void;
   title: string;
@@ -30,7 +31,7 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
   const navigate = useNavigate();
   const isAuthenticate = useAuth();
   const loggedInUser=useAppSelector(state => state.user)
-  const [boards,setBoards]=useState(null)
+  const [boards,setBoards]=useState<null|BoardType[]>(null)
   const [selectedBoard,setSelectedBoard]=useState({
     boardName:'',
     boardId:''
@@ -61,7 +62,7 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
 
         const userBoards= loggedInUser?.board.filter((board)=>{
           return resData.data?.pin?.boards?.some(
-             (b1) => b1?._id === board?._id
+             (b1:BoardType) => b1?._id === board?._id
            );
          })
          setBoards(userBoards?.length ===0 ? null : userBoards)        
@@ -181,6 +182,9 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
                   ) : (
                     <img
                       src={pinDetails?.imageUrl}
+                      onError={(e)=>{
+                        e.target.src=ErrorImage
+                       }}
                       alt={pinDetails?.title || pinDetails?.description}
                       className="w-full h-full object-cover rounded-2xl"
                     />

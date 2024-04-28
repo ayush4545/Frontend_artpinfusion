@@ -9,8 +9,8 @@ import { FaChevronDown } from "react-icons/fa";
 import RightSidePopup from "./RightSidePopup";
 import ModeToggle from "./ModeToggle";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-
-
+import { BsFillPinAngleFill } from "react-icons/bs";
+import ErrorImage from "../assets/404Page.gif"
 const Header = () => {
   const { pathname,state } = useLocation();
   console.log("state",state)
@@ -54,11 +54,12 @@ const Header = () => {
    },[])
 
   return (
-    <header className="w-full flex h-[12vh] items-center justify-between  px-4 dark:bg-[#282828] dark:border-b-[2px] border-[#3b3b3b]  bg-white fixed top-0 left-0 z-10">
+    <header className="w-full flex h-[12vh] items-center justify-between  px-4 dark:bg-[#282828] dark:border-b-[2px] border-[#3b3b3b]  bg-white fixed top-0 left-0 z-50">
       {/* left side of header */}
       <div className=" dark:text-white flex items-center gap-[20px]">
-        <Link to="/" className="font-bold text-[#FF8C00]">
-          ArtPinFusion
+        <Link to="/" className="font-bold text-[#FF8C00] flex items-center gap-1 text-xl">
+         <BsFillPinAngleFill/>
+         <p>PinIt</p>
         </Link>
 
         {isAuthenticate && (
@@ -68,7 +69,7 @@ const Header = () => {
               className={`rounded-3xl p-2 ${
                 pathname === routePaths.HOME
                   ? "bg-slate-900 text-white  dark:bg-[#E9E9E9] dark:text-black"
-                  : "hover:bg-[#E9E9E9]"
+                  : "hover:bg-[#E9E9E9] dark:hover:text-black"
               }`}
             >
               Home
@@ -94,11 +95,11 @@ const Header = () => {
         {!isAuthenticate && (
           <div>
             <Link
-              to={routePaths.ABOUT}
-              className={` font-bold dark:text-white  rounded-3xl p-2 ${
-                pathname === routePaths.ABOUT
+              to={routePaths.ABOUT_US}
+              className={`  rounded-3xl p-2  ${
+                pathname === routePaths.ABOUT_US
                   ? "bg-slate-900 text-white  dark:bg-[#E9E9E9] dark:text-black"
-                  : "hover:bg-[#E9E9E9] "
+                  : "hover:bg-[#E9E9E9] dark:hover:text-black dark:text-white"
               }`}
             >
               About
@@ -142,9 +143,8 @@ const Header = () => {
                 <img
                   src={user?.imgUrl}
                   alt={user?.name}
-
                   onError={(e)=>{
-                   e.target.src="https://c4.wallpaperflare.com/wallpaper/297/22/531/lake-blue-moonlight-moon-wallpaper-preview.jpg"
+                   e.target.src=ErrorImage
                   }}
                   className={`rounded-full object-cover w-full h-full ${
                     pathname === `/${user.username}`
