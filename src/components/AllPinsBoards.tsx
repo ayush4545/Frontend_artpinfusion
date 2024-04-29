@@ -9,7 +9,6 @@ type Props={
 }
 const AllPinsBoards = (props:Props) => {
   const {userData}=props
-  console.log()
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 p-4">
         <AllPinsCard pins={userData?.savedPins} username={userData?.username}  _id={userData?._id}/>

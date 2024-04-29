@@ -4,6 +4,7 @@ import { downloadFile } from "../config/utils";
 import AllPinsBoardSavePinModel from "./AllPinsBoardSavePinModel";
 import AllPinsBoardEditSavePinModel from "./AllPinsBoardEditSavePinModel";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels} from "../config/constants/text.constant";
 
 type Props = {
   pinId: string;
@@ -27,16 +28,15 @@ const AllPinsBoardHoverCard = (props: Props) => {
               e.preventDefault();
               setOpenSaveModel(true);
               setCardClicked(true);
-              // document.body.style.overflow="hidden"
             }}
           >
-            Save
+            {labels?.SAVE}
           </button>
         </div>
 
         <div className="absolute bottom-2 right-3 flex items-center gap-3">
           <div
-            title="Delete Pin"
+            title={labels?.DELETE_PIN}
             className=" w-8 h-8 rounded-full flex items-center justify-center bg-[#e9e9e9]"
             onClick={(e) => {
               e.preventDefault();
@@ -48,7 +48,7 @@ const AllPinsBoardHoverCard = (props: Props) => {
             <MdDelete className="text-black text-lg" />
           </div>
           <div
-            title="Download Pin"
+            title={labels?.DOWNLOAD_PIN}
             className=" w-8 h-8 rounded-full flex items-center justify-center bg-[#e9e9e9]"
             onClick={(e) => {
               e.preventDefault();
@@ -66,16 +66,15 @@ const AllPinsBoardHoverCard = (props: Props) => {
           onClose={() => {
             setCardClicked(false);
             setOpenSaveModel(false);
-            // document.body.style.overflow="auto"
           }}
-          title="Save Pin"
+          title={labels?.SAVE_PIN}
           pinId={pinId}
         />
       )}
 
       {openEditModel && (
         <AllPinsBoardEditSavePinModel
-          title="Delete Pin"
+          title={labels?.DELETE_PIN}
           pinId={pinId}
           onClose={() => {
             setCardClicked(false);

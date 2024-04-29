@@ -10,7 +10,7 @@ const ModeToggle = () => {
     <label className="switch">
       <input type="checkbox" onChange={()=>{
         dispatch(toggleMode())
-      }} value={`${darkMode}`}/>
+      }} checked={darkMode}/>
       <span className="slider round"></span>
     </label>
   );

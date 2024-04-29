@@ -10,7 +10,7 @@ type Props={
 }
 const Saved = (props:Props) => {
     const {userData,isNotLoggedInUser}=props
-    console.log("userData in Saved",userData)
+   
   return (
     <div className='w-full dark:bg-[#282828]'>
       {!isNotLoggedInUser && (

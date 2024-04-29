@@ -6,6 +6,7 @@ import axios from "axios";
 import {  removeUser } from "../redux/user.slice";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props={
   setShowPopup: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -24,9 +25,8 @@ const RightSidePopup = (props : Props) => {
     })
 
     const resData=await res.data
-    console.log(resData)
     if(resData.statusCode === 200){
-      config.utils.cookies.removeCookie("accessToken")
+      config.utils.cookies.removeCookie(labels?.ACCESS_TOKEN)
       document.cookie="accessToken="
       dispatch(removeUser())
       setShowPopup(false)

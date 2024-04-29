@@ -5,6 +5,7 @@ import BoardModel from "./BoardModel";
 import SearchBoard from "./SearchBoard";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props = {
   setSelectedBoard: ({
     boardName,
@@ -42,7 +43,7 @@ const CreatePinChooseBoard = (props: Props) => {
     setOpenBoardModel(false);
     setOpenBoardDropDown(false);
   };
-  console.log("loggedInUser", loggedInUser);
+  
   return (
     <>
       <div className="absolute  left-[50%] -translate-x-[50%] w-2/3 h-80 rounded-3xl overflow-hidden shadow-lg bg-white bottom-12">
@@ -100,7 +101,7 @@ const CreatePinChooseBoard = (props: Props) => {
           className=" absolute bottom-0 w-full h-14 left-0 text-left pl-5 border-t-[1px] border-gray-300 flex items-center gap-2 font-semibold hover:bg-[#e9e9e9] bg-white "
           onClick={handleOpenBoard}
         >
-          <IoAddCircle className="text-[#FF5E0E] text-3xl" /> Create Board
+          <IoAddCircle className="text-[#FF5E0E] text-3xl" /> {labels?.CREATE_BOARD}
         </button>
       </div>
 
@@ -108,7 +109,7 @@ const CreatePinChooseBoard = (props: Props) => {
 
       {openBoardModel && (
         <BoardModel
-          title="Create Board"
+          title={labels?.CREATE_BOARD}
           onClose={() => setOpenBoardModel(false)}
           isSavedButtonModel={false}
           isNeedToNavigateBoardDetails={false}

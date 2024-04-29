@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 
 type Props = {
   onClose: () => void;
@@ -32,7 +33,7 @@ const Modal = (props: Props) => {
         </p>
         {isSignupPage && (
           <p className="text-center mt-2 dark:text-white">
-            Lets have fun and find video or image as per you mood
+           {labels?.SIGN_UP_MODAL_TITLE}
           </p>
         )}
         <div className="w-full">

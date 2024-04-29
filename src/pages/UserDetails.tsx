@@ -11,10 +11,13 @@ import useAuth from "../hooks/useAuth";
 import Loader from "../components/Loader";
 import { setHoverOn } from "../redux/hoverOn.slice";
 import ShareModal from "../components/ShareModal";
-import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
+import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 import NotFound from "../components/NotFound";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/404Page.gif";
+import { labels } from "../config/constants/text.constant";
+import { routePaths } from "../config/constants/route.constant";
 const Pins = React.lazy(() => import("../components/Pins"));
+
 const UserDetails = () => {
   const { state, pathname } = useLocation();
   const { BACKEND_END_POINTS } = config.constant.api;
@@ -34,7 +37,7 @@ const UserDetails = () => {
   const isAuthenticate = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  console.log("userData", isNotLoggedInUser,state);
+ 
 
   const fetchUser = async () => {
     try {
@@ -53,15 +56,15 @@ const UserDetails = () => {
 
         setIsFollowing(() => {
           const index = resData.data.followers
-            ?.map((f) => f._id)
-            .indexOf(loggedInUser?._id!);
+            ?.map((f:UserState) => f._id)
+            .indexOf(loggedInUser._id!);
           if (index !== -1) {
             return true;
           }
           return false;
         });
       }
-      console.log(344, resData);
+     
     } catch (error) {
       console.log("user error", error);
     }
@@ -116,6 +119,18 @@ const UserDetails = () => {
     }
   };
 
+  const handleWindowClick = (e) => {
+    setOpenShareModal(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleWindowClick);
+
+    return () => {
+      window.removeEventListener("click", handleWindowClick);
+    };
+  }, []);
+
   return (
     <div className="w-screen absolute top-[12vh] dark:bg-[#282828]">
       <div className="flex flex-col items-center w-full p-3">
@@ -167,7 +182,7 @@ const UserDetails = () => {
                     setSelectedFollow("followedUsers");
                   }}
                 >
-                  {userData?.followedUsers.length} following
+                  {userData?.followedUsers.length} {labels?.FOLLOWING}
                 </span>
               </p>
 
@@ -179,26 +194,44 @@ const UserDetails = () => {
               >
                 {isNotLoggedInUser ? (
                   <div
-                    title="share"
+                    title={labels?.SHARE}
                     className="rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer relative"
-                    onClick={() => {
-                      setOpenShareModal(prev=>!prev);
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setOpenShareModal((prev) => !prev);
                     }}
                   >
                     <MdShare className="text-black text-2xl dark:text-white" />
-                    {openShareModal && <ShareModal onClose={()=>{setOpenShareModal(false)}} leftTopStyle="-top-5 -left-[212px]"/>}
+                    {openShareModal && (
+                      <ShareModal
+                        onClose={() => {
+                          setOpenShareModal(false);
+                        }}
+                        leftTopStyle="-top-5 -left-[212px]"
+                      />
+                    )}
                   </div>
                 ) : (
                   <div className="relative">
                     <button
-                      className={`${openShareModal ? "bg-black text-white dark:bg-white dark:text-black" : "bg-[#E9E9E9] hover:bg-[#dad9d9]"}  rounded-[20px] p-2 px-4 mr-2 font-semibold`}
+                      className={`${
+                        openShareModal
+                          ? "bg-black text-white dark:bg-white dark:text-black"
+                          : "bg-[#E9E9E9] hover:bg-[#dad9d9]"
+                      }  rounded-[20px] p-2 px-4 mr-2 font-semibold`}
                       onClick={() => {
-                        setOpenShareModal(prev=>!prev);
+                        setOpenShareModal((prev) => !prev);
                       }}
                     >
-                      Share
+                      {labels?.SHARE}
                     </button>
-                    {openShareModal && <ShareModal onClose={()=>setOpenShareModal(false)} leftTopStyle="-top-5 -left-[212px] "/>}
+                    {openShareModal && (
+                      <ShareModal
+                        onClose={() => setOpenShareModal(false)}
+                        leftTopStyle="-top-5 -left-[212px] "
+                      />
+                    )}
                   </div>
                 )}
 
@@ -211,7 +244,7 @@ const UserDetails = () => {
                     } text-white rounded-[20px] p-2 px-4 font-semibold`}
                     onClick={handleFollow}
                   >
-                    {isFollowing ? "Following" : "Follow"}
+                    {isFollowing ? labels?.FOLLOWING : labels?.FOLLOW}
                   </button>
                 )}
               </div>
@@ -220,20 +253,20 @@ const UserDetails = () => {
               <div className="flex items-center gap-5 mt-12 justify-center w-full">
                 <button
                   className={`rounded-lg p-2 border-b-4 ${
-                    selectedTab === "created"
-                      ? " border-black dark:border-white "
-                      : "hover:bg-[#E9E9E9] border-white dark:border-[#282828]"
-                  } font-semibold dark:text-white`}
+                    selectedTab === labels?.HOVER_ON_CREATED
+                      ? " border-black dark:border-white"
+                      : "hover:bg-[#E9E9E9] border-white dark:border-[#282828] dark:hover:text-black"
+                  } font-semibold dark:text-white `}
                   onClick={() => {
-                    setSelectedTab("created");
+                    setSelectedTab(labels?.HOVER_ON_CREATED);
                     if (pathname.includes(loggedInUser?.username)) {
-                      dispatch(setHoverOn("created"));
+                      dispatch(setHoverOn(labels?.HOVER_ON_CREATED));
                     } else {
-                      dispatch(setHoverOn("homePin"));
+                      dispatch(setHoverOn(labels?.HOVER_ON_HOME_PIN));
                     }
                   }}
                 >
-                  Created
+                  {labels?.CREATED}
                 </button>
 
                 <button
@@ -241,24 +274,24 @@ const UserDetails = () => {
                     selectedTab === "saved"
                       ? " border-black dark:border-white"
                       : "hover:bg-[#E9E9E9] border-white dark:border-[#282828] dark:hover:text-black"
-                  } font-semibold dark:text-white`}
+                  } font-semibold dark:text-white `}
                   onClick={() => {
                     setSelectedTab("saved");
                     if (pathname.includes(loggedInUser?.username)) {
-                      dispatch(setHoverOn("allPins"));
+                      dispatch(setHoverOn(labels?.HOVER_ON_ALL_PINS));
                     } else {
-                      dispatch(setHoverOn("homePin"));
+                      dispatch(setHoverOn(labels?.HOVER_ON_HOME_PIN));
                     }
                   }}
                 >
-                  Saved
+                  {labels?.SAVED}
                 </button>
               </div>
             </div>
 
             {/* created and saved pins hear */}
             <div className="mt-10 w-full">
-              {selectedTab === "created" &&
+              {selectedTab === labels?.HOVER_ON_CREATED &&
                 (pins && pins.length > 0 ? (
                   <Suspense fallback={<Loader />}>
                     <Pins
@@ -268,14 +301,12 @@ const UserDetails = () => {
                   </Suspense>
                 ) : (
                   <div className="text-center">
-                    <p className="text-center">
-                      Nothing to show...yet! Pins you create will live here
-                    </p>
+                    <p className="text-center">{labels?.NO_PIN_CREATED}</p>
                     <Link
-                      to="/create-pin"
+                      to={routePaths?.CREATE_PIN}
                       className="rounded-3xl px-3 py-2 font-bold cursor-pointer bg-[#FF8C00] hover:bg-[#FF5E0E] text-white"
                     >
-                      Create Pin
+                      {labels?.CREATE_PIN}
                     </Link>
                   </div>
                 ))}
@@ -288,18 +319,13 @@ const UserDetails = () => {
                   />
                 ) : (
                   <p className="text-center">
-                    {userData?.name} hasn't saved any pins yet
+                    {labels?.NO_PIN_SAVE_MESSAGE(userData?.name)}
                   </p>
                 ))}
             </div>
           </>
         ) : (
-          <>
-          {
-            state ?  <Loader /> : <NotFound />
-          }
-          
-          </>
+          <>{state ? <Loader /> : <NotFound />}</>
         )}
       </div>
 
@@ -314,4 +340,4 @@ const UserDetails = () => {
   );
 };
 
-export default WithErrorBoundariesWrapper( UserDetails);
+export default WithErrorBoundariesWrapper(UserDetails);

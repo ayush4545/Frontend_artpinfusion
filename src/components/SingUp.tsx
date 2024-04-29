@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
   handleSwitchToLogin: () => void;
@@ -117,10 +118,19 @@ const SignUp = (props: Props) => {
         dispatch
       );
       reset()
-      toastPopup(`Congratulations! ${data.name} Your account has been created.`,"success")
+      toastPopup(labels?.SIGN_UP_SUCCESS_TOAST_MESSAGE(data.name),"success")
       onClose();
     } catch (error) {
-      toastPopup("Oops! Something went wrong. Please try signing up again later.","error")
+      if(error?.response?.status===400){
+        toastPopup(labels?.ALL_FIELDS_REQUIRED,"error")
+      }
+      if(error?.response?.status===409){
+        toastPopup(labels?.USER_EXISTED,"error")
+      }
+      if(error?.response?.status===500){
+        toastPopup("Oops! Something went wrong. Please try signing up again later.","error")
+      }
+      
     }
   };
 
@@ -151,7 +161,7 @@ const SignUp = (props: Props) => {
                 />
               ) : (
                 <p className="w-full h-full rounded-full flex items-center justify-center bg-gray-300 hover:bg-gray-400 hover:text-white">
-                  Avatar
+                  {labels?.AVATAR}
                 </p>
               )}
 
@@ -168,12 +178,12 @@ const SignUp = (props: Props) => {
                 className="text-sm text-black dark:text-white  font-semibold"
                 autoFocus
               >
-                Full Name
+                {labels?.FULL_NAME}
               </label>
               <input
                 type="text"
                 id="name"
-                placeholder="Full Name"
+                placeholder={labels?.FULL_NAME}
                 className="outline-none border-2 border-gray-400 rounded-xl  py-1 pl-4"
                 required
                 {...register("name")}
@@ -187,13 +197,13 @@ const SignUp = (props: Props) => {
                 className="text-sm text-black dark:text-white  font-semibold"
                 autoFocus
               >
-                Username
+                {labels?.USER_NAME}
               </label>
               <input
                 type="text"
                 id="username"
                 {...register("username")}
-                placeholder="Username"
+                placeholder={labels?.USER_NAME}
                 className="outline-none border-2 border-gray-400 rounded-xl  py-1 pl-4"
                 required
               />
@@ -207,13 +217,13 @@ const SignUp = (props: Props) => {
                 className="text-sm text-black dark:text-white  font-semibold"
                 autoFocus
               >
-                Email
+                {labels?.EMAIL}
               </label>
               <input
                 type="text"
                 id="emailId"
                 {...register("emailId")}
-                placeholder="Email"
+                placeholder={labels?.EMAIL}
                 className="outline-none border-2 border-gray-400 rounded-xl  py-1 pl-4"
                 required
               />
@@ -224,13 +234,13 @@ const SignUp = (props: Props) => {
                 htmlFor="password"
                 className="text-sm text-black dark:text-white  font-semibold"
               >
-                Password
+                {labels?.PASSWORD}
               </label>
               <input
                 type={eyeOpen ? "password" : "text"}
                 id="password"
                 {...register("password")}
-                placeholder="Password"
+                placeholder={labels?.PASSWORD}
                 className="outline-none border-2 border-gray-400 rounded-xl  py-1 pl-4"
                 required
               />
@@ -265,7 +275,7 @@ const SignUp = (props: Props) => {
               type="submit"
               disabled={isDisabledSignUp}
             >
-              Sign up
+              {labels?.SIGN_UP}
             </button>
           </form>
 
@@ -274,13 +284,13 @@ const SignUp = (props: Props) => {
             onClick={handleSignUp}
           >
             <FcGoogle />
-            Sign up with Google
+           {labels?.SIGN_UP_GOOGLE}
           </button>
           <p
             className="mt-2 font-bold cursor-pointer"
             onClick={handleSwitchToLogin}
           >
-            Already have a member ? log in
+            {labels?.ALREADY_MEMBER}
           </p>
         </div>
       </Modal>

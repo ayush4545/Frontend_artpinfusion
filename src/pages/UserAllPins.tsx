@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import Loader from "../components/Loader";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 import ViewOption from "../components/ViewOption";
+import { labels } from "../config/constants/text.constant";
 const Pins = lazy(() => import("../components/Pins"));
 
 const UserAllPins = () => {
@@ -43,7 +44,7 @@ const UserAllPins = () => {
     <div className="w-screen absolute top-[12vh]   -z-10">
       <div className="fixed w-full h-20 top-[12vh] left-0  pr-3 z-50 bg-white dark:bg-[#282828] flex items-center">
         <p className="text-xl lg:text-2xl text-center flex-1 font-semibold absolute left-[50%] -translate-x-[50%] dark:text-white">
-          All Pins
+          {labels?.ALL_PINS}
         </p>
         {userId === loggedInUser?._id && (
           <div className="flex items-center gap-3 absolute right-3 pr-2">
@@ -59,7 +60,7 @@ const UserAllPins = () => {
               <Pins
                 pins={pins}
                 gridStyle={
-                  selectedViewOptions === "standard"
+                  selectedViewOptions === labels?.STANDARD_VALUE
                     ? "columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
                     : "columns-2 gap-4 lg:gap-4 sm:columns-4 lg:columns-6 xl:columns-8"
                 }
@@ -68,7 +69,7 @@ const UserAllPins = () => {
           </div>
         ) : (
           <p className="text-center text-gray-400 dark:text-white">
-            There aren’t any Pins saved yet
+            {labels?.NO_PIN_SAVED_YET}
           </p>
         )}
       </div>

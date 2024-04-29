@@ -14,6 +14,7 @@ import CreateBoardWithPin from "./CreateBoardWithPin";
 import SearchBoard from "./SearchBoard";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
   title: string;
@@ -39,14 +40,11 @@ const AllPinsBoardSavePinModel = (props: Props) => {
     boardName: "",
     boardId: "",
   });
-  console.log("345", selectedBoardDetails);
-  console.log("234", loggedInUser);
-  console.log("4o", userBoards);
   const fetchPin = async () => {
     try {
       const res = await axios.get(`${BACKEND_END_POINTS.Get_PIN}/${pinId}`);
       const resData = await res.data;
-      console.log("resData", resData);
+      
       if (resData.statusCode === 200) {
         setPinDetails(resData.data?.pin);
         setUserBoards((prevBoards) => {
@@ -76,8 +74,6 @@ const AllPinsBoardSavePinModel = (props: Props) => {
   const handleSavePin = async (e, selectedBoardId?: string) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("selectedBoardId", e, selectedBoardId);
-    console.log("selectedBoardDetails", selectedBoardDetails);
 
     try {
       if (!isAuthenticate) {
@@ -98,7 +94,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
         },
       });
       const resData = await res.data;
-      console.log(24, resData);
+
       if (resData.statusCode === 201) {
         saveUserInRedux.useSaveLoginUserAndAccessToken(
           { _doc: { ...resData.data } },
@@ -108,11 +104,10 @@ const AllPinsBoardSavePinModel = (props: Props) => {
           const filteredBoards = prevBoards?.filter(
             (board) => board?._id !== selectedBoardId
           );
-          console.log("34523", filteredBoards);
           return filteredBoards;
         });
 
-        const toastMessage = `Pin is saved in your board`;
+        const toastMessage = labels?.PIN_SAVED_BOARD_TOAST_MESSAGE;
         toastPopup(toastMessage, "success");
       }
     } catch (error) {
@@ -135,8 +130,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                   <div className="w-full lg:col-span-1 h-full">
                     {pinDetails?.boards.length > 0 && (
                       <div className=" rounded-xl p-2 text-white text-center w-1/3 lg:w-2/3 bg-orange-500 after:content-[''] left-[50%] -translate-x-[50%] mb-3 relative after:absolute after:border-[10px]  after:border-l-transparent after:border-r-transparent after:border-t-orange-500 after:border-b-transparent after:-bottom-[18px] after:left-[50%] after:-translate-x-[50%]">
-                        This Pin is already saved in{" "}
-                        {pinDetails?.boards[0]?.boardName}
+                       {labels?.PIN_SAVED_TITLE(pinDetails?.boards?.[0]?.boardName)} 
                       </div>
                     )}
                     <div
@@ -176,7 +170,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                     />
 
                     <div className="mt-3 p-2">
-                      <p>Other Boards</p>
+                      <p>{labels?.OTHER_BOARDS}</p>
                       <div className="w-full max-h-full lg:max-h-[400px] overflow-y-auto">
                         {userBoards?.length > 0 ? (
                           userBoards?.map((board) => (
@@ -189,7 +183,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                             />
                           ))
                         ) : (
-                          <p>Their is not any board for this user.</p>
+                          <p>{labels?.NO_BOARD_MESSAGE}</p>
                         )}
                       </div>
                     </div>
@@ -202,13 +196,12 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                     onClick={() => {
                       setShowFirstModel(false);
                       setOpenCreateBoardModel(true);
-                      // onClose()
                     }}
                   >
                     <div className="w-10 h-10 rounded-md bg-[#e9e9e9] flex items-center justify-center overflow-hidden">
                       <PiPlusBold className="font-extrabold text-2xl" />
                     </div>
-                    <p>Create Board</p>
+                    <p>{labels?.CREATE_BOARD}</p>
                   </button>
                   <button
                     className={
@@ -216,7 +209,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                     }
                     onClick={onClose}
                   >
-                    Done
+                    {labels?.DONE}
                   </button>
                 </div>
               </div>
@@ -250,4 +243,4 @@ const AllPinsBoardSavePinModel = (props: Props) => {
   return createPortal(getModel(), document.body);
 };
 
-export default WithErrorBoundariesWrapper(AllPinsBoardSavePinModel);
+export default AllPinsBoardSavePinModel;

@@ -15,6 +15,7 @@ import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
 import { PiPlusBold } from "react-icons/pi";
 import ViewOption from "../components/ViewOption";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type BoardData = {
   boardName: string;
   creatorBy: UserState;
@@ -33,7 +34,7 @@ const BoardDetails = () => {
   const [openFollowersModel, setOpenFollowersModel] = useState(false);
   const navigate=useNavigate()
   const selectedViewOptions=useAppSelector(state=>state.viewOption)
-  console.log("board state", state,pathname);
+  
 
   const fetchBoardDetails = async () => {
     try {
@@ -46,12 +47,12 @@ const BoardDetails = () => {
         const { boardName, creatorBy, pins, _id, description=''} = resData.data;
         setBoardData({ boardName, creatorBy, pins, _id,description });
         if(pathname.includes(loggedInUser?.username)){
-          dispatch(setHoverOn("allPins"))
+          dispatch(setHoverOn(labels?.HOVER_ON_ALL_PINS))
         }else{
-          dispatch(setHoverOn("homePin"))
+          dispatch(setHoverOn(labels?.HOVER_ON_HOME_PIN))
         }
       }
-      console.log("boardData", resData);
+    
     } catch (error) {
       console.log("board details error", error);
     }
@@ -66,7 +67,7 @@ const BoardDetails = () => {
     if (state && state?.boardId) {
       fetchBoardDetails();
     }
-    // return ()={}
+    return ()=>{}
   }, [state]);
   return (
     <>
@@ -113,11 +114,11 @@ const BoardDetails = () => {
                       setOpenFollowersModel(true);
                     }}
                   >
-                    {boardData?.creatorBy?.followers.length} followers
+                    {boardData?.creatorBy?.followers.length} {labels?.FOLLOWERS}
                   </p>
 
                   <button className="bg-[#E9E9E9] hover:bg-[#dad9d9]  rounded-[20px] p-2 px-4 mr-2 font-semibold mt-5">
-                    Share
+                    {labels?.SHARE}
                   </button>
                 </>
               )}
@@ -151,7 +152,7 @@ const BoardDetails = () => {
           )}
         </>
       ) : (
-        <p className="text-center text-3xl text-bold">Loading...</p>
+        <Loader/>
       )}
 
       {/* show pins to save in board */}
@@ -208,10 +209,10 @@ const BoardPinsModel = (props: Props) => {
       const resData = await res.data;
       if (resData?.data?.length) {
         const newPins = removeDuplicates([...pins, ...resData.data], "_id");
-        console.log("newPins", newPins);
+       
         setPins(newPins);
       }
-      console.log("pins for board-->", resData);
+    
     } catch (error) {
       console.log("board pins model error", error);
     }
@@ -223,7 +224,7 @@ const BoardPinsModel = (props: Props) => {
   const boardPinsModel = () => {
     return (
       <Modal
-        title="Save some pins to your new board"
+        title={labels?.SOME_PIN_TO_SAVE_IN_BOARD}
         onClose={onClose}
         showClose={false}
         widthHeightStyle="w-2/3"
@@ -242,7 +243,7 @@ const BoardPinsModel = (props: Props) => {
                   onClose();
                 }}
               >
-                Done
+                {labels?.DONE}
               </button>
             </div>
           </div>

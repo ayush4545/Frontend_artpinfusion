@@ -1,6 +1,7 @@
 import React from "react";
 import { BsWhatsapp } from "react-icons/bs";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 
 type Props={
   onClose : ()=> void,
@@ -8,6 +9,7 @@ type Props={
 }
 const ShareModal = (props:Props) => {
    const {onClose,leftTopStyle}=props
+   const whatsappWebBaseUrl="https://web.whatsapp.com/send?text="
   return (
     <div className={`w-52  shadow-2xl rounded-lg absolute border-[1px] border-gray-300 p-3 bg-white ${leftTopStyle} z-50`}>
       <p className="text-center font-semibold text-lg">Share</p>
@@ -15,22 +17,15 @@ const ShareModal = (props:Props) => {
         <button
           className="flex flex-col items-center gap-2"
           onClick={()=>{
-            window.open(`https://web.whatsapp.com/send?text=I found some funny pins for you in PinIt!%0A${window.location.href}`) 
+            window.open(`${whatsappWebBaseUrl}${labels?.WHATSAPP_SEND_MESSAGE}%0A${window.location.href}`) 
             onClose()
           }}
         >
           <div className="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center">
             <BsWhatsapp className="text-white text-3xl" />
           </div>
-          <p className="text-sm">Whatsapp</p>
+          <p className="text-sm">{labels?.WHATSAPP}</p>
         </button>
-
-        {/* <div className="flex flex-col items-center gap-2" onClick={handleCopyLink}>
-            <div className="bg-[#e9e9e9] w-12 h-12 rounded-full flex items-center justify-center">
-                <GrLink className="text-xl"/>
-            </div>
-            <p className="text-sm">{isLinkCopy ?'Link copied' : 'Copy link'}</p>
-        </div> */}
       </div>
     </div>
   );

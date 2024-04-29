@@ -13,6 +13,8 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { BoardType } from "../Types/types";
+import { labels } from "../config/constants/text.constant";
 
 const HomePinHoverCard = (props) => {
   const { boardId, setCardClicked, _id, boards, link, user, title, imageUrl } =
@@ -49,14 +51,14 @@ const HomePinHoverCard = (props) => {
 
   useEffect(() => {
     if (isPinSaved) {
-      console.log(1000,boards, loggedInUser?.board)
+      
       if (boards && boards?.length > 0) {
         const board = loggedInUser?.board.filter((board)=>{
          return boards?.some(
-            (b1) => b1?._id === board?._id
+            (b1:BoardType) => b1?._id === board?._id
           );
         })
-        console.log("if me arha hboard id wala",board);
+       
         if(board.length > 0){
          setSelectedBoardDetails({
           boardName: board[0]?.boardName,
@@ -64,21 +66,21 @@ const HomePinHoverCard = (props) => {
         });
         }else{
           setSelectedBoardDetails({
-            boardName: "Profile",
+            boardName: labels?.PROFILE,
             boardId: null,
           });
         }
       }
     } else {
       setSelectedBoardDetails({
-        boardName: "Profile",
+        boardName: labels?.PROFILE,
         boardId: null,
       });
     }
   }, [isPinSaved, boards]);
-  console.log("209",selectedBoardDetails)
+  
 
-  const handleWindowClick = (e) => {
+  const handleWindowClick = () => {
     setOpenBoardPopover(false);
     setCardClicked(false);
   };
@@ -94,9 +96,7 @@ const HomePinHoverCard = (props) => {
   const handleSavePin = async (e, selectedBoardId?: string) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("selectedBoardId", e, selectedBoardId);
-    console.log("selectedBoardDetails", selectedBoardDetails);
-    // return
+
     try {
       if (!isAuthenticate) {
         return navigate(`/`, {
@@ -104,9 +104,9 @@ const HomePinHoverCard = (props) => {
         });
       }
 
-      const token = getCookie("accessToken");
+      const token = getCookie(labels?.ACCESS_TOKEN);
       const id = boardId ? boardId : selectedBoardId;
-      console.log("hello ji", id);
+     
       if (!isPinSaved) {
         const body = {
           pinId: _id,
@@ -118,7 +118,7 @@ const HomePinHoverCard = (props) => {
           },
         });
         const resData = await res.data;
-        console.log(24,resData)
+      
         if (resData.statusCode === 201) {
           saveUserInRedux.useSaveLoginUserAndAccessToken(
             { _doc: { ...resData.data } },
@@ -126,7 +126,7 @@ const HomePinHoverCard = (props) => {
           );
           setIsPinSaved(true);
 
-          const toastMessage = boardId ? "" : "Pin is saved in your profile";
+          const toastMessage = boardId ? "" : labels?.PIN_SAVED_PROFILE_TOAST_MESSAGE;
           toastPopup(toastMessage, "success");
         }
       } else {
@@ -150,7 +150,7 @@ const HomePinHoverCard = (props) => {
 
           const toastMessage = boardId
             ? ""
-            : "Pin is removed from your profile";
+            : labels?.PIN_REMOVE_PROFILE_TOAST_MESSAGE;
           toastPopup(toastMessage, "success");
         }
       }
@@ -180,7 +180,7 @@ const HomePinHoverCard = (props) => {
         {/* saved and likes pin */}
         <div className="flex items-center gap-3 justify-self-end">
           <div
-            title="Save Pin"
+            title={labels?.SAVE_PIN}
             className="rounded-full w-8 aspect-square bg-[#e9e9e9] flex items-center justify-center hover:bg-[#d7d5d5] transition-all cursor-pointer"
             onClick={(e) => {
               handleSavePin(e, selectedBoardDetails?.boardId);
@@ -201,7 +201,7 @@ const HomePinHoverCard = (props) => {
             {user?.avatar && user.avatar.length > 0 ? (
               <img
                 src={user?.avatar}
-                onError={(e) => {
+                onError={(e:React.SyntheticEvent<HTMLImageElement, Event>) => {
                   e.target.src = ErrorImage;
                 }}
                 alt={user?.name}
@@ -235,7 +235,7 @@ const HomePinHoverCard = (props) => {
                 e.stopPropagation();
                 downloadFile(imageUrl, title);
               }}
-              title="download"
+              title={labels?.DONWLOAD}
             >
               <MdOutlineFileDownload className="text-black text-lg" />
             </div>
@@ -260,11 +260,11 @@ const HomePinHoverCard = (props) => {
       {openCreateBoardModel && (
         <BoardModel
           onClose={() => setOpenCreateBoardModel(false)}
-          title="Create Board"
+          title={labels?.CREATE_BOARD}
           isSavedButtonModel={true}
           pinId={_id}
           setSelectedBoardDetails={setSelectedBoardDetails}
-        />
+        /> 
       )}
     </>
   );

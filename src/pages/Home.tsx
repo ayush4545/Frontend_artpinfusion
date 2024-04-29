@@ -9,6 +9,7 @@ import { setHoverOn } from "../redux/hoverOn.slice";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import Loader from "../components/Loader";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 
 const LIMIT = 10;
 const Home = () => {
@@ -30,15 +31,15 @@ const Home = () => {
   }, [isAuthenticate]);
 
   const fetchPins = async () => {
-    console.log(123,page,newPins)
+   
     try {
       const res = await axios.get(
         `${BACKEND_END_POINTS.Get_ALL_PINS}?page=${page?.current}&limit=${LIMIT}`
       );
       const resData = await res.data;
       if (resData?.data?.length) {
-        // const initialPins= pins ? pins : []
-        console.log(234,pins)
+        
+       
         const setOfPins = [...new Set([...newPins?.current, ...resData.data])];
         newPins.current=setOfPins
         setPins(setOfPins);
@@ -48,7 +49,7 @@ const Home = () => {
       }
 
     } catch (error) {
-      toastPopup("Something went wrong", "error");
+      toastPopup(labels?.FETCHING_PINS_ERROR, "error");
       
     }finally{
       setLoading(false);
@@ -58,7 +59,7 @@ const Home = () => {
   useEffect(() => {
     if (isAuthenticateValue) {
       fetchPins();
-      dispatch(setHoverOn("homePin"));
+      dispatch(setHoverOn(labels?.HOVER_ON_HOME_PIN));
     }
   }, []);
 
@@ -69,7 +70,6 @@ const Home = () => {
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.scrollHeight - 30
     ) {
-      console.log("height",window.innerHeight + document.documentElement.scrollTop,document.documentElement.scrollHeight - 60)
       setLoading(true)
       fetchPins();
     }
@@ -104,7 +104,8 @@ const Home = () => {
                   gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
                 /> : 
                 <h2 className="text-center font-bold text-4xl mt-10 text-gray-700">
-                No pins found
+                
+                {labels?.NO_PINS_FOUND}
               </h2>
               ) : <Loader/>
             }

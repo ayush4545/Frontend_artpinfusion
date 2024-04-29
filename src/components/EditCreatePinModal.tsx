@@ -12,6 +12,7 @@ import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
   title: string;
@@ -46,7 +47,7 @@ const EditCreatePinModal = (props: Props) => {
     try {
       const res = await axios.get(`${BACKEND_END_POINTS.Get_PIN}/${pinId}`);
       const resData = await res.data;
-      console.log("resData", resData);
+      
       if (resData.statusCode === 200) {
         setPinDetails(resData.data?.pin);
         setPinInput({
@@ -80,7 +81,7 @@ const EditCreatePinModal = (props: Props) => {
   }, [pinId]);
 
   const handleInputsChange=(e)=>{
-    console.log(e.target.name,e.target.value)
+   
     setPinInput(prev=>{
       return {...prev,[e.target.name]:e.target.value}
     })
@@ -90,7 +91,7 @@ const EditCreatePinModal = (props: Props) => {
     if(selectedBoard && selectedBoard?.boardId){
       
       const board=pinDetails?.boards?.filter((board:BoardType)=>board?._id === selectedBoard?.boardId)
-      console.log(209,board)
+     
       if(!board?.length){
         return true
       }
@@ -123,14 +124,12 @@ const EditCreatePinModal = (props: Props) => {
       const resData= await res?.data
 
       if(resData.statusCode === 200){
-        toastPopup("Pin details is updated","success")
+        toastPopup(labels?.PIN_DETAIL_UPDATE_TOAST_MESSAGE,"success")
         onClose()
       }
-      console.log("resData",resData)
-
-      console.log("dcsdcscdd",body)
+      
     } catch (error) {
-      toastPopup("Some problem while updating pin details","error") 
+      toastPopup(labels?.PIN_DETAIL_UPDATE_ERROR_TOAST_MESSAGE,"error") 
     }
   }
 
@@ -148,18 +147,18 @@ const EditCreatePinModal = (props: Props) => {
         },
       })
       const resData= await res?.data
-      console.log("delete resData",resData)
+      
       if(resData.statusCode === 200){
         saveUserInRedux.useSaveLoginUserAndAccessToken(
           { _doc: { ...resData.data } },
           dispatch
         );
-        toastPopup("Pin deleted successfully","success") 
+        toastPopup(labels?.PIN_DETELTE_TOAST_MESSAGE,"success") 
         onClose()
         window.location.reload()
       }
     } catch (error) {
-      toastPopup("Some problem while deleting pin","error") 
+      toastPopup(labels?.PIN_DETELTE_ERROR_TOAST_MESSAGE,"error") 
     }
   }
   
@@ -209,13 +208,13 @@ const EditCreatePinModal = (props: Props) => {
               <div className="w-full lg:col-span-2">
                 <div className="flex flex-col w-full gap-2">
                   <label htmlFor="title" className="text-sm">
-                    Title
+                    {labels?.TITLE}
                   </label>
                   <input
                     className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
                     id="title"
                     name="title"
-                    placeholder="Add a title"
+                    placeholder={labels?.TITLE_PLACEHOLDER}
                     type="text"
                     value={pinInput.title}
                     onChange={handleInputsChange}
@@ -224,13 +223,13 @@ const EditCreatePinModal = (props: Props) => {
 
                 <div className="flex flex-col w-full gap-2 mt-3">
                   <label htmlFor="description" className="text-sm">
-                    Description
+                    {labels?.DESCRIPTION}
                   </label>
                   <textarea
                     className="outline-none border-2 border-gray-400 rounded-xl  pl-4 md:h-28 resize-none py-2"
                     id="description"
                     name="description"
-                    placeholder="Add a detailed description"
+                    placeholder={labels?.DESCRIPTION_PIN_PLACEHOLDER}
                     rows={5}
                     value={pinInput.description}
                     onChange={handleInputsChange}
@@ -238,7 +237,7 @@ const EditCreatePinModal = (props: Props) => {
                 </div>
 
                 <div className="flex flex-col w-full gap-2 mt-12 relative">
-                  <p className="text-sm">Board</p>
+                  <p className="text-sm">{labels?.BOARD}</p>
                   <div
                     className={`border-gray-400 rounded-xl  py-2 px-4 border-2 flex items-center justify-between cursor-pointer`}
                     id="board"
@@ -267,7 +266,7 @@ const EditCreatePinModal = (props: Props) => {
                         </p>
                       </div>
                     ) : (
-                      <span>Choose a board</span>
+                      <span>{labels?.CHOOSE_BOARD_TITLE}</span>
                     )}
                     <FaChevronDown />
                   </div>
@@ -287,14 +286,14 @@ const EditCreatePinModal = (props: Props) => {
                 className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]"
                 onClick={onClose}
               >
-                Cancel
+                {labels?.CANCEL}
               </button>
               <div className="flex items-center gap-5">
                 <button
                   className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]"
                   onClick={handleDeletePin}
                 >
-                  Delete
+                  {labels?.DELETE}
                 </button>
                 <button
                   className={
@@ -303,7 +302,7 @@ const EditCreatePinModal = (props: Props) => {
                   onClick={handleSaveDetails}
                   disabled={pinInput.title === pinDetails?.title && pinInput.description === pinDetails?.description}
                 >
-                  Save
+                  {labels?.SAVE}
                 </button>
               </div>
             </div>

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 
 type Props = {
   onClose: () => void;
@@ -60,9 +61,9 @@ const EditBoardPopup = (props: Props) => {
         setIsDoneBtnClicked(false)
         onClose()
       }
-      console.log("updatedBoardName in user",resData)
+      
     } catch (error) {
-      console.log("update board details error", error);
+    
       setIsDoneBtnClicked(false)
     }
   };
@@ -86,7 +87,7 @@ const EditBoardPopup = (props: Props) => {
         onClose()
         window.location.reload()
     }
-    console.log("delete board",resData)
+    
    } catch (error) {
      console.log("delete board error",error)
    }
@@ -102,13 +103,13 @@ const EditBoardPopup = (props: Props) => {
         <div className="w-full flex item-center flex-col p-10">
           <div className="flex flex-col  gap-2">
             <label htmlFor="boardName" className="text-sm">
-              Name
+              {labels?.NAME}
             </label>
             <input
               className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
               id="boardName"
               name="boardName"
-              placeholder="Name"
+              placeholder={labels?.NAME}
               type="text"
               value={inputs?.boardName}
               onChange={handleChange}
@@ -117,13 +118,13 @@ const EditBoardPopup = (props: Props) => {
 
           <div className="flex flex-col  gap-2 mt-8">
             <label htmlFor="description" className="text-sm">
-              Description
+              {labels?.DESCRIPTION}
             </label>
             <textarea
               className="outline-none border-2 border-gray-400 rounded-xl  pl-4 md:h-28 resize-none py-2"
               id="description"
               name="description"
-              placeholder="What's your board about"
+              placeholder={labels?.DESCRIPTION_BOARD_PLACEHOLDER}
               rows={5}
               value={inputs?.description}
               onChange={handleChange}
@@ -132,7 +133,7 @@ const EditBoardPopup = (props: Props) => {
         </div>
         <div className="absolute bottom-0 shadow-2xl w-full flex items-center justify-between py-4 px-3 border-t-2 border-gray-300">
            <button className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]" onClick={handleDeleteBoard}>
-              Delete board
+              {labels?.DELETE_BOARD}
             </button>
           <button
             className={`bg-[#FF8C00]  text-white rounded-[20px] p-2 px-4 ${
@@ -148,7 +149,7 @@ const EditBoardPopup = (props: Props) => {
               || isDoneBtnClicked
             }
           >
-            Done
+            {labels?.DONE}
           </button>
         </div>
       </Modal>

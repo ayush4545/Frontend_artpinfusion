@@ -12,6 +12,7 @@ import { useAppDispatch } from "../hooks/reduxHooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
   handleSwitchToSignUp: ()=> void
@@ -35,11 +36,11 @@ const LogIn = (props: Props) => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async ({ access_token }) => {
       const userInfo = await config.utils.GoogleUserInfo.getGoogleUserInfo(access_token)
-      console.log(userInfo)
+      
       const userLogin=await axios.post(config.constant.api.BACKEND_END_POINTS.GOOGLE_USER,userInfo)
       config.utils.saveUserInReduxAndSetAccessToken.useSaveLoginUserAndAccessToken(userLogin.data.data,dispatch)
       onClose()
-      toastPopup(`Welcome back, ${userLogin?.data?.data?._doc?.name}`,"success")
+      toastPopup(labels?.WELCOME_USER_TOAST_MESSAGE(userLogin?.data?.data?._doc?.name),"success")
       window.location.reload()
     },
     onError:(error)=> toastPopup(error?.error_description as string,"warning")
@@ -55,30 +56,30 @@ const LogIn = (props: Props) => {
      if(data.password && data.emailId){
       const res= await axios.post(BACKEND_END_POINTS.LOGIN,data)
       const resData=await res?.data
-      console.log("login",resData)
+      
       config.utils.saveUserInReduxAndSetAccessToken.useSaveLoginUserAndAccessToken(
         resData.data,
         dispatch
       );
       reset()
-      toastPopup(`Welcome back, ${resData?.data?._doc?.name}`,"success")
+      toastPopup(labels?.WELCOME_USER_TOAST_MESSAGE(resData?.data?._doc?.name),"success")
       onClose();
       window.location.reload()
      }
    } catch (error) {
-      console.log("error",error)
+      
       if(error?.response?.status===401){
-      toastPopup("Invalid user credientials","warning")
+      toastPopup(labels?.INVALID_USER_TOAST_MESSAGE,"warning")
       }
       if(error?.response?.status === 404){
-        toastPopup("User does not exists","warning")
+        toastPopup(labels?.USER_NOT_EXIST_TOAST_MESSAGE,"warning")
       }
    }
  }
 
   const getLoginModal = (): ReactElement => {
     return (
-      <Modal onClose={onClose} isSignupPage={false} title={"Welcome to PinIt"} showClose={true} widthHeightStyle=" w-[90%] sm:w-2/3 lg:w-1/3 h-auto">
+      <Modal onClose={onClose} isSignupPage={false} title={labels?.LOGIN_TITLE} showClose={true} widthHeightStyle=" w-[90%] sm:w-2/3 lg:w-1/3 h-auto">
         <div className="grid place-items-center mt-10 items-center w-full">
           <form className="w-full grid place-items-center" onSubmit={handleSubmit(onSubmitHandler)} >
             <div className="flex flex-col gap-3 w-[55%]">
@@ -87,13 +88,13 @@ const LogIn = (props: Props) => {
                 className="text-md text-black dark:text-white  font-semibold"
                 autoFocus
               >
-                Email
+                {labels?.EMAIL}
               </label>
               <input
                 type="text"
                 id="emailId"
                 {...register("emailId")}
-                placeholder="Email"
+                placeholder={labels?.EMAIL}
                 className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4 bg-white"
                 required
               />
@@ -104,13 +105,13 @@ const LogIn = (props: Props) => {
                 htmlFor="password"
                 className="text-md text-black dark:text-white  font-semibold"
               >
-                Password
+               {labels?.PASSWORD}
               </label>
               <input
                 type={eyeOpen ? "password" : "text"}
                 id="password"
                 {...register("password")}
-                placeholder="Password"
+                placeholder={labels?.PASSWORD}
                 className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
                 required
               />
@@ -135,11 +136,9 @@ const LogIn = (props: Props) => {
               </p>
               <p className="text-red-800 text-sm">{errors?.password?.message}</p>
             </div>
-            <Link to="/password-reset" className="w-[55%] mt-2 font-bold">
-            Forgot your password?
-          </Link>
+           
           <button className="w-[55%] bg-[#FF8C00] hover:bg-[#FF5E0E] text-white rounded-[20px] p-2 px-4 mt-5">
-            Log in
+            {labels?.LOG_IN}
           </button>
           </form>
          
@@ -148,11 +147,11 @@ const LogIn = (props: Props) => {
            onClick={handleSignUp}
           >
             <FcGoogle />
-            Sign up with Google
+            {labels?.SIGN_UP_GOOGLE}
           </button>
 
           <p className="mt-5 font-bold cursor-pointer" onClick={handleSwitchToSignUp}>
-            Not on PinIt yet ? Sign up
+            {labels?.NOT_SIGN_UP}
           </p>
         </div>
       </Modal>

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import CreateBoardWithPin from "./CreateBoardWithPin";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 
 
 type Props = {
@@ -58,8 +59,7 @@ const BoardModel = (props: Props) => {
       const resData = await res.data;
       if (resData.statusCode === 201) {
         saveUserInRedux.useSaveLoginUserAndAccessToken(resData.data, dispatch);
-        console.log("user after board create", resData.data);
-        console.log(`/${resData?.data?._doc?.username}/${boardName}`);
+
         if (handleGetBoardNameAndId) {
           handleGetBoardNameAndId(boardName, resData?.data?.boardId);
         }
@@ -72,12 +72,12 @@ const BoardModel = (props: Props) => {
           });
         }
       }
-      console.log("board", resData);
+     
     } catch (error) {
       if (error?.response?.status === 409) {
         setDuplicateName(true);
       }
-      console.log("create board error", error);
+     
     }
   };
   const normalBoard = () => {
@@ -85,11 +85,11 @@ const BoardModel = (props: Props) => {
       <div className="w-full p-10 mt-10 h-full">
         <div className="flex flex-col gap-2">
           <label htmlFor="boardName" className="text-sm">
-            Name
+            {labels?.NAME}
           </label>
           <input
             type="text"
-            placeholder='Like "Watching Anime" or "Traveling"'
+            placeholder={labels?.BOARD_NAME_PLACEHOLDER}
             value={boardName}
             className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
             onChange={(e) => {
@@ -99,7 +99,7 @@ const BoardModel = (props: Props) => {
           />
           {duplicateName && (
             <p className="text-sm text-red-500">
-              This board name is already taken.
+              {labels?.DUPLICATE_BOARD_NAME_WARNING}
             </p>
           )}
         </div>

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { BoardType, UserState } from "../Types/types";
-
-
 import useAuth from "../hooks/useAuth";
 import {  useAppSelector } from "../hooks/reduxHooks";
 import ErrorImage from "../assets/404Page.gif"
@@ -9,6 +7,7 @@ import HomePinHoverCard from "./HomePinHoverCard";
 import AllPinsBoardHoverCard from "./AllPinsBoardHoverCard";
 import EditCreatePin from "./EditCreatePin";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 type Props = {
   imageUrl: string;
   user?: UserState;
@@ -91,15 +90,15 @@ const PinCard = (props: Props) => {
               )}
 
               {
-                hoverOn === "allPins" && <AllPinsBoardHoverCard imageUrl={imageUrl} title={title} setCardClicked={setCardClicked} pinId={_id}/>
+                hoverOn === labels?.HOVER_ON_ALL_PINS && <AllPinsBoardHoverCard imageUrl={imageUrl} title={title} setCardClicked={setCardClicked} pinId={_id}/>
               }
               {
-                hoverOn === "created" && <EditCreatePin  setCardClicked={setCardClicked} pinId={_id}/>
+                hoverOn === labels?.HOVER_ON_CREATED && <EditCreatePin  setCardClicked={setCardClicked} pinId={_id}/>
               }
             </>
           ) : (
             <p className="text-lg text-center absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
-              Open
+              {labels?.OPEN}
             </p>
           )}
         </div>

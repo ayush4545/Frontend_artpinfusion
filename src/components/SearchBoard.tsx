@@ -1,10 +1,11 @@
 import React, { MutableRefObject, useState } from "react";
 import { BoardType } from "../Types/types";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+import { labels } from "../config/constants/text.constant";
 
 type Props={
   styles:string,
-  setBoards : ()=>void,
+  setBoards : (boards:BoardType[])=>void,
   originalBoards: MutableRefObject<null | BoardType[]>
 }
 const SearchBoard = (props:Props) => {
@@ -12,14 +13,14 @@ const SearchBoard = (props:Props) => {
     const [input,setInput]=useState('')
     const handleChange=(e)=>{
         setInput(e.target.value)
-        console.log(30,e.target.value,originalBoards)
+        
       if(e.target.value === '' && originalBoards.current){
         setBoards(originalBoards?.current)
       }else{
         const filteredBoards = originalBoards?.current?.filter((board) =>
           board?.boardName?.toLowerCase()?.includes(e.target.value.toLowerCase())
         );
-        console.log(35,filteredBoards)
+       
         setBoards(filteredBoards);
       }
     }
@@ -28,7 +29,7 @@ const SearchBoard = (props:Props) => {
       className={styles}
       id="search"
       name="search"
-      placeholder="Search"
+      placeholder={labels?.SEARCH_PLACEHOLDER}
       type="search"
       value={input}
       onChange={handleChange}

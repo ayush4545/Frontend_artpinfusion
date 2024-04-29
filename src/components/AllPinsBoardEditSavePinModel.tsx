@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import useAuth from "../hooks/useAuth";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
   title: string;
@@ -20,7 +21,6 @@ type Props = {
 const AllPinsBoardEditSavePinModel = (props: Props) => {
   const { onClose, title, pinId } = props;
   const {state}=useLocation()
-  console.log("state",state)
   const { BACKEND_END_POINTS } = config.constant.api;
   const [pinDetails, setPinDetails] = useState<PinType | null>(null);
   const [openDropDown,setOpenDropDown] = useState(false)
@@ -40,13 +40,11 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
     try {
       const res = await axios.get(`${BACKEND_END_POINTS.Get_PIN}/${pinId}`);
       const resData = await res.data;
-      console.log("resData", resData);
       if (resData.statusCode === 200) {
         setPinDetails(resData.data?.pin);
 
         if(state?.boardId){
           const board=resData.data?.pin?.boards.filter((board)=>board?._id === state?.boardId)
-          console.log("dfvdfv",board)
           if(board.length >0){
             setSelectedBoard({
               boardName: board[0].boardName,
@@ -71,16 +69,12 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
       console.log("getting pin error", error);
     }
   };
- console.log("selectedBoard",selectedBoard)
+ 
   useEffect(() => {
     if (pinId) {
       fetchPin();
     }
   }, [pinId]);
-
-
-
-  console.log("pinDetails", pinDetails);
 
   const handleDelete=async()=>{
     try {
@@ -101,13 +95,13 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
         },
       });
       const resData = await res.data;
-      console.log("345",resData)
+
       if (resData.statusCode === 200) {
         saveUserInRedux.useSaveLoginUserAndAccessToken(
           { _doc: { ...resData.data } },
           dispatch
         );
-        const toastMessage =`Pin is removed from your ${selectedBoard?.boardName === undefined ? "Profile" : selectedBoard?.boardName}`;
+        const toastMessage =labels?.PIN_REMOVED_EDIT_TOAST_MESSAGE(selectedBoard?.boardName === undefined ? "Profile" : selectedBoard?.boardName);
         toastPopup(toastMessage, "success");
         onClose()
       }
@@ -131,7 +125,7 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
                {
                 boards && boards?.length > 0 && (
                   <div className="lg:col-span-2 w-full h-full">
-                  <p>Boards</p>
+                  <p>{labels?.BOARDS}</p>
                   <div className="bg-[#f1f1f1] flex items-center justify-between py-3 rounded-lg px-4 cursor-pointer mt-3" onClick={(e)=>{
                     e.preventDefault()
                     e.stopPropagation()
@@ -198,7 +192,7 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
                   className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]"
                   onClick={onClose}
                 >
-                  Cancel
+                  {labels?.CANCEL}
                 </button>
                 <button
                   className={
@@ -206,7 +200,7 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
                   }
                   onClick={handleDelete}
                 >
-                  Delete
+                {labels?.DELETE}
                 </button>
             </div>
           </div>
@@ -218,4 +212,4 @@ const AllPinsBoardEditSavePinModel = (props: Props) => {
   };
   return createPortal(getModel(), document.body);
 };
-export default WithErrorBoundariesWrapper(AllPinsBoardEditSavePinModel);
+export default AllPinsBoardEditSavePinModel

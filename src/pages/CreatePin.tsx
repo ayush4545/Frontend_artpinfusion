@@ -6,6 +6,7 @@ import config from "../config";
 import CreatePinChooseBoard from "../components/CreatePinChooseBoard";
 import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type pinData = {
   title: string;
   description: string;
@@ -87,7 +88,7 @@ const CreatePin = () => {
         },
       });
       const resData = await res.data;
-      console.log(resData);
+      
       toastPopup("Your pin has been published", "success");
       setFiles([]);
       setSelectedImage(null);
@@ -101,18 +102,18 @@ const CreatePin = () => {
       imageRef.current = null;
       setBtnDisabled(false);
     } catch (error) {
-      console.log("create pin error", error);
+      
       if (error.response.status === 401) {
-        toastPopup("Unauthorized user", "error");
+        toastPopup(labels?.UNAUTHORIZED_USER, "error");
       }
 
       if (error.response.statue === 422) {
-        toastPopup("File is required", "error");
+        toastPopup(labels?.FILE_IS_REQUIRED, "error");
       }
 
       if (error.response.status === 500) {
         toastPopup(
-          "Sorry!, due to some problem pin not able to published",
+          labels?.NOT_PUBLISHED_ERROR,
           "error"
         );
       }
@@ -120,9 +121,8 @@ const CreatePin = () => {
   };
 
   const handleWindowClick = (e) => {
-    console.log(e.target.id)
+   
     if(e.target.id !== "search"){
-
       setOpenBoardDropDown(false);
     }
   };
@@ -138,7 +138,7 @@ const CreatePin = () => {
   return (
     <div className="relative top-[12vh] w-full h-full dark:bg-[#282828]">
       <div className="fixed top-[12vh] w-full py-5 px-5 border-b-[1px] border-gray-300 flex justify-between items-center z-50 bg-white dark:bg-[#282828] dark:text-white">
-        <p className="text-xl font-semibold text-black dark:text-white">Create Pin</p>
+        <p className="text-xl font-semibold text-black dark:text-white">{labels?.CREATE_PIN}</p>
         {selectedImage && (
           <div>
             <button
@@ -148,7 +148,7 @@ const CreatePin = () => {
               onClick={handleCreatePin}
               disabled={btnDisabled}
             >
-              Publish
+              {labels?.PUBLISH}
             </button>
           </div>
         )}
@@ -170,14 +170,14 @@ const CreatePin = () => {
               <div className="flex flex-col items-center h-5/6 justify-center">
                 <FaCircleArrowUp className="text-2xl" />
                 <p className="text-lg text-wrap w-3/4 mt-3">
-                  Choose a file or drag and drop it here
+                  {labels?.CHOOSE_FILE_DRAG_DROP}
                 </p>
               </div>
               <div className="absolute bottom-5 text-center px-2 w-full">
                 <p className="text-sm">
-                  We recommend using high quality files less than 20MB
+                  {labels?.FILE_RECOMMEND_20_MB}
                 </p>
-                <p className="text-sm">or .mp4 files less than 200MB</p>
+                <p className="text-sm">{labels?.LESS_THAN_200_MB}</p>
               </div>
               <input
                 type="file"
@@ -216,13 +216,13 @@ const CreatePin = () => {
         <form className={`w-full ${files.length === 0 && "opacity-30"} flex flex-col items-center lg:items-start`}>
           <div className="flex flex-col w-4/5 gap-2">
             <label htmlFor="title" className="text-sm dark:text-white">
-              Title
+              {labels?.TITLE}
             </label>
             <input
               className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
               id="title"
               name="title"
-              placeholder="Add a title"
+              placeholder={labels?.TITLE_PLACEHOLDER}
               type="text"
               disabled={files.length === 0}
               value={pinData.title}
@@ -232,13 +232,13 @@ const CreatePin = () => {
 
           <div className="flex flex-col w-4/5 gap-2 mt-3">
             <label htmlFor="description" className="text-sm dark:text-white">
-              Description
+              {labels?.DESCRIPTION}
             </label>
             <textarea
               className="outline-none border-2 border-gray-400 rounded-xl  pl-4 md:h-28 resize-none py-2"
               id="description"
               name="description"
-              placeholder="Add a detailed description"
+              placeholder={labels?.DESCRIPTION_PIN_PLACEHOLDER}
               rows={5}
               disabled={files.length === 0}
               value={pinData.description}
@@ -248,13 +248,13 @@ const CreatePin = () => {
 
           <div className="flex flex-col w-4/5 gap-2 mt-5">
             <label htmlFor="link" className="text-sm dark:text-white">
-              Link
+              {labels?.LINK}
             </label>
             <input
               className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
               id="link"
               name="link"
-              placeholder="Add a link"
+              placeholder={labels?.LINK_PLACEHOLDER}
               type="text"
               disabled={files.length === 0}
               value={pinData.link}
@@ -263,7 +263,7 @@ const CreatePin = () => {
           </div>
 
           <div className="flex flex-col w-4/5 gap-2 mt-3 relative">
-            <p className="text-sm dark:text-white">Board</p>
+            <p className="text-sm dark:text-white">{labels?.BOARD}</p>
             <div
               className={`border-gray-400 rounded-xl  py-2 px-4 border-2 flex items-center justify-between dark:text-white ${
                 files.length === 0 ? "pointer-events-none" : "cursor-pointer"
@@ -281,7 +281,7 @@ const CreatePin = () => {
                     {selectedBoard?.pinImage && (
                       <img
                         src={selectedBoard?.pinImage}
-                        onError={(e) => {
+                        onError={(e:React.SyntheticEvent<HTMLImageElement, Event>) => {
                           e.target.src = ErrorImage;
                         }}
                         alt={selectedBoard?.pinTitle}
@@ -290,11 +290,11 @@ const CreatePin = () => {
                     )}
                   </div>
                   <p className="text-md font-medium">
-                    {selectedBoard.boardName}
+                    {selectedBoard?.boardName}
                   </p>
                 </div>
               ) : (
-                <span>Choose a board</span>
+                <span>{labels?.CHOOSE_BOARD_TITLE}</span>
               )}
               <FaChevronDown />
             </div>
@@ -309,10 +309,10 @@ const CreatePin = () => {
 
           <div className="flex flex-col w-4/5 gap-2 mt-3">
             <label htmlFor="tags" className="text-sm dark:text-white">
-              Tags <span className="text-sm -mt-2">- seperated by {"(,)"}</span>
+              {labels?.TAG} <span className="text-sm -mt-2">- seperated by {"(,)"}</span>
             </label>
             <input
-              placeholder="Add a tag"
+              placeholder={labels?.TAG_PLACEHOLDER}
               id="tags"
               name="tags"
               type="text"

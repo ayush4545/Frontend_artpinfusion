@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { PinType } from '../Types/types';
 import { WithErrorBoundariesWrapper } from './WithErrorBoundaries';
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from '../config/constants/text.constant';
 type Props={
   pins:PinType[],
   username:string,
@@ -22,7 +23,7 @@ const AllPinsCard = (props:Props) => {
          })
         }
       </div>
-      <p className='font-semibold text-xl mx-2 mt-2 dark:text-white'>All Pins</p>
+      <p className='font-semibold text-xl mx-2 mt-2 dark:text-white'>{labels?.ALL_PINS}</p>
       <p className='mx-2 text-sm dark:text-white'>{pins?.length} pins</p>
     </Link>
   )

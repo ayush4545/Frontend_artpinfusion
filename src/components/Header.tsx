@@ -11,16 +11,17 @@ import ModeToggle from "./ModeToggle";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { BsFillPinAngleFill } from "react-icons/bs";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 const Header = () => {
   const { pathname,state } = useLocation();
-  console.log("state",state)
+  
   const [isLogin, setIsLogin] = useState(false)
   const [isSignup, setIsSignUp] = useState(false);
   const user = useAppSelector((state) => state.user);
   const [showRightSidePopup,setShowRightSidePopup]=useState(false)
   const  isAuthenticate  = useAuth();
   const { routePaths } = config.constant.routes;
-  console.log("isLogin header me",isLogin)
+  
   const handleSwitchToSignUp = useCallback(() => {
     setIsLogin(false);
     setIsSignUp(true);
@@ -32,15 +33,15 @@ const Header = () => {
   }, []);
 
   useEffect(()=>{
-   if(!isAuthenticate && state && state["isNeedToLogin"]){
+   if(!isAuthenticate && state && state[labels?.NEED_TO_LOGIN]){
     setIsLogin(true)
    }else{
      setIsLogin(false)
    }
   },[state])
 
-  const handleWindowClick=(e)=>{
-    console.log("window clicked",e)
+  const handleWindowClick=()=>{
+   
     setShowRightSidePopup(false)
    }
  
@@ -57,9 +58,9 @@ const Header = () => {
     <header className="w-full flex h-[12vh] items-center justify-between  px-4 dark:bg-[#282828] dark:border-b-[2px] border-[#3b3b3b]  bg-white fixed top-0 left-0 z-50">
       {/* left side of header */}
       <div className=" dark:text-white flex items-center gap-[20px]">
-        <Link to="/" className="font-bold text-[#FF8C00] flex items-center gap-1 text-xl">
+        <Link to={routePaths?.HOME} className="font-bold text-[#FF8C00] flex items-center gap-1 text-xl">
          <BsFillPinAngleFill/>
-         <p>PinIt</p>
+         <p>{labels?.PINIT}</p>
         </Link>
 
         {isAuthenticate && (
@@ -72,7 +73,7 @@ const Header = () => {
                   : "hover:bg-[#E9E9E9] dark:hover:text-black"
               }`}
             >
-              Home
+              {labels?.HOME}
             </Link>
             
             <Link
@@ -83,7 +84,7 @@ const Header = () => {
                   : "hover:bg-[#E9E9E9]"
               }`}
             >
-              Create
+              {labels?.CREATE}
             </Link>
           </div>
         ) }
@@ -102,7 +103,7 @@ const Header = () => {
                   : "hover:bg-[#E9E9E9] dark:hover:text-black dark:text-white"
               }`}
             >
-              About
+              {labels?.ABOUT}
             </Link>
           </div>
         )}
@@ -118,7 +119,7 @@ const Header = () => {
                 setIsLogin(true);
               }}
             >
-              Log in
+              {labels?.LOG_IN}
             </button>
 
             <button
@@ -127,7 +128,7 @@ const Header = () => {
                 setIsSignUp(true);
               }}
             >
-              Sign up
+              {labels?.SIGN_UP}
             </button>
           </div>
         ) : (
@@ -143,13 +144,12 @@ const Header = () => {
                 <img
                   src={user?.imgUrl}
                   alt={user?.name}
-                  onError={(e)=>{
+                  onError={(e:React.SyntheticEvent<HTMLImageElement, Event>)=>{
                    e.target.src=ErrorImage
                   }}
                   className={`rounded-full object-cover w-full h-full ${
                     pathname === `/${user.username}`
-                      ? "border-2 border-orange-600"
-                      : ""
+                      &&"border-2 border-orange-600"
                   }`}
                 />
               ) : (

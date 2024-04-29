@@ -9,6 +9,7 @@ import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props = {
   title: string;
   onClose: () => void;
@@ -16,7 +17,7 @@ type Props = {
 };
 const FollowersOrFollowing = (props: Props) => {
   const { title, onClose, users } = props;
-  console.log("follower or following", users);
+ 
   const getFollowsModel = (): ReactElement => {
     return (
       <Modal
@@ -58,7 +59,7 @@ const FollowListComp = (props: FollowListProps) => {
     if(user?.followers.includes(loggedInUser?._id!))return true
     return false
   })
-  console.log("usdsdc", user);
+  
 
   const handleFollow = async () => {
     if(!isAuthenticate){
@@ -81,7 +82,7 @@ const FollowListComp = (props: FollowListProps) => {
         const resData = await res.data;
         if (resData.statusCode === 200) {
           setIsFollowing(true);
-          toastPopup(`You start following ${resData?.data.name}`, "success");
+          toastPopup(labels?.FOLLOWING_TOAST_MESSAGE(resData?.data.name), "success");
         }
       } else {
         const res = await axios.get(
@@ -93,10 +94,10 @@ const FollowListComp = (props: FollowListProps) => {
           }
         );
         const resData = await res.data;
-        console.log(355,resData)
+       
         if (resData.statusCode === 200) {
           setIsFollowing(false);
-          toastPopup(`You unfollow ${resData?.data?.name}`, "success");
+          toastPopup(labels?.UNFOLLOWING_TOAST_MESSAGE(resData?.data?.name), "success");
         }
       }
     } catch (error) {
@@ -109,7 +110,7 @@ const FollowListComp = (props: FollowListProps) => {
         {user.avatar && user.avatar.length > 10 ? (
           <img
             src={user?.avatar}
-            onError={(e)=>{
+            onError={(e:React.SyntheticEvent<HTMLImageElement, Event>)=>{
               e.target.src=ErrorImage
              }}
             alt={user?.name}
@@ -134,9 +135,9 @@ const FollowListComp = (props: FollowListProps) => {
         disabled={isLoggedInUser}
       >
         {isLoggedInUser ?
-         (title === "followers" ? "That's you" : "Unfollow") : 
+         (title === labels?.FOLLOWERS ? labels?.THAS_YOU : labels?.UNFOLLOW) : 
           (
-            isFollowing ? (title === "followers" ? "Following" : "Unfollow" ): "Follow"
+            isFollowing ? (title === labels?.FOLLOWERS ? labels?.FOLLOWING :  labels?.UNFOLLOW ): labels?.FOLLOW
           )
          }
       </button>

@@ -10,7 +10,7 @@ import { MdShare } from "react-icons/md";
 import axios from "axios";
 import config from "../config";
 import Pins from "../components/Pins";
-import { PinType } from "../Types/types";
+import { BoardType, PinType } from "../Types/types";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { BsFillPinAngleFill } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
@@ -19,6 +19,8 @@ import ShowBoardName from "../components/ShowBoardName";
 import Loader from "../components/Loader";
 import ShareModal from "../components/ShareModal";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
+import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 type PinData = {
   pin: PinType;
   exploreMore: PinType[];
@@ -44,7 +46,7 @@ const PinDetails = () => {
   });
   const token = getCookie("accessToken");
   const [openBoardPopover, setOpenBoardPopover] = useState(false);
-  console.log("pinData", setPinData);
+ 
 
   const fetchPin = async () => {
     try {
@@ -64,12 +66,12 @@ const PinDetails = () => {
       });
 
       if (loggedInUser?.savedPins?.length > 0) {
-        console.log("cdcsdcs", loggedInUser);
+        
         setIsPinSaved(() => {
           const index = loggedInUser?.savedPins
             ?.map((pin) => pin?._id)
             .indexOf(resData?.data?.pin?._id);
-          console.log(index, "Index");
+         
           if (index !== -1) {
             return true;
           }
@@ -80,7 +82,7 @@ const PinDetails = () => {
       toastPopup(error?.message, "error");
     }
   };
-  console.log("isPinSaved", isPinSaved);
+  
 
   useEffect(() => {
     if (id) {
@@ -147,15 +149,14 @@ const PinDetails = () => {
           }
         );
         const resData = await res.data;
-        console.log(355, resData);
-        console.log(345, pinData);
+      
         if (resData.statusCode === 200) {
           const newData = resData.data;
           const pin = JSON.parse(JSON.stringify(pinData));
           pin.pin.user = newData;
           setIsFollowing(false);
           setPinData(pin);
-          toastPopup(`You unfollow ${resData?.data?.name}`, "success");
+          toastPopup(labels?.UNFOLLOWING_TOAST_MESSAGE(resData?.data?.name), "success");
         }
       }
     } catch (error) {
@@ -168,10 +169,10 @@ const PinDetails = () => {
       if (pinData?.pin?.boards?.length > 0) {
         const board = loggedInUser?.board.filter((board)=>{
           return pinData?.pin?.boards?.some(
-             (b1) => b1?._id === board?._id
+             (b1:BoardType) => b1?._id === board?._id
            );
          })
-         console.log("if me arha hboard id wala",board);
+         
          if(board.length > 0){
           setSelectedBoardDetails({
            boardName: board[0]?.boardName,
@@ -179,14 +180,14 @@ const PinDetails = () => {
          });
          }else{
            setSelectedBoardDetails({
-             boardName: "Profile",
+             boardName: labels?.PROFILE,
              boardId: null,
            });
          } 
       }
     } else {
       setSelectedBoardDetails({
-        boardName: "Profile",
+        boardName: labels?.PROFILE,
         boardId: null,
       });
     }
@@ -208,7 +209,7 @@ const PinDetails = () => {
   const handleSavePin = async (e, selectedBoardId?: string) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("selectedBoardId", e, selectedBoardId);
+    
     try {
       if (!isAuthenticate) {
         return navigate(`/`, {
@@ -237,8 +238,8 @@ const PinDetails = () => {
           setIsPinSaved(true);
 
           const toastMessage = selectedBoardId
-            ? `Pin is saved in ${selectedBoardDetails?.boardName} board`
-            : "Pin is saved in your profile";
+            ? labels?.PIN_SAVED_IN_BOARD_TOAST_MESSAGE(selectedBoardDetails?.boardName)
+            : labels?.PIN_SAVED_PROFILE_TOAST_MESSAGE;
           toastPopup(toastMessage, "success");
         }
       } else {
@@ -261,11 +262,11 @@ const PinDetails = () => {
           setIsPinSaved(false);
 
           const toastMessage = selectedBoardId
-            ? `Pin is saved in ${selectedBoardDetails?.boardName} board`
-            : "Pin is saved in your profile";
+            ? labels?.PIN_REMOVED_EDIT_TOAST_MESSAGE(selectedBoardDetails?.boardName) 
+            : labels?.PIN_REMOVE_PROFILE_TOAST_MESSAGE;
           toastPopup(toastMessage, "success");
         }
-        console.log("save pin data", resData);
+       
       }
 
       setOpenBoardPopover(false);
@@ -301,7 +302,7 @@ const PinDetails = () => {
               ) : (
                 <img
                   src={pinData?.pin?.imageUrl}
-                  onError={(e) => {
+                  onError={(e:React.SyntheticEvent<HTMLImageElement, Event>) => {
                     e.target.src = ErrorImage;
                   }}
                   alt={pinData?.pin?.title}
@@ -329,10 +330,10 @@ const PinDetails = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      console.log("heelo brother");
+                     
                       downloadFile(pinData?.pin?.imageUrl,pinData?.pin?.title)
                     }}
-                    title="download"
+                    title={labels?.DONWLOAD}
                   >
                     <MdOutlineFileDownload className="text-black text-2xl dark:text-white" />
                   </div>
@@ -342,7 +343,7 @@ const PinDetails = () => {
                       e.stopPropagation()
                       setOpenShareModel(prev=>!prev)
                     }}
-                    title="Share"
+                    title={labels?.SHARE}
                   >
                     <MdShare className="text-black text-2xl dark:text-white" />
                     {openShareModel && <ShareModal onClose={()=>{setOpenShareModel(false)}} leftTopStyle="top-4 left-10"/>}
@@ -357,7 +358,7 @@ const PinDetails = () => {
                     setOpenBoardPopover={setOpenBoardPopover}
                   />
                   <div
-                    title={isPinSaved ? "removed pin" : "Save Pin"}
+                    title={isPinSaved ? labels?.REMOVE_PIN : labels?.SAVE_PIN}
                     className="rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer"
                     onClick={handleSavePin}
                   >
@@ -441,7 +442,7 @@ const PinDetails = () => {
                       </p>
                     </Link>
                     <p className="text-sm -mt-[2px] text-[#767676]">
-                      {pinData?.pin?.user?.followers?.length} followers
+                      {pinData?.pin?.user?.followers?.length} {labels?.FOLLOWERS}
                     </p>
                   </div>
                 </div>
@@ -456,7 +457,7 @@ const PinDetails = () => {
                       }  rounded-[20px] p-2 px-4 mr-2 font-semibold flex-1 md:flex-none sm:flex-none lg:flex-none`}
                       onClick={handleFollow}
                     >
-                      {isFollowing ? "Following" : "Follow"}
+                      {isFollowing ? labels?.FOLLOWING : labels?.FOLLOW}
                     </button>
                   ))}
               </div>
@@ -479,7 +480,7 @@ const PinDetails = () => {
 
       {pinData && pinData?.exploreMore && pinData.exploreMore?.length > 0 && (
         <div className="w-full snap-start mt-2" id="moreToExplore">
-          <h4 className="text-center lg:text-lg dark:text-white">More to explore</h4>
+          <h4 className="text-center lg:text-lg dark:text-white">{labels?.MORE_TO_EXPLORE}</h4>
           <div className="mt-10 p-4">
           <Pins
             pins={pinData?.exploreMore}
@@ -493,4 +494,4 @@ const PinDetails = () => {
   );
 };
 
-export default PinDetails;
+export default WithErrorBoundariesWrapper(PinDetails);

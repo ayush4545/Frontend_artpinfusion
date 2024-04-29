@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BoardType } from '../Types/types'
 import { WithErrorBoundariesWrapper } from './WithErrorBoundaries'
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from '../config/constants/text.constant'
 type BoardProps={
     board: BoardType,
     handleSave : (e:any,selectedBoardId:number|string)=> void,
@@ -54,7 +55,7 @@ const BoardCardWithSaveBtn = (props:BoardProps) => {
           <p>{board?.boardName}</p>
         </div>
         <button className={`${isSaved ? "bg-black dark:bg-white ":"bg-[#FF8C00] hover:bg-[#FF5E0E] "}text-white rounded-[20px] p-2 px-4`}>
-          {isSaved ? "Saved" : "Save"}
+          {isSaved ? labels?.SAVED : labels?.SAVE}
         </button>
       </div>
     );

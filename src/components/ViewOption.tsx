@@ -3,6 +3,7 @@ import { LuSettings2 } from "react-icons/lu";
 import { WithErrorBoundariesWrapper } from './WithErrorBoundaries';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { setViewOptions } from '../redux/viewOptions.slice';
+import { labels } from '../config/constants/text.constant';
 
 type Props={
     isBoard:boolean,
@@ -14,8 +15,8 @@ const ViewOption = (props:Props) => {
     const selectedViewOptions=useAppSelector(state=>state.viewOption)
     const dispatch=useAppDispatch()
 
-  const handleWindowClick=(e)=>{
-    console.log("window clicked",e)
+  const handleWindowClick=()=>{
+  
     setOpen(false)
    }
  
@@ -46,26 +47,26 @@ const ViewOption = (props:Props) => {
 
         {open && (
           <div className={`absolute shadow-2xl w-44 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white -left[-50%] -translate-x-[50%] lg:translate-x-0 lg:-left-48 lg:${top} rounded-xl dark:shadow-md p-3 dark:text-white z-50`}>
-            <p className="text-sm p-2">View Options</p>
+            <p className="text-sm p-2">{labels?.VIEW_OPTIONS}</p>
 
             
               <button
               type="button"
                className={`w-full text-left rounded-md px-3 py-2  font-semibold ${selectedViewOptions === "standard" ? "bg-orange-500 text-white" :"hover:bg-[#e9e9e9] dark:hover:text-black"}`} onClick={()=>{
-                dispatch(setViewOptions("standard"))
+                dispatch(setViewOptions(labels?.STANDARD_VALUE))
                 // setOpen(false)
               }}>
-               {isBoard ? "Default" : "Standard"} 
+               {isBoard ? labels?.STANDARD : labels?.STANDARD} 
               </button>
             
                 <button
                 type="button"
                 className={`w-full text-left rounded-md px-3 py-2  font-semibold mt-2 ${selectedViewOptions === "compact" ? "bg-orange-500 text-white " :"hover:bg-[#e9e9e9] dark:hover:text-black"}`}
                 onClick={()=>{
-                    dispatch(setViewOptions("compact"))
+                    dispatch(setViewOptions(labels?.COMPACT_VALUE))
                   }}
               >
-                Compact
+                {labels?.COMPACT}
               </button>
           </div>
         )}

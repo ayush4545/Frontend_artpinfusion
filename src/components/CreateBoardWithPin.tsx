@@ -7,6 +7,7 @@ import useAuth from "../hooks/useAuth";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import ErrorImage from "../assets/404Page.gif"
+import { labels } from "../config/constants/text.constant";
 type Props = {
   pinId: string;
   setSelectedBoardDetails : ({
@@ -18,7 +19,7 @@ type Props = {
 };
 const CreateBoardWithPin = (props: Props) => {
   const { pinId, setSelectedBoardDetails, onClose,setModelTitle } = props;
-  console.log("pinId", pinId);
+
   const { BACKEND_END_POINTS } = config.constant.api;
   const { getCookie } = config.utils.cookies;
   const saveUserInRedux = config.utils.saveUserInReduxAndSetAccessToken;
@@ -37,7 +38,7 @@ const CreateBoardWithPin = (props: Props) => {
     try {
       const res = await axios.get(`${BACKEND_END_POINTS.Get_PIN}/${pinId}`);
       const resData = await res.data;
-      console.log("resData", resData);
+    
       if (resData.statusCode === 200) {
         setPinDetails(resData.data?.pin);
       }
@@ -76,19 +77,19 @@ const CreateBoardWithPin = (props: Props) => {
       const resData = await res.data;
       if (resData.statusCode === 201) {
         saveUserInRedux.useSaveLoginUserAndAccessToken(resData.data, dispatch);
-        console.log("user after board create", resData.data);
+   
         setSelectedBoardDetails({
           boardName: boardDetails?.boardName,
           boardId: resData?.data?.boardId,
         });
         setIsPinSaved(true)
-        setModelTitle("Board Created")
+        setModelTitle(labels?.BOARD_CREATED_TITLE)
         setTimeout(()=>{
 
           onClose();
         },2000)
       }
-      console.log("board", resData);
+     
     } catch (error) {
       console.log("create board error", error);
     }
@@ -110,7 +111,7 @@ const CreateBoardWithPin = (props: Props) => {
               ) : (
                 <img
                   src={pinDetails?.imageUrl}
-                  onError={(e)=>{
+                  onError={(e:React.SyntheticEvent<HTMLImageElement, Event>)=>{
                     e.target.src=ErrorImage
                    }}
                   alt={pinDetails?.title || pinDetails?.description}
@@ -118,7 +119,7 @@ const CreateBoardWithPin = (props: Props) => {
                 />
               )}
             </div>
-            <p className="text-4xl font-bold relative top-28 text-center pinSavedAnimation">You saved this pin to {boardDetails?.boardName}</p>
+            <p className="text-4xl font-bold relative top-28 text-center pinSavedAnimation">{labels?.SAVE_PIN_TO(boardDetails?.boardName)}</p>
         </div>
       ) : (
         <>
@@ -147,13 +148,13 @@ const CreateBoardWithPin = (props: Props) => {
             <div className="w-full lg:col-span-2">
               <div className="flex flex-col  gap-2">
                 <label htmlFor="boardName" className="text-sm">
-                  Name
+                  {labels?.NAME}
                 </label>
                 <input
                   className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
                   id="boardName"
                   name="boardName"
-                  placeholder="Name"
+                  placeholder={labels?.Name}
                   type="text"
                   value={boardDetails?.boardName}
                   onChange={handleChange}
@@ -162,13 +163,13 @@ const CreateBoardWithPin = (props: Props) => {
 
               <div className="flex flex-col  gap-2 mt-8">
                 <label htmlFor="description" className="text-sm">
-                  Description
+                  {labels?.DESCRIPTION}
                 </label>
                 <textarea
                   className="outline-none border-2 border-gray-400 rounded-xl  pl-4 md:h-28 resize-none py-2"
                   id="description"
                   name="description"
-                  placeholder="What's your board about"
+                  placeholder={labels?.DESCRIPTION_BOARD_PLACEHOLDER}
                   rows={5}
                   value={boardDetails?.description}
                   onChange={handleChange}
@@ -177,7 +178,7 @@ const CreateBoardWithPin = (props: Props) => {
               {pinDetails?.user && (
                 <div className=" mt-3">
                   <p className="capitalize text-sm text-[#282828] font-medium">
-                    pin created by
+                    {labels?.PIN_CREATE_BY}
                   </p>
                   <Link
                     to={`/${pinDetails?.user?.username}`}
@@ -219,7 +220,7 @@ const CreateBoardWithPin = (props: Props) => {
               className="rounded-3xl p-3  font-bold bg-[#e9e9e9]"
               onClick={onClose}
             >
-              Cancel
+              {labels?.CANCEL}
             </button>
             <button
               className={`rounded-3xl p-3  font-bold ${
@@ -230,7 +231,7 @@ const CreateBoardWithPin = (props: Props) => {
               disabled={boardDetails?.boardName === ""}
               onClick={handleCreateBoardWithPin}
             >
-              Create
+              {labels?.CREATE}
             </button>
           </div>
         </>
