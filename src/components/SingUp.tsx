@@ -56,7 +56,7 @@ const SignUp = (props: Props) => {
       const userInfo = await config.utils.GoogleUserInfo.getGoogleUserInfo(
         access_token
       );
-      console.log(userInfo);
+     
       const userLogin = await axios.post(
         config.constant.api.BACKEND_END_POINTS.GOOGLE_USER,
         userInfo
@@ -95,7 +95,6 @@ const SignUp = (props: Props) => {
   const onSubmitHandler = async (data: formData) => {
     try {
       setIsDisabledSignUp(true)
-      console.log(data);
       const formsData = new FormData();
       formsData.set("username", data.username);
       formsData.set("name", data.name);
@@ -104,8 +103,6 @@ const SignUp = (props: Props) => {
       if (selectedAvatar) {
         formsData.append("avatar", selectedAvatar);
       }
-
-      console.log(formsData);
 
       const res = await axios.post(BACKEND_END_POINTS.SIGN_UP, formsData, {
         headers: {

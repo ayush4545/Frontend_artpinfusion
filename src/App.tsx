@@ -95,7 +95,6 @@ function App() {
     return () => {};
   }, []);
 
-  console.log("modeValue",modeValue)
   return (
     <div className={`w-screen h-auto ${modeValue.darkMode ? "dark" : ''} scrollbar-thin scrollbar-track-gray-400/20 scrollbar-thumb-[#f7ab0a]/80`}>
       <BrowserRouter>

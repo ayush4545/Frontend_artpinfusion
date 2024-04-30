@@ -76,7 +76,7 @@ const PinCard = (props: Props) => {
         <div className="absolute bottom-0 left-0 p-3 bg-black bg-opacity-50 text-white w-full h-full rounded-3xl -z-1">
           {isAuthenticate ? (
             <>
-              {hoverOn === "homePin" && (
+              {hoverOn === labels?.HOVER_ON_HOME_PIN && (
                 <HomePinHoverCard
                   boardId={boardId}
                   boards={boards}

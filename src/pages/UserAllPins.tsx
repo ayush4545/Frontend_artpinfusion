@@ -17,6 +17,9 @@ const UserAllPins = () => {
   } = useLocation();
   const { BACKEND_END_POINTS } = config.constant.api;
   const [pins, setPins] = useState([]);
+  const [openViewOption, setOpenViewOption] = useState<boolean>(false);
+  const [openCreateButtonModel, setOpenCreateButtonModel] =
+    useState<boolean>(false);
   const loggedInUser = useAppSelector((state) => state.user);
   const selectedViewOptions = useAppSelector((state) => state.viewOption);
   const dispatch = useAppDispatch();
@@ -28,9 +31,9 @@ const UserAllPins = () => {
     if (resData.statusCode === 200) {
       setPins(resData.data);
       if (userId === loggedInUser?._id) {
-        dispatch(setHoverOn("allPins"));
+        dispatch(setHoverOn(labels?.HOVER_ON_ALL_PINS));
       } else {
-        dispatch(setHoverOn("homePin"));
+        dispatch(setHoverOn(labels?.HOVER_ON_HOME_PIN));
       }
     }
   };
@@ -40,6 +43,18 @@ const UserAllPins = () => {
     }
   }, [userId]);
 
+  const handleWindowClick = () => {
+    setOpenViewOption(false);
+    setOpenCreateButtonModel(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleWindowClick);
+
+    return () => {
+      window.removeEventListener("click", handleWindowClick);
+    };
+  }, []);
   return (
     <div className="w-screen absolute top-[12vh]   -z-10">
       <div className="fixed w-full h-20 top-[12vh] left-0  pr-3 z-50 bg-white dark:bg-[#282828] flex items-center">
@@ -48,8 +63,20 @@ const UserAllPins = () => {
         </p>
         {userId === loggedInUser?._id && (
           <div className="flex items-center gap-3 absolute right-3 pr-2">
-            <ViewOption isBoard={false} top="-top-8" />
-            <CreateBoardPinButton showBoard={false} top="-top-8" />
+            <ViewOption
+              isBoard={false}
+              top="-top-8"
+              openViewOption={openViewOption}
+              setOpenViewOption={setOpenViewOption}
+              setOpenCreateButtonModel={setOpenCreateButtonModel}
+            />
+            <CreateBoardPinButton
+              showBoard={false}
+              top="-top-8"
+              openCreateButtonModel={openCreateButtonModel}
+              setOpenViewOption={setOpenViewOption}
+              setOpenCreateButtonModel={setOpenCreateButtonModel}
+            />
           </div>
         )}
       </div>

@@ -4,7 +4,6 @@ import { addUser } from "../../redux/user.slice";
 import { setCookies } from "./setAndGetCookies";
 const useSaveLoginUserAndAccessToken = (data, dispatch: AppDispatch) => {
   const userData = data._doc;
-  console.log("userData", userData);
   const userObj = {
     name: userData?.name,
     emailId: userData?.emailId,

@@ -274,6 +274,16 @@ const PinDetails = () => {
       console.log("save pin error", error);
     }
   };
+
+  useEffect(()=>{
+    const element = document.getElementById("mainContent");
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth' // Optional: smooth scrolling animation
+      });
+    }
+  
+  },[])
   return (
     <div className="w-screen absolute top-[12vh] homeSection  dark:bg-[#282828] min-h-[88%] flex flex-col items-center justify-center gap-10 snap-y snap-proximity">
       <div
@@ -286,7 +296,7 @@ const PinDetails = () => {
       </div>
 
       {/* main content */}
-      <div className="flex items-center justify-center w-screen h-[80%] py-5">
+      <div className="flex items-center justify-center w-screen h-[80%] py-5" id="mainContent">
         {pinData && pinData?.pin ? (
           <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 w-3/5   rounded-3xl shadow-2xl px-2 pt-3 pb-3 dark:shadow-white dark:shadow-lg">
             <div className="w-full h-full p-2">

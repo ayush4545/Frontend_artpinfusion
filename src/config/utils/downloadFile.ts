@@ -22,7 +22,6 @@ const downloadFile = async (
       link.setAttribute("download", filename); //or any other extension
       document.body.appendChild(link);
       link.click();
-      console.log("Fetched image URL:", imageUrl);
     })
     .catch((error) => {
       console.error("Error fetching image:", error);

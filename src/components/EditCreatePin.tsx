@@ -6,7 +6,7 @@ import { labels } from "../config/constants/text.constant";
 
 type Props = {
   pinId: string;
-  setCardClicked: (val: boolean) => void;
+  setCardClicked?: (val: boolean) => void;
 };
 const EditCreatePin = (props: Props) => {
   const { pinId, setCardClicked } = props;

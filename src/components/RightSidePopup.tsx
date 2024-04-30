@@ -35,7 +35,7 @@ const RightSidePopup = (props : Props) => {
     }
   }
   return (
-    <div className="absolute w-[50vw] sm:w-[30vw] lg:w-[20vw] bg-white right-1 top-12 shadow-3xl rounded-lg z-40 p-2" tabIndex={1} 
+    <div className="absolute w-[70vw] sm:w-[30vw] lg:w-[20vw] bg-white right-1 top-12 shadow-3xl rounded-lg z-40 p-2" tabIndex={1} 
     onClick={(e)=>{
      e.stopPropagation()
      e.preventDefault()

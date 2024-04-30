@@ -7,43 +7,37 @@ import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { labels } from "../config/constants/text.constant";
 
 type Props = {
-  showBoard: boolean;
-  top: string;
+  showBoard: boolean,
+  top: string,
+  openCreateButtonModel:boolean,
+  setOpenViewOption?:(prev:boolean)=>boolean,
+    setOpenCreateButtonModel:(prev:boolean)=>boolean
 };
-const CreateBoardPinButton = ({ showBoard, top }: Props) => {
+const CreateBoardPinButton = (props: Props) => {
+  const {showBoard,top,openCreateButtonModel,setOpenViewOption=()=>{},setOpenCreateButtonModel}=props
   const { routePaths } = config.constant.routes;
-  const [open, setOpen] = useState<boolean>(false);
   const [openBoard, setOpenBoard] = useState(false);
-  const handleWindowClick = () => {
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    window.addEventListener("click", handleWindowClick);
-
-    return () => {
-      window.removeEventListener("click", handleWindowClick);
-    };
-  }, []);
+  
   return (
     <>
       <div className="relative">
         <div
           className={`w-8 lg:w-10 aspect-square rounded-full ${
-            open
+            openCreateButtonModel
               ? "bg-black text-white dark:bg-white dark:text-black"
               : "hover:bg-[#e9e9e9] dark:bg-white"
           } transition-all cursor-pointer grid place-items-center`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setOpen((prev) => !prev);
+            setOpenCreateButtonModel((prev) =>!prev);
+            setOpenViewOption?.(false)
           }}
         >
           <PiPlusBold className="font-extrabold text-xl lg:text-2xl" />
         </div>
 
-        {open && (
+        {openCreateButtonModel && (
           <div
             className={`absolute shadow-2xl w-44 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white -left[-50%] -translate-x-[50%] lg:translate-x-0 lg:-left-48 md:top-0 lg:${top} rounded-xl dark:shadow-md p-3 dark:text-white z-10`}
           >

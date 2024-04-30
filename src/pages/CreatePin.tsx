@@ -137,7 +137,7 @@ const CreatePin = () => {
 
   return (
     <div className="relative top-[12vh] w-full h-full dark:bg-[#282828]">
-      <div className="fixed top-[12vh] w-full py-5 px-5 border-b-[1px] border-gray-300 flex justify-between items-center z-50 bg-white dark:bg-[#282828] dark:text-white">
+      <div className="fixed top-[12vh] w-full py-5 px-5 border-b-[1px] border-gray-300 flex justify-between items-center z-40 bg-white dark:bg-[#282828] dark:text-white">
         <p className="text-xl font-semibold text-black dark:text-white">{labels?.CREATE_PIN}</p>
         {selectedImage && (
           <div>
