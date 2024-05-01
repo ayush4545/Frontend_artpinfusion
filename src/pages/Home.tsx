@@ -17,7 +17,7 @@ const Home = () => {
   const { BACKEND_END_POINTS } = config.constant.api;
   const { toastPopup } = config.utils.toastMessage;
   const page = useRef<number>(1);
-  const [pins, setPins] = useState<PinType[]>([]);
+  const [pins, setPins] = useState<PinType[] | null>(null);
   const newPins = useRef<PinType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const isAllPinsComing = useRef<boolean>(false);
@@ -29,19 +29,35 @@ const Home = () => {
     setIsAuthenticatedValue(isAuthenticate);
   }, [isAuthenticate]);
 
+  const removeDuplicates = (arr: PinType[], key: string) => {
+    return arr.filter((item, index: number) => {
+      // Check if the current item's index is the first occurrence of the item in the array
+      return (
+        index ===
+        arr.findIndex((obj: PinType) => {
+          // Compare the current item with previous items using a key
+          return obj[key] === item[key];
+        })
+      );
+    });
+  };
+
   const fetchPins = async () => {
     try {
-      const res = await axios.get(
-        `${BACKEND_END_POINTS.Get_ALL_PINS}?page=${page?.current}&limit=${LIMIT}`
-      );
-      const resData = await res.data;
-      if (resData?.data?.length) {
-        const setOfPins = [...new Set([...newPins?.current, ...resData?.data])];
-        newPins.current = setOfPins;
-        setPins(setOfPins);
-        page.current += 1;
-      } else {
-        isAllPinsComing.current = true;
+      if (!isAllPinsComing.current) {
+        const res = await axios.get(
+          `${BACKEND_END_POINTS.Get_ALL_PINS}?page=${page?.current}&limit=${LIMIT}`
+        );
+        const resData = await res.data;
+        if (resData?.data?.length > 0) {
+          let setOfPins = [...new Set([...newPins?.current, ...resData?.data])];
+          setOfPins = removeDuplicates(setOfPins, "_id");
+          newPins.current = setOfPins;
+          setPins(setOfPins);
+          page.current += 1;
+        } else {
+          isAllPinsComing.current = true;
+        }
       }
     } catch (error) {
       toastPopup(labels?.FETCHING_PINS_ERROR, "error");
@@ -51,7 +67,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticateValue) {
+    if (isAuthenticateValue && !isAllPinsComing.current) {
       fetchPins();
       dispatch(setHoverOn(labels?.HOVER_ON_HOME_PIN));
     }

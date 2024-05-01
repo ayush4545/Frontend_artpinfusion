@@ -285,6 +285,10 @@ const PinDetails = () => {
     }
   };
 
+  useEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.documentElement.scrollIntoView({ behavior: "smooth" });
+  }, []);
   return (
     <div className="w-screen absolute top-[12vh] homeSection  dark:bg-[#282828] min-h-[88%] flex flex-col items-center justify-center gap-10 snap-y snap-proximity">
       <div
@@ -302,7 +306,7 @@ const PinDetails = () => {
         id="mainContent"
       >
         {pinData && pinData?.pin ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 w-3/5   rounded-3xl shadow-2xl px-2 pt-3 pb-3 dark:shadow-white dark:shadow-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 w-4/5 md:w-3/5   rounded-3xl shadow-2xl px-2 pt-3 pb-3 dark:shadow-white dark:shadow-lg">
             <div className="w-full h-full p-2">
               {pinData?.pin?.imageUrl?.includes("video") ? (
                 <video
