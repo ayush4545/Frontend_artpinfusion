@@ -11,11 +11,15 @@ type Props = {
 };
 
 const Pins = (props: Props) => {
-  const { pins, gridStyle, boardId} = props;
+  const { pins, gridStyle, boardId } = props;
   return (
     <div className={gridStyle}>
       {pins.map((pin) => (
-        <Link to={`/pins/${pin._id}`} key={pin._id} className="flex justify-center">
+        <Link
+          to={`/pins/${pin._id}`}
+          key={pin._id}
+          className="flex justify-center"
+        >
           <PinCard
             imageUrl={pin.imageUrl}
             link={pin.sourceLink}

@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 import ViewOption from "../components/ViewOption";
 import { labels } from "../config/constants/text.constant";
+import { PinType } from "../Types/types";
 const Pins = lazy(() => import("../components/Pins"));
 
 const UserAllPins = () => {
@@ -16,7 +17,7 @@ const UserAllPins = () => {
     state: { userId },
   } = useLocation();
   const { BACKEND_END_POINTS } = config.constant.api;
-  const [pins, setPins] = useState([]);
+  const [pins, setPins] = useState<PinType[]>([]);
   const [openViewOption, setOpenViewOption] = useState<boolean>(false);
   const [openCreateButtonModel, setOpenCreateButtonModel] =
     useState<boolean>(false);

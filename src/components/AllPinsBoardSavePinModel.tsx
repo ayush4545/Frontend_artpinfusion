@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Modal from "./Modal";
 import config from "../config";
-import { BoardType, PinType } from "../Types/types";
+import { BoardType, PinType, SelectedBoardDetailsType } from "../Types/types";
 import axios from "axios";
 import Loader from "./Loader";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
@@ -12,9 +12,9 @@ import useAuth from "../hooks/useAuth";
 import { PiPlusBold } from "react-icons/pi";
 import CreateBoardWithPin from "./CreateBoardWithPin";
 import SearchBoard from "./SearchBoard";
-import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/404Page.gif";
 import { labels } from "../config/constants/text.constant";
+import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 type Props = {
   onClose: () => void;
   title: string;
@@ -31,12 +31,12 @@ const AllPinsBoardSavePinModel = (props: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuthenticate = useAuth();
-  const [openCreateBoardModal, setOpenCreateBoardModel] = useState(false);
-  const [showFirstModel, setShowFirstModel] = useState(true);
-  const [userBoards, setUserBoards] = useState(loggedInUser?.board);
-  const [modelTitle, setModelTitle] = useState("Create Board");
+  const [openCreateBoardModal, setOpenCreateBoardModel] = useState<boolean>(false);
+  const [showFirstModel, setShowFirstModel] = useState<boolean>(true);
+  const [userBoards, setUserBoards] = useState<BoardType[]>(loggedInUser?.board);
+  const [modelTitle, setModelTitle] = useState<string>("Create Board");
   const originalBoards = useRef<BoardType[] | null>(null);
-  const [selectedBoardDetails, setSelectedBoardDetails] = useState({
+  const [selectedBoardDetails, setSelectedBoardDetails] = useState<SelectedBoardDetailsType>({
     boardName: "",
     boardId: "",
   });
@@ -44,14 +44,14 @@ const AllPinsBoardSavePinModel = (props: Props) => {
     try {
       const res = await axios.get(`${BACKEND_END_POINTS.Get_PIN}/${pinId}`);
       const resData = await res.data;
-      
+
       if (resData.statusCode === 200) {
         setPinDetails(resData.data?.pin);
         setUserBoards((prevBoards) => {
           const filteredBoards = prevBoards?.filter((board) => {
             if (resData?.data?.pin?.boards?.length) {
               return resData?.data?.pin?.boards?.every(
-                (b1:BoardType) => b1?._id !== board._id
+                (b1: BoardType) => b1?._id !== board._id
               );
             }
             return true;
@@ -71,7 +71,10 @@ const AllPinsBoardSavePinModel = (props: Props) => {
     }
   }, [pinId]);
 
-  const handleSavePin = async (e, selectedBoardId?: string) => {
+  const handleSavePin = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    selectedBoardId?: string
+  ) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -82,7 +85,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
         });
       }
 
-      const token = getCookie("accessToken");
+      const token = getCookie(labels?.ACCESS_TOKEN);
       const body = {
         pinId,
         boardId: selectedBoardId,
@@ -130,7 +133,9 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                   <div className="w-full lg:col-span-1 h-full">
                     {pinDetails?.boards.length > 0 && (
                       <div className=" rounded-xl p-2 text-white text-center w-1/3 lg:w-2/3 bg-orange-500 after:content-[''] left-[50%] -translate-x-[50%] mb-3 relative after:absolute after:border-[10px]  after:border-l-transparent after:border-r-transparent after:border-t-orange-500 after:border-b-transparent after:-bottom-[18px] after:left-[50%] after:-translate-x-[50%]">
-                       {labels?.PIN_SAVED_TITLE(pinDetails?.boards?.[0]?.boardName)} 
+                        {labels?.PIN_SAVED_TITLE(
+                          pinDetails?.boards?.[0]?.boardName
+                        )}
                       </div>
                     )}
                     <div
@@ -150,9 +155,11 @@ const AllPinsBoardSavePinModel = (props: Props) => {
                       ) : (
                         <img
                           src={pinDetails?.imageUrl}
-                          onError={(e)=>{
-                            e.target.src=ErrorImage
-                           }}
+                          onError={(
+                            e: React.SyntheticEvent<HTMLImageElement, Event>
+                          ) => {
+                            (e.target as HTMLImageElement).src = ErrorImage;
+                          }}
                           alt={pinDetails?.title || pinDetails?.description}
                           className="w-full h-full object-cover rounded-2xl"
                         />
@@ -162,9 +169,7 @@ const AllPinsBoardSavePinModel = (props: Props) => {
 
                   <div className="lg:col-span-2 w-full h-full">
                     <SearchBoard
-                      styles={
-                        "outline-none border-2 border-gray-400 rounded-3xl  py-2 pl-4 w-full h-14"
-                      }
+                      styles="outline-none border-2 border-gray-400 rounded-3xl  py-2 pl-4 w-full h-14"
                       setBoards={setUserBoards}
                       originalBoards={originalBoards}
                     />
@@ -243,4 +248,4 @@ const AllPinsBoardSavePinModel = (props: Props) => {
   return createPortal(getModel(), document.body);
 };
 
-export default AllPinsBoardSavePinModel;
+export default WithErrorBoundariesWrapper(AllPinsBoardSavePinModel);

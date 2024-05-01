@@ -11,7 +11,7 @@ import CreatePinChooseBoard from "./CreatePinChooseBoard";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/404Page.gif";
 import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
@@ -19,55 +19,61 @@ type Props = {
   pinId: string;
 };
 
-type SelectedBoard={
+type SelectedBoard = {
   boardName: string;
-  pinImage: string | null;
-  pinTitle: string | null | undefined;
+  pinImage: string | undefined;
+  pinTitle: string | undefined;
   boardId: string;
-}
+};
+
+type PinInputType = {
+  title: string;
+  description: string;
+};
 const EditCreatePinModal = (props: Props) => {
   const { onClose, title, pinId } = props;
   const { BACKEND_END_POINTS } = config.constant.api;
   const [pinDetails, setPinDetails] = useState<PinType | null>(null);
-  const [selectedBoard, setSelectedBoard] = useState<null | SelectedBoard>(null);
+  const [selectedBoard, setSelectedBoard] = useState<null | SelectedBoard>(
+    null
+  );
   const { getCookie } = config.utils.cookies;
   const { toastPopup } = config.utils.toastMessage;
   const saveUserInRedux = config.utils.saveUserInReduxAndSetAccessToken;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuthenticate = useAuth();
-  const token=getCookie('accessToken')
-  const loggedInUser=useAppSelector(state=>state.user)
-  const [openBoardDropDown, setOpenBoardDropDown] = useState(false);
-  const [pinInput,setPinInput]=useState({
-    title:'',
-    description:''
-  })
+  const token = getCookie(labels?.ACCESS_TOKEN);
+  const loggedInUser = useAppSelector((state) => state.user);
+  const [openBoardDropDown, setOpenBoardDropDown] = useState<boolean>(false);
+  const [pinInput, setPinInput] = useState<PinInputType>({
+    title: "",
+    description: "",
+  });
   const fetchPin = async () => {
     try {
       const res = await axios.get(`${BACKEND_END_POINTS.Get_PIN}/${pinId}`);
       const resData = await res.data;
-      
+
       if (resData.statusCode === 200) {
         setPinDetails(resData.data?.pin);
         setPinInput({
-          title:resData.data?.pin?.title,
-          description:resData.data?.pin?.description
-        })
-        const board=loggedInUser?.board.filter((board)=>{
+          title: resData.data?.pin?.title,
+          description: resData.data?.pin?.description,
+        });
+        const board = loggedInUser?.board.filter((board) => {
           return resData.data?.pin?.boards?.some(
-             (b1:BoardType) => b1?._id === board?._id
-           );
-         })
-         if(board.length){
+            (b1: BoardType) => b1?._id === board?._id
+          );
+        });
+        if (board?.length) {
           setSelectedBoard({
             boardName: board[0]?.boardName,
             pinImage: board[0]?.pins[0]?.imageUrl,
             pinTitle: board[0]?.pins[0]?.title,
             boardId: board[0]?._id,
-          })
-         }
-        
+          });
+        }
       }
     } catch (error) {
       console.log("getting pin error", error);
@@ -80,60 +86,66 @@ const EditCreatePinModal = (props: Props) => {
     }
   }, [pinId]);
 
-  const handleInputsChange=(e)=>{
-   
-    setPinInput(prev=>{
-      return {...prev,[e.target.name]:e.target.value}
-    })
-  }
+  const handleInputsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPinInput((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
 
-  const checkingBoardChange=()=>{
-    if(selectedBoard && selectedBoard?.boardId){
-      
-      const board=pinDetails?.boards?.filter((board:BoardType)=>board?._id === selectedBoard?.boardId)
-     
-      if(!board?.length){
-        return true
-      }
-      else{
-        return false
+  const checkingBoardChange = () => {
+    if (selectedBoard && selectedBoard?.boardId) {
+      const board = pinDetails?.boards?.filter(
+        (board: BoardType) => board?._id === selectedBoard?.boardId
+      );
+
+      if (!board?.length) {
+        return true;
+      } else {
+        return false;
       }
     }
-    return false
-  }
+    return false;
+  };
 
-  const handleSaveDetails=async()=>{
+  const handleSaveDetails = async () => {
     try {
       if (!isAuthenticate) {
         return navigate(`/`, {
           state: { isNeedToLogin: true },
         });
       }
-      const body={
-        title: pinInput?.title === undefined ? pinDetails?.title : pinInput?.title,
-        description: pinInput?.description === undefined ? pinDetails?.description : pinInput?.description,
-        boardId: checkingBoardChange() ?  selectedBoard?.boardId : null,
-        pinId: pinId
-      }
-     
-      const res=await axios.put(BACKEND_END_POINTS?.UPDATE_PIN_DETAILS,body,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      const resData= await res?.data
+      const body = {
+        title:
+          pinInput?.title === undefined ? pinDetails?.title : pinInput?.title,
+        description:
+          pinInput?.description === undefined
+            ? pinDetails?.description
+            : pinInput?.description,
+        boardId: checkingBoardChange() ? selectedBoard?.boardId : null,
+        pinId: pinId,
+      };
 
-      if(resData.statusCode === 200){
-        toastPopup(labels?.PIN_DETAIL_UPDATE_TOAST_MESSAGE,"success")
-        onClose()
+      const res = await axios.put(
+        BACKEND_END_POINTS?.UPDATE_PIN_DETAILS,
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resData = await res?.data;
+
+      if (resData.statusCode === 200) {
+        toastPopup(labels?.PIN_DETAIL_UPDATE_TOAST_MESSAGE, "success");
+        onClose();
       }
-      
     } catch (error) {
-      toastPopup(labels?.PIN_DETAIL_UPDATE_ERROR_TOAST_MESSAGE,"error") 
+      toastPopup(labels?.PIN_DETAIL_UPDATE_ERROR_TOAST_MESSAGE, "error");
     }
-  }
+  };
 
-  const handleDeletePin=async()=>{
+  const handleDeletePin = async () => {
     try {
       if (!isAuthenticate) {
         return navigate(`/`, {
@@ -141,27 +153,30 @@ const EditCreatePinModal = (props: Props) => {
         });
       }
 
-      const res=await axios.delete(`${BACKEND_END_POINTS?.DELETE_PIN}/${pinId}`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      const resData= await res?.data
-      
-      if(resData.statusCode === 200){
+      const res = await axios.delete(
+        `${BACKEND_END_POINTS?.DELETE_PIN}/${pinId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resData = await res?.data;
+
+      if (resData.statusCode === 200) {
         saveUserInRedux.useSaveLoginUserAndAccessToken(
           { _doc: { ...resData.data } },
           dispatch
         );
-        toastPopup(labels?.PIN_DETELTE_TOAST_MESSAGE,"success") 
-        onClose()
-        window.location.reload()
+        toastPopup(labels?.PIN_DETELTE_TOAST_MESSAGE, "success");
+        onClose();
+        window.location.reload();
       }
     } catch (error) {
-      toastPopup(labels?.PIN_DETELTE_ERROR_TOAST_MESSAGE,"error") 
+      toastPopup(labels?.PIN_DETELTE_ERROR_TOAST_MESSAGE, "error");
     }
-  }
-  
+  };
+
   const getModel = () => {
     return (
       <Modal
@@ -195,9 +210,11 @@ const EditCreatePinModal = (props: Props) => {
                   ) : (
                     <img
                       src={pinDetails?.imageUrl}
-                      onError={(e)=>{
-                        e.target.src=ErrorImage
-                       }}
+                      onError={(
+                        e: React.SyntheticEvent<HTMLImageElement, Event>
+                      ) => {
+                        (e.target as HTMLImageElement).src = ErrorImage;
+                      }}
                       alt={pinDetails?.title || pinDetails?.description}
                       className="w-full h-full object-cover rounded-2xl"
                     />
@@ -232,7 +249,11 @@ const EditCreatePinModal = (props: Props) => {
                     placeholder={labels?.DESCRIPTION_PIN_PLACEHOLDER}
                     rows={5}
                     value={pinInput.description}
-                    onChange={handleInputsChange}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                      setPinInput((prev) => {
+                        return { ...prev, [e.target.name]: e.target.value };
+                      })
+                    }
                   />
                 </div>
 
@@ -241,7 +262,9 @@ const EditCreatePinModal = (props: Props) => {
                   <div
                     className={`border-gray-400 rounded-xl  py-2 px-4 border-2 flex items-center justify-between cursor-pointer`}
                     id="board"
-                    onClick={(e) => {
+                    onClick={(
+                      e: React.MouseEvent<HTMLDivElement, MouseEvent>
+                    ) => {
                       e.preventDefault();
                       e.stopPropagation();
                       setOpenBoardDropDown((prev) => !prev);
@@ -253,9 +276,11 @@ const EditCreatePinModal = (props: Props) => {
                           {!selectedBoard?.pinImage?.includes("video") && (
                             <img
                               src={selectedBoard?.pinImage}
-                              onError={(e)=>{
-                                e.target.src=ErrorImage
-                               }}
+                              onError={(
+                                e: React.SyntheticEvent<HTMLImageElement, Event>
+                              ) => {
+                                (e.target as HTMLImageElement).src = ErrorImage;
+                              }}
                               alt={selectedBoard?.pinTitle}
                               className="w-full aspect-square rounded-md object-cover"
                             />
@@ -296,11 +321,17 @@ const EditCreatePinModal = (props: Props) => {
                   {labels?.DELETE}
                 </button>
                 <button
-                  className={
-                    `rounded-3xl px-3 py-2 font-bold  bg-[#FF8C00] text-white ${pinInput.title === pinDetails?.title && pinInput.description === pinDetails?.description ? "opacity-70 pointer-events-none": " hover:bg-[#FF5E0E] cursor-pointer"}` 
-                  }
+                  className={`rounded-3xl px-3 py-2 font-bold  bg-[#FF8C00] text-white ${
+                    pinInput.title === pinDetails?.title &&
+                    pinInput.description === pinDetails?.description
+                      ? "opacity-70 pointer-events-none"
+                      : " hover:bg-[#FF5E0E] cursor-pointer"
+                  }`}
                   onClick={handleSaveDetails}
-                  disabled={pinInput.title === pinDetails?.title && pinInput.description === pinDetails?.description}
+                  disabled={
+                    pinInput.title === pinDetails?.title &&
+                    pinInput.description === pinDetails?.description
+                  }
                 >
                   {labels?.SAVE}
                 </button>

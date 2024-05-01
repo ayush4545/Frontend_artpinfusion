@@ -4,29 +4,32 @@ import { useAppSelector } from "../hooks/reduxHooks";
 import BoardModel from "./BoardModel";
 import SearchBoard from "./SearchBoard";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/404Page.gif";
 import { labels } from "../config/constants/text.constant";
+import { BoardType } from "../Types/types";
 type Props = {
   setSelectedBoard: ({
     boardName,
     pinImage,
     pinTitle,
     boardId,
-  }:{
-  boardName: string;
-  pinImage: string | null;
-  pinTitle: string | null | undefined;
-  boardId: string;
+  }: {
+    boardName: string;
+    pinImage: string | null;
+    pinTitle: string | null | undefined;
+    boardId: string;
   }) => void;
-  setOpenBoardDropDown: (value:boolean) => void;
+  setOpenBoardDropDown: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const CreatePinChooseBoard = (props: Props) => {
   const { setSelectedBoard, setOpenBoardDropDown } = props;
   const loggedInUser = useAppSelector((state) => state.user);
-  const [userBoards, setUserBoards] = useState(loggedInUser?.board);
-  const originalBoards = useRef(loggedInUser?.board);
+  const [userBoards, setUserBoards] = useState<BoardType[]>(
+    loggedInUser?.board
+  );
+  const originalBoards = useRef<BoardType[]>(loggedInUser?.board);
   const [openBoardModel, setOpenBoardModel] = useState<boolean>(false);
-  const handleOpenBoard = (e) => {
+  const handleOpenBoard = (e: React.MouseEvent<HTMLButtonElement, Event>) => {
     e.preventDefault();
     e.stopPropagation();
     setOpenBoardModel(true);
@@ -43,7 +46,7 @@ const CreatePinChooseBoard = (props: Props) => {
     setOpenBoardModel(false);
     setOpenBoardDropDown(false);
   };
-  
+
   return (
     <>
       <div className="absolute  left-[50%] -translate-x-[50%] w-2/3 h-80 rounded-3xl overflow-hidden shadow-lg bg-white bottom-12">
@@ -83,9 +86,11 @@ const CreatePinChooseBoard = (props: Props) => {
                       !board.pins[0]?.imageUrl.includes("video") && (
                         <img
                           src={board.pins[0]?.imageUrl}
-                          onError={(e)=>{
-                            e.target.src=ErrorImage
-                           }}
+                          onError={(
+                            e: React.SyntheticEvent<HTMLImageElement, Event>
+                          ) => {
+                            (e.target as HTMLImageElement).src = ErrorImage;
+                          }}
                           alt={board.pins[0]?.title}
                           className="w-full aspect-square rounded-md object-cover"
                         />
@@ -101,7 +106,8 @@ const CreatePinChooseBoard = (props: Props) => {
           className=" absolute bottom-0 w-full h-14 left-0 text-left pl-5 border-t-[1px] border-gray-300 flex items-center gap-2 font-semibold hover:bg-[#e9e9e9] bg-white "
           onClick={handleOpenBoard}
         >
-          <IoAddCircle className="text-[#FF5E0E] text-3xl" /> {labels?.CREATE_BOARD}
+          <IoAddCircle className="text-[#FF5E0E] text-3xl" />{" "}
+          {labels?.CREATE_BOARD}
         </button>
       </div>
 

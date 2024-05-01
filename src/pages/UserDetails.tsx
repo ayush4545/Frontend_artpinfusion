@@ -37,7 +37,6 @@ const UserDetails = () => {
   const isAuthenticate = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
- 
 
   const fetchUser = async () => {
     try {
@@ -56,7 +55,7 @@ const UserDetails = () => {
 
         setIsFollowing(() => {
           const index = resData.data.followers
-            ?.map((f:UserState) => f._id)
+            ?.map((f: UserState) => f._id)
             .indexOf(loggedInUser._id!);
           if (index !== -1) {
             return true;
@@ -64,7 +63,6 @@ const UserDetails = () => {
           return false;
         });
       }
-     
     } catch (error) {
       console.log("user error", error);
     }
@@ -83,7 +81,7 @@ const UserDetails = () => {
       });
     }
     try {
-      const token = getCookie("accessToken");
+      const token = getCookie(labels?.ACCESS_TOKEN);
 
       if (!isFollowing) {
         const res = await axios.get(
@@ -119,7 +117,7 @@ const UserDetails = () => {
     }
   };
 
-  const handleWindowClick = (e) => {
+  const handleWindowClick = () => {
     setOpenShareModal(false);
   };
 
@@ -141,7 +139,7 @@ const UserDetails = () => {
                 <img
                   src={userData?.avatar}
                   onError={(e) => {
-                    e.target.src = ErrorImage;
+                    (e.target as HTMLImageElement).src = ErrorImage;
                   }}
                   alt={userData.name}
                   className="w-[120px] aspect-square rounded-full object-cover border-2 border-[#282828] dark:border-white"
@@ -196,7 +194,9 @@ const UserDetails = () => {
                   <div
                     title={labels?.SHARE}
                     className="rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer relative"
-                    onClick={(e) => {
+                    onClick={(
+                      e: React.MouseEvent<HTMLDivElement, MouseEvent>
+                    ) => {
                       e.stopPropagation();
                       e.preventDefault();
                       setOpenShareModal((prev) => !prev);

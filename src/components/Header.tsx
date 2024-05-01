@@ -12,6 +12,7 @@ import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { BsFillPinAngleFill } from "react-icons/bs";
 import ErrorImage from "../assets/404Page.gif";
 import { labels } from "../config/constants/text.constant";
+
 const Header = () => {
   const { pathname, state } = useLocation();
 
@@ -21,7 +22,7 @@ const Header = () => {
   const [showRightSidePopup, setShowRightSidePopup] = useState<boolean>(false);
   const isAuthenticate = useAuth();
   const { routePaths } = config.constant.routes;
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [dropDownValue, setDropDownValue] = useState<string>(() => {
     return pathname === routePaths.CREATE_PIN ? "Create" : "Home";
   });
@@ -46,7 +47,7 @@ const Header = () => {
 
   const handleWindowClick = () => {
     setShowRightSidePopup(false);
-    setOpenDropDown(false)
+    setOpenDropDown(false);
   };
 
   useEffect(() => {
@@ -100,56 +101,53 @@ const Header = () => {
                   openDropDown &&
                   "bg-slate-900 text-white  dark:bg-[#E9E9E9] dark:text-black font-semibold"
                 }`}
-                onClick={(e)=>{
-                  e.preventDefault()
-                  e.stopPropagation()
-                  setOpenDropDown(!openDropDown)
-                  setShowRightSidePopup(false)
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setOpenDropDown(!openDropDown);
+                  setShowRightSidePopup(false);
                 }}
               >
                 <p>{dropDownValue}</p>
                 <FaChevronDown className="text-sm" />
               </div>
-              {
-                openDropDown && (
-                  <div
-                className={`absolute shadow-2xl w-32 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white left-[50%] -translate-x-[50%]  rounded-xl dark:shadow-md p-3 dark:text-white z-50`}
-              >
-                <button
-                  type="button"
-                  className={`w-full text-left rounded-md px-3 py-2  font-semibold ${
-                    dropDownValue === labels?.HOME
-                      ? "bg-orange-500 text-white"
-                      : "hover:bg-[#e9e9e9] dark:hover:text-black"
-                  }`}
-                  onClick={() => {
-                    setDropDownValue(labels?.HOME);
-                    navigate(routePaths.HOME)
-                    setOpenDropDown(false)
-                  }}
+              {openDropDown && (
+                <div
+                  className={`absolute shadow-2xl w-32 h-auto bg-white dark:bg-[#282828] dark:shadow-white dark:border-2 dark:border-white left-[50%] -translate-x-[50%]  rounded-xl dark:shadow-md p-3 dark:text-white z-50`}
                 >
-                  {labels?.HOME}
-                </button>
+                  <button
+                    type="button"
+                    className={`w-full text-left rounded-md px-3 py-2  font-semibold ${
+                      dropDownValue === labels?.HOME
+                        ? "bg-orange-500 text-white"
+                        : "hover:bg-[#e9e9e9] dark:hover:text-black"
+                    }`}
+                    onClick={() => {
+                      setDropDownValue(labels?.HOME);
+                      navigate(routePaths.HOME);
+                      setOpenDropDown(false);
+                    }}
+                  >
+                    {labels?.HOME}
+                  </button>
 
-                <button
-                  type="button"
-                  className={`w-full text-left rounded-md px-3 py-2  font-semibold mt-2 ${
-                    dropDownValue === labels?.CREATE
-                      ? "bg-orange-500 text-white "
-                      : "hover:bg-[#e9e9e9] dark:hover:text-black"
-                  }`}
-                  onClick={() => {
-                    // dispatch(setViewOptions(labels?.COMPACT_VALUE));
-                    setDropDownValue(labels?.CREATE);
-                    navigate(routePaths.CREATE_PIN)
-                    setOpenDropDown(false)
-                  }}
-                >
-                  {labels?.CREATE}
-                </button>
-              </div>
-                )
-              }
+                  <button
+                    type="button"
+                    className={`w-full text-left rounded-md px-3 py-2  font-semibold mt-2 ${
+                      dropDownValue === labels?.CREATE
+                        ? "bg-orange-500 text-white "
+                        : "hover:bg-[#e9e9e9] dark:hover:text-black"
+                    }`}
+                    onClick={() => {
+                      setDropDownValue(labels?.CREATE);
+                      navigate(routePaths.CREATE_PIN);
+                      setOpenDropDown(false);
+                    }}
+                  >
+                    {labels?.CREATE}
+                  </button>
+                </div>
+              )}
             </div>
           </>
         )}
@@ -211,7 +209,7 @@ const Header = () => {
                   onError={(
                     e: React.SyntheticEvent<HTMLImageElement, Event>
                   ) => {
-                    e.target.src = ErrorImage;
+                    (e.target as HTMLImageElement).src = ErrorImage;
                   }}
                   className={`rounded-full object-cover w-full h-full ${
                     pathname === `/${user.username}` &&
@@ -231,7 +229,7 @@ const Header = () => {
                 e.preventDefault();
                 e.stopPropagation();
                 setShowRightSidePopup((prev) => !prev);
-                setOpenDropDown(false)
+                setOpenDropDown(false);
               }}
             >
               <FaChevronDown className="dark:text-white" />

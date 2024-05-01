@@ -4,13 +4,17 @@ import { toggleMode } from "../redux/darkMode.slice";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 const ModeToggle = () => {
-    const dispatch=useAppDispatch()
-    const {darkMode} =useAppSelector(status=>status.mode)
+  const dispatch = useAppDispatch();
+  const { darkMode }:{darkMode:boolean} = useAppSelector((status) => status.mode);
   return (
     <label className="switch">
-      <input type="checkbox" onChange={()=>{
-        dispatch(toggleMode())
-      }} checked={darkMode}/>
+      <input
+        type="checkbox"
+        onChange={() => {
+          dispatch(toggleMode());
+        }}
+        checked={darkMode}
+      />
       <span className="slider round"></span>
     </label>
   );

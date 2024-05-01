@@ -16,12 +16,11 @@ const Home = () => {
   const isAuthenticate = useAuth();
   const { BACKEND_END_POINTS } = config.constant.api;
   const { toastPopup } = config.utils.toastMessage;
-  const page=useRef(1)
-  const containerRef = useRef(null);
+  const page = useRef<number>(1);
   const [pins, setPins] = useState<PinType[]>([]);
-  const newPins=useRef([])
-  const [loading, setLoading] = useState(false);
-  const isAllPinsComing=useRef(false)
+  const newPins = useRef<PinType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const isAllPinsComing = useRef<boolean>(false);
   const dispatch = useAppDispatch();
   const [isAuthenticateValue, setIsAuthenticatedValue] =
     useState(isAuthenticate);
@@ -31,27 +30,22 @@ const Home = () => {
   }, [isAuthenticate]);
 
   const fetchPins = async () => {
-   
     try {
       const res = await axios.get(
         `${BACKEND_END_POINTS.Get_ALL_PINS}?page=${page?.current}&limit=${LIMIT}`
       );
       const resData = await res.data;
       if (resData?.data?.length) {
-        
-       
-        const setOfPins = [...new Set([...newPins?.current, ...resData.data])];
-        newPins.current=setOfPins
+        const setOfPins = [...new Set([...newPins?.current, ...resData?.data])];
+        newPins.current = setOfPins;
         setPins(setOfPins);
-        page.current +=1
-      }else{
-        isAllPinsComing.current=true
+        page.current += 1;
+      } else {
+        isAllPinsComing.current = true;
       }
-
     } catch (error) {
       toastPopup(labels?.FETCHING_PINS_ERROR, "error");
-      
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -68,12 +62,11 @@ const Home = () => {
       isAuthenticateValue &&
       !isAllPinsComing.current &&
       window.innerHeight + document.documentElement.scrollTop >=
-      document.documentElement.scrollHeight - 30
+        document.documentElement.scrollHeight - 30
     ) {
-      setLoading(true)
+      setLoading(true);
       fetchPins();
     }
-
   };
 
   useEffect(() => {
@@ -86,29 +79,27 @@ const Home = () => {
 
   return (
     <>
-      <main
-        className="w-screen h-auto homeSection snap-y snap-proximity relative"
-        ref={containerRef}
-      >
+      <main className="w-screen h-auto homeSection snap-y snap-proximity relative">
         {!isAuthenticateValue ? (
           <>
             <HeroSection />
           </>
         ) : (
           <div className="w-screen absolute top-[12vh] homeSection min-h-[90%] dark:bg-[#282828] p-3">
-            {
-              pins ? (
-                  pins.length > 0 ?
-                  <Pins
+            {pins ? (
+              pins.length > 0 ? (
+                <Pins
                   pins={pins}
                   gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
-                /> : 
+                />
+              ) : (
                 <h2 className="text-center font-bold text-4xl mt-10 text-gray-700">
-                
-                {labels?.NO_PINS_FOUND}
-              </h2>
-              ) : <Loader/>
-            }
+                  {labels?.NO_PINS_FOUND}
+                </h2>
+              )
+            ) : (
+              <Loader />
+            )}
 
             {loading && <Loader />}
           </div>

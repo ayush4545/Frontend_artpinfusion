@@ -2,7 +2,7 @@ import React from "react";
 import { withErrorBoundary } from "react-error-boundary";
 
 const WithErrorBoundariesWrapper = (
-  componentThayMayError: React.ComponentType | JSX.Element
+  componentThayMayError: React.ComponentType<object>
 ) => {
   return withErrorBoundary(componentThayMayError, {
     FallbackComponent: ErrorFallback,
@@ -11,7 +11,13 @@ const WithErrorBoundariesWrapper = (
 
 export { WithErrorBoundariesWrapper };
 
-const ErrorFallback = ({ error, resetErrorBoundary }) => {
+const ErrorFallback = ({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error;
+  resetErrorBoundary: () => void;
+}) => {
   return (
     <div
       role="alert"

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { BoardType, UserState } from "../Types/types";
 import useAuth from "../hooks/useAuth";
-import {  useAppSelector } from "../hooks/reduxHooks";
-import ErrorImage from "../assets/404Page.gif"
+import { useAppSelector } from "../hooks/reduxHooks";
+import ErrorImage from "../assets/404Page.gif";
 import HomePinHoverCard from "./HomePinHoverCard";
 import AllPinsBoardHoverCard from "./AllPinsBoardHoverCard";
 import EditCreatePin from "./EditCreatePin";
@@ -18,19 +18,11 @@ type Props = {
   boards?: BoardType[];
 };
 const PinCard = (props: Props) => {
-  const {
-    imageUrl,
-    user,
-    link = "",
-    title = "",
-    _id,
-    boardId,
-    boards
-  } = props;
-  const [isHover, setIsHover] = useState(false);
+  const { imageUrl, user, link = "", title = "", _id, boardId, boards } = props;
+  const [isHover, setIsHover] = useState<boolean>(false);
   const isAuthenticate = useAuth();
   const [cardClicked, setCardClicked] = useState<boolean>(false);
-  const hoverOn=useAppSelector(state=>state.hoverOn)
+  const hoverOn: string = useAppSelector((state) => state.hoverOn);
 
   return (
     <div
@@ -39,14 +31,13 @@ const PinCard = (props: Props) => {
         setIsHover(true);
       }}
       onMouseLeave={() => {
-        setIsHover(false); 
+        setIsHover(false);
       }}
-
       onTouchStart={() => {
         setIsHover(true);
       }}
       onTouchEnd={() => {
-        setIsHover(false); 
+        setIsHover(false);
       }}
       onClick={() => {
         setCardClicked(true);
@@ -64,8 +55,8 @@ const PinCard = (props: Props) => {
       ) : (
         <img
           src={imageUrl}
-          onError={(e) => {
-            e.target.src = ErrorImage;
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+            (e.target as HTMLImageElement).src = ErrorImage;
           }}
           alt="pin"
           className="w-full object-cover h-full  rounded-3xl"
@@ -89,12 +80,17 @@ const PinCard = (props: Props) => {
                 />
               )}
 
-              {
-                hoverOn === labels?.HOVER_ON_ALL_PINS && <AllPinsBoardHoverCard imageUrl={imageUrl} title={title} setCardClicked={setCardClicked} pinId={_id}/>
-              }
-              {
-                hoverOn === labels?.HOVER_ON_CREATED && <EditCreatePin  setCardClicked={setCardClicked} pinId={_id}/>
-              }
+              {hoverOn === labels?.HOVER_ON_ALL_PINS && (
+                <AllPinsBoardHoverCard
+                  imageUrl={imageUrl}
+                  title={title}
+                  setCardClicked={setCardClicked}
+                  pinId={_id}
+                />
+              )}
+              {hoverOn === labels?.HOVER_ON_CREATED && (
+                <EditCreatePin setCardClicked={setCardClicked} pinId={_id} />
+              )}
             </>
           ) : (
             <p className="text-lg text-center absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">

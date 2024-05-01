@@ -8,7 +8,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/404Page.gif";
 import { labels } from "../config/constants/text.constant";
 type Props = {
   title: string;
@@ -17,7 +17,7 @@ type Props = {
 };
 const FollowersOrFollowing = (props: Props) => {
   const { title, onClose, users } = props;
- 
+
   const getFollowsModel = (): ReactElement => {
     return (
       <Modal
@@ -29,7 +29,9 @@ const FollowersOrFollowing = (props: Props) => {
         <div className="w-full h-full overflow-auto mt-4 p-4 scroll">
           {users &&
             users.length > 0 &&
-            users.map((user) => <FollowListComp user={user} key={user._id} title={title}/>)}
+            users.map((user) => (
+              <FollowListComp user={user} key={user._id} title={title} />
+            ))}
         </div>
       </Modal>
     );
@@ -39,36 +41,34 @@ const FollowersOrFollowing = (props: Props) => {
 
 type FollowListProps = {
   user: UserState;
-  title: string,
+  title: string;
 };
 const FollowListComp = (props: FollowListProps) => {
-  const { user,title } = props;
-  const loggedInUser=useAppSelector(state => state.user)
-  const {BACKEND_END_POINTS} = config.constant.api
-  const {getCookie} =config.utils.cookies
-  const {toastPopup} =config.utils.toastMessage
-  const isAuthenticate=useAuth()
-  const navigate=useNavigate()
-  const [isLoggedInUser]=useState(()=>{
-    if( user._id ===  loggedInUser?._id){
-        return true
-    }
-    else return false
-  })
-  const [isFollowing,setIsFollowing] =useState(()=>{
-    if(user?.followers.includes(loggedInUser?._id!))return true
-    return false
-  })
-  
+  const { user, title } = props;
+  const loggedInUser = useAppSelector((state) => state.user);
+  const { BACKEND_END_POINTS } = config.constant.api;
+  const { getCookie } = config.utils.cookies;
+  const { toastPopup } = config.utils.toastMessage;
+  const isAuthenticate = useAuth();
+  const navigate = useNavigate();
+  const [isLoggedInUser] = useState<boolean>(() => {
+    if (user._id === loggedInUser?._id) {
+      return true;
+    } else return false;
+  });
+  const [isFollowing, setIsFollowing] = useState(() => {
+    if (user?.followers?.includes(loggedInUser?._id)) return true;
+    return false;
+  });
 
   const handleFollow = async () => {
-    if(!isAuthenticate){
-     return navigate(`/`,{
-      state:{isNeedToLogin:true}
-  })
-  }
+    if (!isAuthenticate) {
+      return navigate(`/`, {
+        state: { isNeedToLogin: true },
+      });
+    }
     try {
-      const token = getCookie("accessToken");
+      const token = getCookie(labels?.ACCESS_TOKEN);
 
       if (!isFollowing) {
         const res = await axios.get(
@@ -82,7 +82,10 @@ const FollowListComp = (props: FollowListProps) => {
         const resData = await res.data;
         if (resData.statusCode === 200) {
           setIsFollowing(true);
-          toastPopup(labels?.FOLLOWING_TOAST_MESSAGE(resData?.data.name), "success");
+          toastPopup(
+            labels?.FOLLOWING_TOAST_MESSAGE(resData?.data.name),
+            "success"
+          );
         }
       } else {
         const res = await axios.get(
@@ -94,10 +97,13 @@ const FollowListComp = (props: FollowListProps) => {
           }
         );
         const resData = await res.data;
-       
+
         if (resData.statusCode === 200) {
           setIsFollowing(false);
-          toastPopup(labels?.UNFOLLOWING_TOAST_MESSAGE(resData?.data?.name), "success");
+          toastPopup(
+            labels?.UNFOLLOWING_TOAST_MESSAGE(resData?.data?.name),
+            "success"
+          );
         }
       }
     } catch (error) {
@@ -110,9 +116,9 @@ const FollowListComp = (props: FollowListProps) => {
         {user.avatar && user.avatar.length > 10 ? (
           <img
             src={user?.avatar}
-            onError={(e:React.SyntheticEvent<HTMLImageElement, Event>)=>{
-              e.target.src=ErrorImage
-             }}
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              (e.target as HTMLImageElement).src = ErrorImage;
+            }}
             alt={user?.name}
             className="rounded-full w-14 aspect-square object-cover"
           />
@@ -134,12 +140,15 @@ const FollowListComp = (props: FollowListProps) => {
         onClick={handleFollow}
         disabled={isLoggedInUser}
       >
-        {isLoggedInUser ?
-         (title === labels?.FOLLOWERS ? labels?.THAS_YOU : labels?.UNFOLLOW) : 
-          (
-            isFollowing ? (title === labels?.FOLLOWERS ? labels?.FOLLOWING :  labels?.UNFOLLOW ): labels?.FOLLOW
-          )
-         }
+        {isLoggedInUser
+          ? title === labels?.FOLLOWERS
+            ? labels?.THAS_YOU
+            : labels?.UNFOLLOW
+          : isFollowing
+          ? title === labels?.FOLLOWERS
+            ? labels?.FOLLOWING
+            : labels?.UNFOLLOW
+          : labels?.FOLLOW}
       </button>
     </div>
   );

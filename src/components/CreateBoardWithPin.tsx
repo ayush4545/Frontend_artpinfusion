@@ -15,8 +15,13 @@ type Props = {
     boardId
   }:{boardName:string,boardId:string})=> void;
   onClose: () => void;
-  setModelTitle : (boardName:string)=> void
+  setModelTitle : React.Dispatch<React.SetStateAction<string>>
 };
+
+type BoardDetailsProps={
+  boardName:string,
+  description:string
+}
 const CreateBoardWithPin = (props: Props) => {
   const { pinId, setSelectedBoardDetails, onClose,setModelTitle } = props;
 
@@ -25,11 +30,11 @@ const CreateBoardWithPin = (props: Props) => {
   const saveUserInRedux = config.utils.saveUserInReduxAndSetAccessToken;
   const [pinDetails, setPinDetails] = useState<PinType | null>(null);
   const isAuthenticate = useAuth();
-  const token = getCookie("accessToken");
+  const token = getCookie(labels?.ACCESS_TOKEN);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [isPinSaved, setIsPinSaved] = useState(false);
-  const [boardDetails, setBoardDetails] = useState({
+  const [isPinSaved, setIsPinSaved] = useState<boolean>(false);
+  const [boardDetails, setBoardDetails] = useState<BoardDetailsProps>({
     boardName: "",
     description: "",
   });
@@ -53,7 +58,7 @@ const CreateBoardWithPin = (props: Props) => {
     }
   }, [pinId]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBoardDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -112,7 +117,7 @@ const CreateBoardWithPin = (props: Props) => {
                 <img
                   src={pinDetails?.imageUrl}
                   onError={(e:React.SyntheticEvent<HTMLImageElement, Event>)=>{
-                    e.target.src=ErrorImage
+                    (e.target as HTMLImageElement).src=ErrorImage
                    }}
                   alt={pinDetails?.title || pinDetails?.description}
                   className="w-full h-full object-cover rounded-2xl"
@@ -137,8 +142,8 @@ const CreateBoardWithPin = (props: Props) => {
               ) : (
                 <img
                   src={pinDetails?.imageUrl}
-                  onError={(e)=>{
-                    e.target.src=ErrorImage
+                  onError={(e:React.SyntheticEvent<HTMLImageElement, Event>)=>{
+                    (e.target as HTMLImageElement).src=ErrorImage
                    }}
                   alt={pinDetails?.title || pinDetails?.description}
                   className="w-full h-full object-cover rounded-2xl"
@@ -154,7 +159,7 @@ const CreateBoardWithPin = (props: Props) => {
                   className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
                   id="boardName"
                   name="boardName"
-                  placeholder={labels?.Name}
+                  placeholder={labels?.NAME}
                   type="text"
                   value={boardDetails?.boardName}
                   onChange={handleChange}
@@ -172,7 +177,7 @@ const CreateBoardWithPin = (props: Props) => {
                   placeholder={labels?.DESCRIPTION_BOARD_PLACEHOLDER}
                   rows={5}
                   value={boardDetails?.description}
-                  onChange={handleChange}
+                  onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>setBoardDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
                 />
               </div>
               {pinDetails?.user && (
@@ -190,8 +195,8 @@ const CreateBoardWithPin = (props: Props) => {
                       pinDetails?.user?.avatar?.length > 10 ? (
                         <img
                           src={pinDetails?.user?.avatar}
-                          onError={(e)=>{
-                            e.target.src=ErrorImage
+                          onError={(e:React.SyntheticEvent<HTMLImageElement, Event>)=>{
+                            (e.target as HTMLImageElement).src=ErrorImage
                            }}
                           alt={pinDetails?.user?.name}
                           className="w-10 h-full rounded-full object-cover"

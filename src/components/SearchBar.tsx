@@ -4,7 +4,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 
 const SearchBar = () => {
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
 
   return (
     <div

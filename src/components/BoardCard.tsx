@@ -5,7 +5,7 @@ import { MdEdit } from "react-icons/md";
 import EditBoardPopup from "./EditBoardPopup";
 import { useAppSelector } from "../hooks/reduxHooks";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/404Page.gif";
 type Props = {
   board: BoardType;
   username: string;
@@ -13,10 +13,10 @@ type Props = {
 const BoardCard = (props: Props) => {
   const { board, username } = props;
   const pins = board?.pins?.reverse().slice(0, 3);
-  const [isHover, setIsHover] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const pinsArr = [...Array(3).keys()];
-  const [boardName, setBoardName] = useState(board?.boardName);
+  const [isHover, setIsHover] = useState<boolean>(false);
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const pinsArr:number[] = [...Array(3).keys()];
+  const [boardName, setBoardName] = useState<string>(board?.boardName);
   const loggedInUser = useAppSelector((state) => state?.user);
   const pinStyle = [
     "w-2/3 h-full left-0",
@@ -54,10 +54,9 @@ const BoardCard = (props: Props) => {
           {loggedInUser?.username === username && isHover && (
             <div
               className="absolute right-2 bottom-2 w-10 h-10 rounded-full flex items-center justify-center bg-[#e9e9e9]"
-              onClick={(e) => {
+              onClick={(e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 e.preventDefault();
                 e.stopPropagation();
-
                 setOpenEdit((prev) => !prev);
               }}
             >
@@ -65,8 +64,12 @@ const BoardCard = (props: Props) => {
             </div>
           )}
         </div>
-        <p className="font-semibold text-xl mx-2 mt-2 dark:text-white">{boardName}</p>
-        <p className="mx-2 text-sm dark:text-white">{board?.pins?.length} pins</p>
+        <p className="font-semibold text-xl mx-2 mt-2 dark:text-white">
+          {boardName}
+        </p>
+        <p className="mx-2 text-sm dark:text-white">
+          {board?.pins?.length} pins
+        </p>
       </Link>
 
       {/* Edit board modal */}
@@ -97,9 +100,9 @@ const BoardChip = (props: BoardChipProps) => {
       {imageUrl && !imageUrl.includes("video") && (
         <img
           src={imageUrl}
-          onError={(e)=>{
-            e.target.src=ErrorImage
-           }}
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+            (e.target as HTMLImageElement).src = ErrorImage;
+          }}
           alt={pinTitle}
           className="w-full h-full object-cover"
         />

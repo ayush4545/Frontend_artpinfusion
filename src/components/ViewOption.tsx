@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { LuSettings2 } from "react-icons/lu";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
@@ -9,13 +9,12 @@ type Props = {
   isBoard: boolean;
   top: string;
   openViewOption: boolean;
-  setOpenViewOption: (value: boolean) => void;
-  setOpenCreateButtonModel?: (value: boolean) => void;
+  setOpenViewOption: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenCreateButtonModel?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const ViewOption = (props: Props) => {
   const {
     isBoard,
-    top,
     openViewOption,
     setOpenViewOption,
     setOpenCreateButtonModel = () => {},
@@ -31,12 +30,11 @@ const ViewOption = (props: Props) => {
             ? "bg-black text-white dark:bg-white dark:text-black"
             : "hover:bg-[#e9e9e9] dark:bg-white"
         } transition-all cursor-pointer grid place-items-center`}
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
           e.preventDefault();
           e.stopPropagation();
           setOpenViewOption((prev) => !prev);
-          if(setOpenCreateButtonModel){
-
+          if (setOpenCreateButtonModel) {
             setOpenCreateButtonModel?.(false);
           }
         }}

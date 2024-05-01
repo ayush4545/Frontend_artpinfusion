@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BsThreeDots } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import axios from "axios";
 import config from "../config";
@@ -30,7 +29,7 @@ const BoardDetails = () => {
   const { routePaths } = config.constant.routes;
   const loggedInUser = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const [openPinsModel, setOpenPinsModel] = useState(false);
+  const [openPinsModel, setOpenPinsModel] = useState<boolean>(false);
   const [boardData, setBoardData] = useState<BoardData | null>(null);
   const { BACKEND_END_POINTS } = config.constant.api;
   const [openFollowersModel, setOpenFollowersModel] = useState(false);
@@ -38,8 +37,8 @@ const BoardDetails = () => {
   const selectedViewOptions = useAppSelector((state) => state.viewOption);
   const [openViewOption, setOpenViewOption] = useState<boolean>(false);
   const [openShareModal, setOpenShareModal] = useState<boolean>(false);
-  const [openEditBoardModel,setOpenEditBoardModel]=useState<boolean>(false)
-  const [boardName,setBoardName]=useState<string>('')
+  const [openEditBoardModel, setOpenEditBoardModel] = useState<boolean>(false);
+  const [boardName, setBoardName] = useState<string>("");
   const fetchBoardDetails = async () => {
     try {
       const res = await axios.get(
@@ -56,7 +55,7 @@ const BoardDetails = () => {
           description = "",
         } = resData.data;
         setBoardData({ creatorBy, pins, _id, description });
-        setBoardName(boardName)
+        setBoardName(boardName);
         if (pathname.includes(loggedInUser?.username)) {
           dispatch(setHoverOn(labels?.HOVER_ON_ALL_PINS));
         } else {
@@ -82,7 +81,7 @@ const BoardDetails = () => {
 
   const handleWindowClick = () => {
     setOpenViewOption(false);
-    setOpenShareModal(false)
+    setOpenShareModal(false);
   };
 
   useEffect(() => {
@@ -101,7 +100,12 @@ const BoardDetails = () => {
               <div className="relative">
                 <p className="text-[32px] font-bold text-wrap min-w-8 max-w-96 whitespace-break-spaces overflow-hidden text-center flex items-end gap-2 dark:text-white">
                   {boardName}
-                  <span className="w-8 h-8 rounded-full md:hidden  p-2 flex-1 bg-[#e9e9e9] hover:bg-[#d2d1d1] flex items-center justify-center  cursor-pointer dark:text-black" onClick={()=>{setOpenEditBoardModel(true)}}>
+                  <span
+                    className="w-8 h-8 rounded-full md:hidden  p-2 flex-1 bg-[#e9e9e9] hover:bg-[#d2d1d1] flex items-center justify-center  cursor-pointer dark:text-black"
+                    onClick={() => {
+                      setOpenEditBoardModel(true);
+                    }}
+                  >
                     <MdEdit className="text-xl" />
                   </span>
                 </p>
@@ -114,8 +118,10 @@ const BoardDetails = () => {
                 >
                   <img
                     src={boardData?.creatorBy?.avatar}
-                    onError={(e:React.SyntheticEvent<HTMLImageElement, Event>) => {
-                      e.target.src = ErrorImage;
+                    onError={(
+                      e: React.SyntheticEvent<HTMLImageElement, Event>
+                    ) => {
+                      (e.target as HTMLImageElement).src = ErrorImage;
                     }}
                     alt={boardData?.creatorBy?.name}
                     className="w-14 aspect-square rounded-full object-cover"
@@ -143,21 +149,23 @@ const BoardDetails = () => {
                       {labels?.FOLLOWERS}
                     </p>
                     <div className="relative">
-                    <button className="bg-[#E9E9E9] hover:bg-[#dad9d9]  rounded-[20px] p-2 px-4 mr-2 font-semibold mt-5" 
-                    onClick={(e)=>{
-                    e.preventDefault()
-                    e.stopPropagation()
-                    setOpenShareModal((prev) => !prev);
-                    }}>
-                      {labels?.SHARE}
-                    </button>
-                    {openShareModal && (
-                      <ShareModal
-                        onClose={() => setOpenShareModal(false)}
-                        leftTopStyle="-top-5 -left-[212px] "
-                      />
-                    )}
-                    </div>    
+                      <button
+                        className="bg-[#E9E9E9] hover:bg-[#dad9d9]  rounded-[20px] p-2 px-4 mr-2 font-semibold mt-5"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setOpenShareModal((prev) => !prev);
+                        }}
+                      >
+                        {labels?.SHARE}
+                      </button>
+                      {openShareModal && (
+                        <ShareModal
+                          onClose={() => setOpenShareModal(false)}
+                          leftTopStyle="-top-5 -left-[212px] "
+                        />
+                      )}
+                    </div>
                   </>
                 )}
               </div>
@@ -232,16 +240,15 @@ const BoardDetails = () => {
         <PiPlusBold className="text-3xl" />
       </div>
 
-      {
-        openEditBoardModel && <EditBoardPopup
-        boardName={boardName}
-        description={boardData?.description}
-        onClose={() => setOpenEditBoardModel(false)}
-        boardId={boardData?._id}
-        setBoardName={setBoardName}
-      />
-            
-      }
+      {openEditBoardModel && (
+        <EditBoardPopup
+          boardName={boardName}
+          description={boardData?.description}
+          onClose={() => setOpenEditBoardModel(false)}
+          boardId={boardData?._id}
+          setBoardName={setBoardName}
+        />
+      )}
     </>
   );
 };
@@ -256,7 +263,7 @@ const BoardPinsModel = (props: Props) => {
   const [pins, setPins] = useState<PinType[]>([]);
 
   const removeDuplicates = (array: PinType[], key: string) => {
-    const uniqueKeys: any = {};
+    const uniqueKeys: unknown = {};
     return array.filter((item) => {
       if (!uniqueKeys[item[key]]) {
         uniqueKeys[item[key]] = true;

@@ -14,24 +14,29 @@ type Props = {
   boardName: string;
   description?: string;
   boardId: string;
-  setBoardName: (boardName:string) => void
+  setBoardName: (boardName: string) => void;
+};
+
+type InputType = {
+  boardName: string;
+  description: string;
 };
 const EditBoardPopup = (props: Props) => {
-  const { onClose, boardName, description = "", boardId,setBoardName } = props;
+  const { onClose, boardName, description = "", boardId, setBoardName } = props;
   const { getCookie } = config.utils.cookies;
   const { BACKEND_END_POINTS } = config.constant.api;
   const isAuthenticate = useAuth();
   const navigate = useNavigate();
   const saveUserInRedux = config.utils.saveUserInReduxAndSetAccessToken;
-  const dispatch= useDispatch()
-  const [isDoneBtnClicked,setIsDoneBtnClicked]=useState(false)
-  const token = getCookie("accessToken");
-  const [inputs, setInputs] = useState({
+  const dispatch = useDispatch();
+  const [isDoneBtnClicked, setIsDoneBtnClicked] = useState<boolean>(false);
+  const token = getCookie(labels?.ACCESS_TOKEN);
+  const [inputs, setInputs] = useState<InputType>({
     boardName: boardName,
     description: description,
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -42,8 +47,8 @@ const EditBoardPopup = (props: Props) => {
           state: { isNeedToLogin: true },
         });
       }
-      setIsDoneBtnClicked(true)
-      
+      setIsDoneBtnClicked(true);
+
       const res = await axios.put(
         `${BACKEND_END_POINTS?.UPDATE_BOARD_DETAILS}/${boardId}`,
         inputs,
@@ -54,44 +59,50 @@ const EditBoardPopup = (props: Props) => {
         }
       );
 
-      const resData=await res.data
-      if(resData.statusCode === 201){
-        saveUserInRedux.useSaveLoginUserAndAccessToken( { _doc: { ...resData.data } },dispatch)
+      const resData = await res.data;
+      if (resData.statusCode === 201) {
+        saveUserInRedux.useSaveLoginUserAndAccessToken(
+          { _doc: { ...resData.data } },
+          dispatch
+        );
         setBoardName(inputs.boardName);
-        setIsDoneBtnClicked(false)
-        onClose()
+        setIsDoneBtnClicked(false);
+        onClose();
       }
-      
     } catch (error) {
-    
-      setIsDoneBtnClicked(false)
+      setIsDoneBtnClicked(false);
     }
   };
 
-  const handleDeleteBoard=async()=>{
-   try {
-    if (!isAuthenticate) {
-      return navigate(`/`, {
-        state: { isNeedToLogin: true },
-      });
-    }
+  const handleDeleteBoard = async () => {
+    try {
+      if (!isAuthenticate) {
+        return navigate(`/`, {
+          state: { isNeedToLogin: true },
+        });
+      }
 
-    const res=await axios.delete(`${BACKEND_END_POINTS.DELETE_BOARD}/${boardId}`,{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    const resData=await res.data
-    if(resData?.statusCode === 200){
-        saveUserInRedux.useSaveLoginUserAndAccessToken( { _doc: { ...resData.data } },dispatch)
-        onClose()
-        window.location.reload()
+      const res = await axios.delete(
+        `${BACKEND_END_POINTS.DELETE_BOARD}/${boardId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resData = await res.data;
+      if (resData?.statusCode === 200) {
+        saveUserInRedux.useSaveLoginUserAndAccessToken(
+          { _doc: { ...resData.data } },
+          dispatch
+        );
+        onClose();
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("delete board error", error);
     }
-    
-   } catch (error) {
-     console.log("delete board error",error)
-   }
-  }
+  };
   const getEditBoardModel = () => {
     return (
       <Modal
@@ -127,26 +138,35 @@ const EditBoardPopup = (props: Props) => {
               placeholder={labels?.DESCRIPTION_BOARD_PLACEHOLDER}
               rows={5}
               value={inputs?.description}
-              onChange={handleChange}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setInputs((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
+              }
             />
           </div>
         </div>
         <div className="absolute bottom-0 shadow-2xl w-full flex items-center justify-between py-4 px-3 border-t-2 border-gray-300">
-           <button className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]" onClick={handleDeleteBoard}>
-              {labels?.DELETE_BOARD}
-            </button>
+          <button
+            className="rounded-3xl px-3 py-2  font-semibold bg-[#e9e9e9]"
+            onClick={handleDeleteBoard}
+          >
+            {labels?.DELETE_BOARD}
+          </button>
           <button
             className={`bg-[#FF8C00]  text-white rounded-[20px] p-2 px-4 ${
               (boardName === inputs?.boardName &&
-              description === inputs?.description) || isDoneBtnClicked
+                description === inputs?.description) ||
+              isDoneBtnClicked
                 ? "opacity-50"
                 : "opacity-100 hover:bg-[#FF5E0E]"
             }`}
             onClick={handleUpdateDetails}
             disabled={
               (boardName === inputs?.boardName &&
-              description === inputs?.description)
-              || isDoneBtnClicked
+                description === inputs?.description) ||
+              isDoneBtnClicked
             }
           >
             {labels?.DONE}

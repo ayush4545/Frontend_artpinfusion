@@ -7,17 +7,23 @@ import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { labels } from "../config/constants/text.constant";
 
 type Props = {
-  showBoard: boolean,
-  top: string,
-  openCreateButtonModel:boolean,
-  setOpenViewOption?:(prev:boolean)=>boolean,
-    setOpenCreateButtonModel:(prev:boolean)=>boolean
+  showBoard: boolean;
+  top: string;
+  openCreateButtonModel: boolean;
+  setOpenViewOption?: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenCreateButtonModel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const CreateBoardPinButton = (props: Props) => {
-  const {showBoard,top,openCreateButtonModel,setOpenViewOption=()=>{},setOpenCreateButtonModel}=props
+  const {
+    showBoard,
+    top,
+    openCreateButtonModel,
+    setOpenViewOption = () => {},
+    setOpenCreateButtonModel,
+  } = props;
   const { routePaths } = config.constant.routes;
-  const [openBoard, setOpenBoard] = useState(false);
-  
+  const [openBoard, setOpenBoard] = useState<boolean>(false);
+
   return (
     <>
       <div className="relative">
@@ -27,11 +33,11 @@ const CreateBoardPinButton = (props: Props) => {
               ? "bg-black text-white dark:bg-white dark:text-black"
               : "hover:bg-[#e9e9e9] dark:bg-white"
           } transition-all cursor-pointer grid place-items-center`}
-          onClick={(e) => {
+          onClick={(e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             e.preventDefault();
             e.stopPropagation();
-            setOpenCreateButtonModel((prev) =>!prev);
-            setOpenViewOption?.(false)
+            setOpenCreateButtonModel((prev) => !prev);
+            setOpenViewOption?.(false);
           }}
         >
           <PiPlusBold className="font-extrabold text-xl lg:text-2xl" />

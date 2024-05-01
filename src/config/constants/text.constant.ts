@@ -113,6 +113,12 @@ const labels={
      LINK_PLACEHOLDER:"Add a link",
      TAG:"Tags",
      TAG_PLACEHOLDER:"Add a tag",
-     SOME_PIN_TO_SAVE_IN_BOARD:"Save some pins to your new board"
+     SOME_PIN_TO_SAVE_IN_BOARD:"Save some pins to your new board",
+     CREATE_PIN_PUBLISHED_TOAST_MESSAGE:"Your pin has been published",
+     LOGOUT:"Logout",
+     MORE_OPTIONS:"More Options",
+     CURRENTLY_IN:"Currently in",
+     SIGN_ERROR:"Oops! Something went wrong. Please try signing up again later."
+
 }
 export {labels}

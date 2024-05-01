@@ -4,18 +4,18 @@ import { downloadFile } from "../config/utils";
 import AllPinsBoardSavePinModel from "./AllPinsBoardSavePinModel";
 import AllPinsBoardEditSavePinModel from "./AllPinsBoardEditSavePinModel";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import { labels} from "../config/constants/text.constant";
+import { labels } from "../config/constants/text.constant";
 
 type Props = {
   pinId: string;
   title: string;
-  setCardClicked: (val: boolean) => void;
+  setCardClicked: React.Dispatch<React.SetStateAction<boolean>>;
   imageUrl: string;
 };
 const AllPinsBoardHoverCard = (props: Props) => {
   const { pinId, title, setCardClicked, imageUrl } = props;
-  const [openSaveModel, setOpenSaveModel] = useState(false);
-  const [openEditModel, setOpenEditModel] = useState(false);
+  const [openSaveModel, setOpenSaveModel] = useState<boolean>(false);
+  const [openEditModel, setOpenEditModel] = useState<boolean>(false);
 
   return (
     <>
@@ -23,7 +23,7 @@ const AllPinsBoardHoverCard = (props: Props) => {
         <div className="flex items-center justify-end">
           <button
             className={`rounded-3xl px-3 py-2 text-md  font-bold cursor-pointer bg-[#FF8C00] hover:bg-[#FF5E0E] text-white tracking-wide`}
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
               e.stopPropagation();
               e.preventDefault();
               setOpenSaveModel(true);
@@ -38,7 +38,7 @@ const AllPinsBoardHoverCard = (props: Props) => {
           <div
             title={labels?.DELETE_PIN}
             className=" w-8 h-8 rounded-full flex items-center justify-center bg-[#e9e9e9]"
-            onClick={(e) => {
+            onClick={(e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
               e.preventDefault();
               e.stopPropagation();
               setOpenEditModel(true);
@@ -50,7 +50,7 @@ const AllPinsBoardHoverCard = (props: Props) => {
           <div
             title={labels?.DOWNLOAD_PIN}
             className=" w-8 h-8 rounded-full flex items-center justify-center bg-[#e9e9e9]"
-            onClick={(e) => {
+            onClick={(e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
               e.preventDefault();
               e.stopPropagation();
               downloadFile(imageUrl, title);

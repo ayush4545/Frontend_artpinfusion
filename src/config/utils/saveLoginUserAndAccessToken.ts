@@ -2,6 +2,7 @@ import { AppDispatch } from "./../../redux/store";
 
 import { addUser } from "../../redux/user.slice";
 import { setCookies } from "./setAndGetCookies";
+import { labels } from "../constants/text.constant";
 const useSaveLoginUserAndAccessToken = (data, dispatch: AppDispatch) => {
   const userData = data._doc;
   const userObj = {
@@ -18,7 +19,7 @@ const useSaveLoginUserAndAccessToken = (data, dispatch: AppDispatch) => {
   };
   dispatch(addUser(userObj)); // Redux Action to store the data in
   if(data?.accessToken){
-    setCookies("accessToken", data?.accessToken);
+    setCookies(labels?.ACCESS_TOKEN, data?.accessToken);
   }
 };
 

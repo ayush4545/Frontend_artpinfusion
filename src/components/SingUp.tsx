@@ -1,10 +1,5 @@
 import { createPortal } from "react-dom";
-import React, {
-  ChangeEventHandler,
-  ReactElement,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import Modal from "./Modal";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
@@ -16,19 +11,18 @@ import { useAppDispatch } from "../hooks/reduxHooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/404Page.gif";
 import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
   handleSwitchToLogin: () => void;
 };
 
-type formData = {
+type FormData = {
   username: string;
   name: string;
   password: string;
   emailId: string;
-  avatar: File;
 };
 
 const SignUp = (props: Props) => {
@@ -38,10 +32,11 @@ const SignUp = (props: Props) => {
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [isDisabledSignUp, setIsDisabledSignUp] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const fileRef = useRef(null);
+  const fileRef = useRef<React.LegacyRef<HTMLInputElement> | null>(null);
   const { signUpSchema } = config.utils.yup;
   const { BACKEND_END_POINTS } = config.constant.api;
-  const {toastPopup}=config.utils.toastMessage
+  const { toastPopup } = config.utils.toastMessage;
+  const saveUserInRedux = config.utils.saveUserInReduxAndSetAccessToken;
   const {
     handleSubmit,
     register,
@@ -56,12 +51,12 @@ const SignUp = (props: Props) => {
       const userInfo = await config.utils.GoogleUserInfo.getGoogleUserInfo(
         access_token
       );
-     
+
       const userLogin = await axios.post(
         config.constant.api.BACKEND_END_POINTS.GOOGLE_USER,
         userInfo
       );
-      config.utils.saveUserInReduxAndSetAccessToken.useSaveLoginUserAndAccessToken(
+      saveUserInRedux.useSaveLoginUserAndAccessToken(
         userLogin.data.data,
         dispatch
       );
@@ -75,10 +70,8 @@ const SignUp = (props: Props) => {
     handleGoogleLogin();
   };
 
-
-
-  const handleImageChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const selectedImage = event.target.files[0];
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = event?.target?.files?.[0];
     setSelectedAvatar(selectedImage);
     // Check if an image is selected
     if (selectedImage) {
@@ -91,10 +84,9 @@ const SignUp = (props: Props) => {
     }
   };
 
-
-  const onSubmitHandler = async (data: formData) => {
+  const onSubmitHandler = async (data: FormData) => {
     try {
-      setIsDisabledSignUp(true)
+      setIsDisabledSignUp(true);
       const formsData = new FormData();
       formsData.set("username", data.username);
       formsData.set("name", data.name);
@@ -110,30 +102,32 @@ const SignUp = (props: Props) => {
         },
       });
       const resData = await res.data;
-      config.utils.saveUserInReduxAndSetAccessToken.useSaveLoginUserAndAccessToken(
-        resData.data,
-        dispatch
-      );
-      reset()
-      toastPopup(labels?.SIGN_UP_SUCCESS_TOAST_MESSAGE(data.name),"success")
+      saveUserInRedux.useSaveLoginUserAndAccessToken(resData.data, dispatch);
+      reset();
+      toastPopup(labels?.SIGN_UP_SUCCESS_TOAST_MESSAGE(data.name), "success");
       onClose();
     } catch (error) {
-      if(error?.response?.status===400){
-        toastPopup(labels?.ALL_FIELDS_REQUIRED,"error")
+      if (error?.response?.status === 400) {
+        toastPopup(labels?.ALL_FIELDS_REQUIRED, "error");
       }
-      if(error?.response?.status===409){
-        toastPopup(labels?.USER_EXISTED,"error")
+      if (error?.response?.status === 409) {
+        toastPopup(labels?.USER_EXISTED, "error");
       }
-      if(error?.response?.status===500){
-        toastPopup("Oops! Something went wrong. Please try signing up again later.","error")
+      if (error?.response?.status === 500) {
+        toastPopup(labels?.SIGN_ERROR, "error");
       }
-      
     }
   };
 
   const getLoginModal = (): ReactElement => {
     return (
-      <Modal onClose={onClose} isSignupPage={true} title="Welcome to PinIt" showClose={true} widthHeightStyle=" w-[90%] sm:w-2/3 lg:w-1/3 h-auto">
+      <Modal
+        onClose={onClose}
+        isSignupPage={true}
+        title="Welcome to PinIt"
+        showClose={true}
+        widthHeightStyle=" w-[90%] sm:w-2/3 lg:w-1/3 h-auto"
+      >
         <div className="grid place-items-center mt-5 items-center w-full">
           <form
             className="w-full grid place-items-center"
@@ -143,7 +137,7 @@ const SignUp = (props: Props) => {
               className="w-[80px] aspect-square rounded-full overflow-hidden  flex items-center justify-center  cursor-pointer transition-all"
               onClick={() => {
                 if (fileRef) {
-                  fileRef?.current?.click();
+                  (fileRef?.current as HTMLElement)?.click();
                 }
               }}
             >
@@ -151,7 +145,7 @@ const SignUp = (props: Props) => {
                 <img
                   src={image as string}
                   onError={(e) => {
-                    e.target.src = ErrorImage;
+                    (e.target as HTMLImageElement).src = ErrorImage;
                   }}
                   alt="user"
                   className="object-cover w-full h-full rounded-full border-2 border-orange-600"
@@ -281,7 +275,7 @@ const SignUp = (props: Props) => {
             onClick={handleSignUp}
           >
             <FcGoogle />
-           {labels?.SIGN_UP_GOOGLE}
+            {labels?.SIGN_UP_GOOGLE}
           </button>
           <p
             className="mt-2 font-bold cursor-pointer"

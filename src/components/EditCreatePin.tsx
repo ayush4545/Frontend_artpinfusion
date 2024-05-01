@@ -6,11 +6,11 @@ import { labels } from "../config/constants/text.constant";
 
 type Props = {
   pinId: string;
-  setCardClicked?: (val: boolean) => void;
+  setCardClicked?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const EditCreatePin = (props: Props) => {
   const { pinId, setCardClicked } = props;
-  const [openEditModal,setOpenEditModal]=useState(false)
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   return (
     <>
       <div
@@ -19,27 +19,24 @@ const EditCreatePin = (props: Props) => {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          setOpenEditModal(true)
-          setCardClicked(true);
+          setOpenEditModal(true);
+          setCardClicked?.(true);
         }}
       >
         <MdEdit className="text-black text-lg" />
       </div>
-    {
-        openEditModal && 
-            <EditCreatePinModal 
-            onClose={()=>{
-                setCardClicked(false)
-                setOpenEditModal(false)
-            }}
-            pinId={pinId}
-            title={labels?.EDIT_PIN_TITLE}
-            />    
-    }
-     
+      {openEditModal && (
+        <EditCreatePinModal
+          onClose={() => {
+            setCardClicked?.(false);
+            setOpenEditModal(false);
+          }}
+          pinId={pinId}
+          title={labels?.EDIT_PIN_TITLE}
+        />
+      )}
     </>
   );
 };
 
 export default WithErrorBoundariesWrapper(EditCreatePin);
-

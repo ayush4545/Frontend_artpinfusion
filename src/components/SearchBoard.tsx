@@ -5,13 +5,13 @@ import { labels } from "../config/constants/text.constant";
 
 type Props={
   styles:string,
-  setBoards : (boards:BoardType[])=>void,
-  originalBoards: MutableRefObject<null | BoardType[]>
+  setBoards :React.Dispatch<React.SetStateAction<BoardType[] | undefined>>,
+  originalBoards: MutableRefObject<BoardType[] | null>
 }
 const SearchBoard = (props:Props) => {
     const {styles,setBoards,originalBoards}=props
-    const [input,setInput]=useState('')
-    const handleChange=(e)=>{
+    const [input,setInput]=useState<string>('')
+    const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setInput(e.target.value)
         
       if(e.target.value === '' && originalBoards.current){

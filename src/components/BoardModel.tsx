@@ -9,7 +9,7 @@ import { useAppDispatch } from "../hooks/reduxHooks";
 import CreateBoardWithPin from "./CreateBoardWithPin";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { labels } from "../config/constants/text.constant";
-
+import { SelectedBoardDetailsType,ErrorTypes } from "../Types/types";
 
 type Props = {
   onClose: () => void;
@@ -17,8 +17,8 @@ type Props = {
   title: string;
   isNeedToNavigateBoardDetails?: boolean;
   handleGetBoardNameAndId?: (boardName: string, boardId: string) => void | null;
-  pinId?:string | null,
-  setSelectedBoardDetails?: ()=> void | null
+  pinId?: string | null;
+  setSelectedBoardDetails?: React.Dispatch<React.SetStateAction<SelectedBoardDetailsType>> | null;
 };
 const BoardModel = (props: Props) => {
   const {
@@ -27,18 +27,18 @@ const BoardModel = (props: Props) => {
     title,
     isNeedToNavigateBoardDetails = true,
     handleGetBoardNameAndId = null,
-    pinId=null,
-    setSelectedBoardDetails=null
+    pinId = null,
+    setSelectedBoardDetails = null,
   } = props;
   const { BACKEND_END_POINTS } = config.constant.api;
   const { getCookie } = config.utils.cookies;
   const saveUserInRedux = config.utils.saveUserInReduxAndSetAccessToken;
-  const [boardName, setBoardName] = useState("");
-  const [duplicateName, setDuplicateName] = useState(false);
+  const [boardName, setBoardName] = useState<string>("");
+  const [duplicateName, setDuplicateName] = useState<boolean>(false);
   const isAuthenticate = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [modelTitle,setModelTitle]=useState(title)
+  const [modelTitle, setModelTitle] = useState<string>(title);
   const handleCreateBoard = async () => {
     if (!isAuthenticate) {
       return navigate(`/`, {
@@ -46,7 +46,7 @@ const BoardModel = (props: Props) => {
       });
     }
     try {
-      const token = getCookie("accessToken");
+      const token = getCookie(labels?.ACCESS_TOKEN);
       const res = await axios.post(
         BACKEND_END_POINTS.CREATE_BOARD,
         { boardName },
@@ -72,12 +72,10 @@ const BoardModel = (props: Props) => {
           });
         }
       }
-     
-    } catch (error) {
+    } catch (error:unknown) {
       if (error?.response?.status === 409) {
         setDuplicateName(true);
       }
-     
     }
   };
   const normalBoard = () => {
@@ -92,7 +90,7 @@ const BoardModel = (props: Props) => {
             placeholder={labels?.BOARD_NAME_PLACEHOLDER}
             value={boardName}
             className="outline-none border-2 border-gray-400 rounded-xl  py-2 pl-4"
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setDuplicateName(false);
               setBoardName(e.target.value);
             }}
@@ -114,7 +112,7 @@ const BoardModel = (props: Props) => {
             disabled={boardName === ""}
             onClick={handleCreateBoard}
           >
-            Create
+            {labels?.CREATE}
           </button>
         </div>
       </div>
@@ -126,9 +124,20 @@ const BoardModel = (props: Props) => {
         onClose={onClose}
         title={modelTitle}
         showClose={false}
-        widthHeightStyle={`${isSavedButtonModel ? ' w-5/6 lg:w-3/6 h-auto' : 'w-1/3 h-auto'}`}
+        widthHeightStyle={`${
+          isSavedButtonModel ? " w-5/6 lg:w-3/6 h-auto" : "w-1/3 h-auto"
+        }`}
       >
-        {isSavedButtonModel ? <CreateBoardWithPin pinId={pinId} setSelectedBoardDetails={setSelectedBoardDetails} onClose={onClose} setModelTitle={setModelTitle}/> : normalBoard()}
+        {isSavedButtonModel ? (
+          <CreateBoardWithPin
+            pinId={pinId}
+            setSelectedBoardDetails={setSelectedBoardDetails}
+            onClose={onClose}
+            setModelTitle={setModelTitle}
+          />
+        ) : (
+          normalBoard()
+        )}
       </Modal>
     );
   };

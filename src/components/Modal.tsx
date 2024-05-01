@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IoMdClose } from "react-icons/io";
-import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
+
 import { labels } from "../config/constants/text.constant";
 
 type Props = {
@@ -45,4 +45,4 @@ const Modal = (props: Props) => {
   );
 };
 
-export default WithErrorBoundariesWrapper( Modal);
+export default Modal;

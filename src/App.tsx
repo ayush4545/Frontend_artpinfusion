@@ -18,6 +18,7 @@ import UserAllPins from "./pages/UserAllPins";
 import NotFoundPage from "./components/NotFound";
 import {WithErrorBoundariesWrapper} from "./components/WithErrorBoundaries";
 import AboutUs from "./pages/AboutUs";
+import { labels } from "./config/constants/text.constant";
 
 function App() {
   const { GET_LOGINED_USER } = config.constant.api.BACKEND_END_POINTS;
@@ -63,7 +64,7 @@ function App() {
   ];
 
   const getLoggedInUser = async () => {
-    const token = getCookie("accessToken");
+    const token = getCookie(labels?.ACCESS_TOKEN);
 
     if (token && user.name ==="") {
       const res = await axios.get(GET_LOGINED_USER, {

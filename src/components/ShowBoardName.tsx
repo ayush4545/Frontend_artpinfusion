@@ -13,8 +13,8 @@ type Props = {
     boardId: string;
     boardName: string;
   };
-  setOpenBoardPopover: (prev: boolean) => void;
-  setCardClicked: () => void;
+  setOpenBoardPopover: React.Dispatch<React.SetStateAction<boolean>>;
+  setCardClicked: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const ShowBoardName = (props: Props) => {
   const {
@@ -91,7 +91,7 @@ const ShowBoardName = (props: Props) => {
           className={`flex items-center gap-2 font-semibold cursor-pointer dark:text-white${
             isPinSaved ? "pointer-events-none" : "pointer-events-auto"
           }`}
-          onClick={(e) => {
+          onClick={(e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             e.preventDefault();
             e.stopPropagation();
             setOpenBoardPopover((prev) => !prev);

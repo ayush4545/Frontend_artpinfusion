@@ -4,8 +4,8 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import config from "../config";
 import CreatePinChooseBoard from "../components/CreatePinChooseBoard";
-import {WithErrorBoundariesWrapper} from "../components/WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
+import ErrorImage from "../assets/404Page.gif";
 import { labels } from "../config/constants/text.constant";
 type pinData = {
   title: string;
@@ -13,15 +13,26 @@ type pinData = {
   tags: string;
   link: string;
 };
+
+type SelectedBoardType = {
+  boardName: string;
+  boardId: string | null;
+  pinImage: string | null;
+  pinTitle: string | undefined;
+};
 const CreatePin = () => {
   const { BACKEND_END_POINTS } = config.constant.api;
   const { getCookie } = config.utils.cookies;
   const { toastPopup } = config.utils.toastMessage;
   const [files, setFiles] = useState<File[]>([]);
   const imageRef = useRef<HTMLInputElement | null>(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<
+    string | ArrayBuffer | null
+  >(null);
   const [openBoardDropDown, setOpenBoardDropDown] = useState(false);
-  const [selectedBoard, setSelectedBoard] = useState(null);
+  const [selectedBoard, setSelectedBoard] = useState<SelectedBoardType | null>(
+    null
+  );
   const [btnDisabled, setBtnDisabled] = useState<boolean>(false);
   const [pinData, setPinData] = useState<pinData>({
     title: "",
@@ -29,7 +40,10 @@ const CreatePin = () => {
     tags: "",
     link: "",
   });
-  const handleDrop = (e) => {
+  const handleDrop = (e: {
+    preventDefault: () => void;
+    dataTransfer: { files: Iterable<File> | ArrayLike<File> };
+  }) => {
     e.preventDefault();
     const droppedFiles: File[] = Array.from(e.dataTransfer.files);
     setFiles(droppedFiles);
@@ -38,12 +52,12 @@ const CreatePin = () => {
     }
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: { preventDefault: () => void }) => {
     e.preventDefault();
   };
 
-  const handleFileChange = (e) => {
-    const selectedFiles: File[] = Array.from(e.target.files);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles: File[] | null = Array.from(e?.target?.files);
     setFiles(selectedFiles);
 
     if (selectedFiles.length) {
@@ -60,7 +74,7 @@ const CreatePin = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleInputsChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleInputsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setPinData((prev) => {
       return { ...prev, [name]: value };
@@ -78,18 +92,17 @@ const CreatePin = () => {
       formData.set("boardId", selectedBoard?.boardId);
     }
 
-    const token = getCookie("accessToken");
+    const token = getCookie(labels?.ACCESS_TOKEN);
     try {
       setBtnDisabled(true);
-      const res = await axios.post(BACKEND_END_POINTS.CREATE_PIN, formData, {
+      await axios.post(BACKEND_END_POINTS.CREATE_PIN, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
-      const resData = await res.data;
-      
-      toastPopup("Your pin has been published", "success");
+
+      toastPopup(labels?.CREATE_PIN_PUBLISHED_TOAST_MESSAGE, "success");
       setFiles([]);
       setSelectedImage(null);
       setPinData({
@@ -101,28 +114,23 @@ const CreatePin = () => {
       setSelectedBoard(null);
       imageRef.current = null;
       setBtnDisabled(false);
-    } catch (error) {
-      
-      if (error.response.status === 401) {
+    } catch (error: unknown) {
+      if (error?.response?.status === 401) {
         toastPopup(labels?.UNAUTHORIZED_USER, "error");
       }
 
-      if (error.response.statue === 422) {
+      if (error?.response?.statue === 422) {
         toastPopup(labels?.FILE_IS_REQUIRED, "error");
       }
 
-      if (error.response.status === 500) {
-        toastPopup(
-          labels?.NOT_PUBLISHED_ERROR,
-          "error"
-        );
+      if (error?.response?.status === 500) {
+        toastPopup(labels?.NOT_PUBLISHED_ERROR, "error");
       }
     }
   };
 
-  const handleWindowClick = (e) => {
-   
-    if(e.target.id !== "search"){
+  const handleWindowClick = (e: React.MouseEvent<HTMLElement>) => {
+    if ((e.target as Element).id !== "search") {
       setOpenBoardDropDown(false);
     }
   };
@@ -138,7 +146,9 @@ const CreatePin = () => {
   return (
     <div className="relative top-[12vh] w-full h-full dark:bg-[#282828]">
       <div className="fixed top-[12vh] w-full py-5 px-5 border-b-[1px] border-gray-300 flex justify-between items-center z-40 bg-white dark:bg-[#282828] dark:text-white">
-        <p className="text-xl font-semibold text-black dark:text-white">{labels?.CREATE_PIN}</p>
+        <p className="text-xl font-semibold text-black dark:text-white">
+          {labels?.CREATE_PIN}
+        </p>
         {selectedImage && (
           <div>
             <button
@@ -163,7 +173,7 @@ const CreatePin = () => {
               onDragOver={handleDragOver}
               onClick={() => {
                 if (imageRef) {
-                  imageRef.current.click();
+                  imageRef?.current?.click?.();
                 }
               }}
             >
@@ -174,9 +184,7 @@ const CreatePin = () => {
                 </p>
               </div>
               <div className="absolute bottom-5 text-center px-2 w-full">
-                <p className="text-sm">
-                  {labels?.FILE_RECOMMEND_20_MB}
-                </p>
+                <p className="text-sm">{labels?.FILE_RECOMMEND_20_MB}</p>
                 <p className="text-sm">{labels?.LESS_THAN_200_MB}</p>
               </div>
               <input
@@ -197,13 +205,15 @@ const CreatePin = () => {
                   controls
                   className="object-cover rounded-3xl w-full h-full"
                 >
-                  <source src={selectedImage} type="video/mp4" />
+                  <source src={selectedImage as string} type="video/mp4" />
                 </video>
               ) : (
                 <img
                   src={selectedImage as string}
-                  onError={(e) => {
-                    e.target.src = ErrorImage;
+                  onError={(
+                    e: React.SyntheticEvent<HTMLImageElement, Event>
+                  ) => {
+                    (e.target as HTMLImageElement).src = ErrorImage;
                   }}
                   className="w-full object-contain h-full rounded-3xl"
                 />
@@ -213,7 +223,11 @@ const CreatePin = () => {
         </div>
 
         {/*  pin description input field */}
-        <form className={`w-full ${files.length === 0 && "opacity-30"} flex flex-col items-center lg:items-start`}>
+        <form
+          className={`w-full ${
+            files.length === 0 && "opacity-30"
+          } flex flex-col items-center lg:items-start`}
+        >
           <div className="flex flex-col w-4/5 gap-2">
             <label htmlFor="title" className="text-sm dark:text-white">
               {labels?.TITLE}
@@ -242,7 +256,11 @@ const CreatePin = () => {
               rows={5}
               disabled={files.length === 0}
               value={pinData.description}
-              onChange={handleInputsChange}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setPinData((prev) => {
+                  return { ...prev, [e.target.name]: e.target.value };
+                })
+              }
             />
           </div>
 
@@ -281,8 +299,10 @@ const CreatePin = () => {
                     {selectedBoard?.pinImage && (
                       <img
                         src={selectedBoard?.pinImage}
-                        onError={(e:React.SyntheticEvent<HTMLImageElement, Event>) => {
-                          e.target.src = ErrorImage;
+                        onError={(
+                          e: React.SyntheticEvent<HTMLImageElement, Event>
+                        ) => {
+                          (e.target as HTMLImageElement).src = ErrorImage;
                         }}
                         alt={selectedBoard?.pinTitle}
                         className="w-full aspect-square rounded-md object-contain"
@@ -309,7 +329,8 @@ const CreatePin = () => {
 
           <div className="flex flex-col w-4/5 gap-2 mt-3">
             <label htmlFor="tags" className="text-sm dark:text-white">
-              {labels?.TAG} <span className="text-sm -mt-2">- seperated by {"(,)"}</span>
+              {labels?.TAG}{" "}
+              <span className="text-sm -mt-2">- seperated by {"(,)"}</span>
             </label>
             <input
               placeholder={labels?.TAG_PLACEHOLDER}

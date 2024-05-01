@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react"
 import { getCookie } from "../config/utils/setAndGetCookies"
+import { labels } from "../config/constants/text.constant"
 
 const useAuth=()=>{
-   const cookies= getCookie("accessToken")
+   const cookies= getCookie(labels?.ACCESS_TOKEN)
    const [isAuthenticate,setIsAuthenticate]=useState<boolean>(cookies ? true : false)
-
-   // if(cookies){
-   //  return {isAuthenticate : true}
-   // }
-   // return {isAuthenticate : false}
+   
    useEffect(()=>{
       if(cookies){
          setIsAuthenticate(true)
