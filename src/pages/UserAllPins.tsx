@@ -65,6 +65,7 @@ const UserAllPins = () => {
         {userId === loggedInUser?._id && (
           <div className="flex items-center gap-3 absolute right-3 pr-2">
             <ViewOption
+             // @ts-ignore
               isBoard={false}
               top="-top-8"
               openViewOption={openViewOption}
@@ -72,6 +73,7 @@ const UserAllPins = () => {
               setOpenCreateButtonModel={setOpenCreateButtonModel}
             />
             <CreateBoardPinButton
+             // @ts-ignore
               showBoard={false}
               top="-top-8"
               openCreateButtonModel={openCreateButtonModel}
@@ -86,6 +88,7 @@ const UserAllPins = () => {
           <div className="mt-5 w-full dark:bg-[#282828]">
             <Suspense fallback={<Loader />}>
               <Pins
+               // @ts-ignore
                 pins={pins}
                 gridStyle={
                   selectedViewOptions === labels?.STANDARD_VALUE

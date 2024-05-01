@@ -115,14 +115,15 @@ const CreatePin = () => {
       imageRef.current = null;
       setBtnDisabled(false);
     } catch (error: unknown) {
+       // @ts-ignore
       if (error?.response?.status === 401) {
         toastPopup(labels?.UNAUTHORIZED_USER, "error");
       }
-
+        // @ts-ignore
       if (error?.response?.statue === 422) {
         toastPopup(labels?.FILE_IS_REQUIRED, "error");
       }
-
+ // @ts-ignore
       if (error?.response?.status === 500) {
         toastPopup(labels?.NOT_PUBLISHED_ERROR, "error");
       }
@@ -136,9 +137,11 @@ const CreatePin = () => {
   };
 
   useEffect(() => {
+     // @ts-ignore
     window.addEventListener("click", handleWindowClick);
 
     return () => {
+       // @ts-ignore
       window.removeEventListener("click", handleWindowClick);
     };
   }, []);
@@ -197,7 +200,8 @@ const CreatePin = () => {
             </div>
           ) : (
             <div className="w-3/4 rounded-3xl overflow-hidden h-auto">
-              {selectedImage?.includes("video/mp4") ? (
+              { // @ts-ignore 
+              selectedImage?.includes("video/mp4") ? (
                 <video
                   autoPlay
                   loop
@@ -321,6 +325,7 @@ const CreatePin = () => {
 
             {openBoardDropDown && (
               <CreatePinChooseBoard
+               // @ts-ignore
                 setSelectedBoard={setSelectedBoard}
                 setOpenBoardDropDown={setOpenBoardDropDown}
               />

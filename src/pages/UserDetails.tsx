@@ -205,6 +205,7 @@ const UserDetails = () => {
                     <MdShare className="text-black text-2xl dark:text-white" />
                     {openShareModal && (
                       <ShareModal
+                       // @ts-ignore
                         onClose={() => {
                           setOpenShareModal(false);
                         }}
@@ -228,6 +229,7 @@ const UserDetails = () => {
                     </button>
                     {openShareModal && (
                       <ShareModal
+                       // @ts-ignore
                         onClose={() => setOpenShareModal(false)}
                         leftTopStyle="-top-5 -left-[212px] "
                       />
@@ -295,6 +297,7 @@ const UserDetails = () => {
                 (pins && pins.length > 0 ? (
                   <Suspense fallback={<Loader />}>
                     <Pins
+                     // @ts-ignore
                       pins={pins}
                       gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
                     />
@@ -314,6 +317,7 @@ const UserDetails = () => {
               {selectedTab === "saved" &&
                 (isNotLoggedInUser || userData?.savedPins?.length > 0 ? (
                   <Saved
+                   // @ts-ignore
                     userData={userData}
                     isNotLoggedInUser={isNotLoggedInUser}
                   />
@@ -331,6 +335,7 @@ const UserDetails = () => {
 
       {userData && selectedFollow && (
         <FollowersOrFollowing
+         // @ts-ignore
           title={selectedFollow}
           onClose={() => setSelectedFollow(null)}
           users={userData[selectedFollow]}

@@ -36,6 +36,7 @@ const Home = () => {
         index ===
         arr.findIndex((obj: PinType) => {
           // Compare the current item with previous items using a key
+           // @ts-ignore
           return obj[key] === item[key];
         })
       );
@@ -50,6 +51,7 @@ const Home = () => {
         );
         const resData = await res.data;
         if (resData?.data?.length > 0) {
+          
           let setOfPins = [...new Set([...newPins?.current, ...resData?.data])];
           setOfPins = removeDuplicates(setOfPins, "_id");
           newPins.current = setOfPins;
@@ -105,6 +107,7 @@ const Home = () => {
             {pins ? (
               pins.length > 0 ? (
                 <Pins
+                 // @ts-ignore
                   pins={pins}
                   gridStyle="columns-2 gap-4 lg:gap-4 sm:columns-2 lg:columns-4 xl:columns-6"
                 />

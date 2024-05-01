@@ -25,7 +25,8 @@ export const userSlice = createSlice({
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
     addUser: (state, action: PayloadAction<UserState>) => {
-      return state = {...action.payload}
+      state = {...action.payload}
+    return state
     },
     removeUser: (state)=>{
       state={
