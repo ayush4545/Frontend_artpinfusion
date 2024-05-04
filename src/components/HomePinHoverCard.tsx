@@ -177,7 +177,7 @@ const HomePinHoverCard = (props: Props) => {
   return (
     <>
       <div className="flex items-center justify-between">
-        {loggedInUser?.board?.length > 0 ? (
+        {/* {loggedInUser?.board?.length > 0 ? (
           <ShowBoardName
             loggedInUser={loggedInUser}
             boardId={boardId}
@@ -188,7 +188,8 @@ const HomePinHoverCard = (props: Props) => {
           />
         ) : (
           <div />
-        )}
+        )} */}
+        <div/>
 
         {/* saved and likes pin */}
         <div className="flex items-center gap-3 justify-self-end">
@@ -256,7 +257,7 @@ const HomePinHoverCard = (props: Props) => {
         </div>
       </div>
       {openBoardPopover && (
-        <div className="absolute top-14">
+        <div className="absolute top-14 z-[1000]">
           <ChooseBoardPopover
             handleSave={handleSavePin}
             boards={loggedInUser?.board}

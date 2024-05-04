@@ -26,7 +26,7 @@ const PinCard = (props: Props) => {
 
   return (
     <div
-      className="relative rounded-3xl  cursor-pointer mb-3 w-5/6 lg:w-full textAnimation"
+      className="relative rounded-3xl  cursor-pointer mb-3 w-5/6 lg:w-full textAnimation z-10"
       onMouseEnter={() => {
         setIsHover(true);
       }}
@@ -58,7 +58,7 @@ const PinCard = (props: Props) => {
       )}
 
       {(isHover || cardClicked) && (
-        <div className="absolute bottom-0 left-0 p-3 bg-black bg-opacity-50 text-white w-full h-full rounded-3xl -z-1">
+        <div className="absolute bottom-0 left-0 p-3 bg-black bg-opacity-50 text-white w-full h-full rounded-3xl z-20">
           {isAuthenticate ? (
             <>
               {hoverOn === labels?.HOVER_ON_HOME_PIN && (
