@@ -50,14 +50,21 @@ const RightSidePopup = (props: Props) => {
         // onClick={()=>}
         className="flex w-full bg-[#E9E9E9] p-1  items-center rounded-lg gap-3 py-2 pl-3"
       >
-        <img
-          src={user?.imgUrl}
-          alt={user.name}
-          onError={(e:React.SyntheticEvent<HTMLImageElement, Event>) => {
-            (e.target as HTMLImageElement).src = ErrorImage;
-          }}
-          className="object-cover rounded-full w-[60px] aspect-square"
-        />
+        {user?.imgUrl && user?.imgUrl?.length > 10 ? (
+                 <img
+                 src={user?.imgUrl}
+                 alt={user.name}
+                 onError={(e:React.SyntheticEvent<HTMLImageElement, Event>) => {
+                   (e.target as HTMLImageElement).src = ErrorImage;
+                 }}
+                 className="object-cover rounded-full w-[60px] aspect-square"
+               />
+              ) : (
+                <p className="font-bold w-14 h-12 text-center bg-white rounded-full flex items-center justify-center">
+                  {user?.name?.toUpperCase()[0]}
+                </p>
+              )}
+       
         <div className="w-full overflow-hidden">
           <p className="font-bold">{user?.name}</p>
           <p className="text-sm">Personal</p>

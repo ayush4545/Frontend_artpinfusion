@@ -50,13 +50,13 @@ const CreateBoardPinButton = (props: Props) => {
             <p className="text-sm p-2">{labels?.CREATE}</p>
 
             <Link to={routePaths.CREATE_PIN} className="-mt-2">
-              <div className="w-full rounded-md px-3 py-2 bg-white hover:bg-[#e9e9e9] font-semibold dark:hover:text-black">
+              <div className="w-full rounded-md px-3 py-2 hover:bg-[#e9e9e9] font-semibold dark:hover:text-black">
                 {labels?.PIN}
               </div>
             </Link>
             {showBoard && (
               <button
-                className="w-full rounded-md px-3 py-2 bg-white hover:bg-[#e9e9e9] text-left font-semibold dark:hover:text-black"
+                className="w-full rounded-md px-3 py-2  hover:bg-[#e9e9e9] text-left font-semibold dark:hover:text-black"
                 onClick={() => {
                   setOpenBoard(true);
                 }}
