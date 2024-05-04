@@ -274,6 +274,7 @@ const SignUp = (props: Props) => {
           <button
             className="flex items-center gap-3 border-2 border-gray-400 w-[55%] p-2 px-4  mt-3 rounded-[20px] justify-center"
             onClick={handleSignUp}
+            disabled={isDisabledSignUp}
           >
             <FcGoogle />
             {labels?.SIGN_UP_GOOGLE}
