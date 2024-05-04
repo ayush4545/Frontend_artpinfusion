@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif"
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 type Props = {
   pinId: string;

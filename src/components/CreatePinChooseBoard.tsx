@@ -4,7 +4,7 @@ import { useAppSelector } from "../hooks/reduxHooks";
 import BoardModel from "./BoardModel";
 import SearchBoard from "./SearchBoard";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 import { BoardType } from "../Types/types";
 type Props = {

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { PinType } from "../Types/types";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 type Props = {
   pins: PinType[];
@@ -23,7 +23,7 @@ const AllPinsCard = (props: Props) => {
   return (
     <Link
       to={`/${username}/pins`}
-      className="w-full aspect-square rounded-2xl overflow-hidden"
+      className="w-full aspect-square rounded-2xl overflow-hidden textAnimation"
       state={{ userId: _id }}
     >
       <div className="w-full h-4/6  relative rounded-2xl overflow-hidden  cursor-pointer">

@@ -28,7 +28,7 @@ const Home = () => {
   useEffect(() => {
     setIsAuthenticatedValue(isAuthenticate);
   }, [isAuthenticate]);
-
+console.log("isAuthenticateValue",isAuthenticateValue)
   const removeDuplicates = (arr: PinType[], key: string) => {
     return arr.filter((item, index: number) => {
       // Check if the current item's index is the first occurrence of the item in the array

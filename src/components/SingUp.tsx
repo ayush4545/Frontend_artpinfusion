@@ -11,7 +11,7 @@ import { useAppDispatch } from "../hooks/reduxHooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 type Props = {
   onClose: () => void;
@@ -95,7 +95,6 @@ const SignUp = (props: Props) => {
       if (selectedAvatar) {
         formsData.append("avatar", selectedAvatar);
       }
-
       const res = await axios.post(BACKEND_END_POINTS.SIGN_UP, formsData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -116,6 +115,8 @@ const SignUp = (props: Props) => {
       if (error?.response?.status === 500) {
         toastPopup(labels?.SIGN_ERROR, "error");
       }
+    }finally{
+      setIsDisabledSignUp(false)
     }
   };
 
@@ -262,11 +263,11 @@ const SignUp = (props: Props) => {
             </div>
 
             <button
-              className="w-[55%] bg-[#FF8C00] hover:bg-[#FF5E0E] text-white rounded-[20px] p-2 px-4 mt-3"
+              className="w-[55%] bg-[#FF8C00] hover:bg-[#FF5E0E] text-white rounded-[20px] p-2 px-4 mt-3 cursor-pointer"
               type="submit"
               disabled={isDisabledSignUp}
             >
-              {labels?.SIGN_UP}
+              {isDisabledSignUp ? "Creating your account" : labels?.SIGN_UP}
             </button>
           </form>
 

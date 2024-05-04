@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BoardType, UserState } from "../Types/types";
 import useAuth from "../hooks/useAuth";
 import { useAppSelector } from "../hooks/reduxHooks";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import HomePinHoverCard from "./HomePinHoverCard";
 import AllPinsBoardHoverCard from "./AllPinsBoardHoverCard";
 import EditCreatePin from "./EditCreatePin";
@@ -26,17 +26,11 @@ const PinCard = (props: Props) => {
 
   return (
     <div
-      className="relative rounded-3xl  cursor-pointer mb-3 w-5/6 lg:w-full"
+      className="relative rounded-3xl  cursor-pointer mb-3 w-5/6 lg:w-full textAnimation"
       onMouseEnter={() => {
         setIsHover(true);
       }}
       onMouseLeave={() => {
-        setIsHover(false);
-      }}
-      onTouchStart={() => {
-        setIsHover(true);
-      }}
-      onTouchEnd={() => {
         setIsHover(false);
       }}
       onClick={() => {

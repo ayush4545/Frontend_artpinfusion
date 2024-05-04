@@ -88,7 +88,7 @@ const ShowBoardName = (props: Props) => {
         )
       ) : (
         <div
-          className={`flex items-center gap-2 font-semibold cursor-pointer dark:text-white${
+          className={`flex items-center gap-2 font-semibold cursor-pointer dark:text-white ${
             isPinSaved ? "pointer-events-none" : "pointer-events-auto"
           }`}
           onClick={(e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { useAppSelector } from "../hooks/reduxHooks";
-import ImgURL404 from "../assets/404Page.gif";
+import ImgURL404 from "../assets/images/notFound.gif";
 import { labels } from "../config/constants/text.constant";
 
 const NotFoundPage = () => {

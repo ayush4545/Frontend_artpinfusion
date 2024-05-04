@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BoardType } from "../Types/types";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 type BoardProps = {
   board: BoardType;

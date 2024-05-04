@@ -12,7 +12,7 @@ import config from "../config";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { BoardType, SelectedBoardDetailsType, UserState } from "../Types/types";
 import { labels } from "../config/constants/text.constant";
 
@@ -226,7 +226,7 @@ const HomePinHoverCard = (props: Props) => {
               </p>
             )}
 
-            <p className="text-[8px] md:text-xs">{user?.name}</p>
+            <p className="text-[8px] md:text-xs dark:text-white">{user?.name}</p>
           </div>
 
           <div className="flex items-center gap-3">

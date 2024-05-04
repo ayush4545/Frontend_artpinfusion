@@ -12,7 +12,7 @@ import useAuth from "../hooks/useAuth";
 import { PiPlusBold } from "react-icons/pi";
 import CreateBoardWithPin from "./CreateBoardWithPin";
 import SearchBoard from "./SearchBoard";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 type Props = {

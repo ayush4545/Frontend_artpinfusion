@@ -8,7 +8,7 @@ import Pic5 from "../assets/images/pic5.jpg";
 import Pic6 from "../assets/images/pic6.jpg";
 import Pic7 from "../assets/images/pic7.jpg";
 import bgVideo from "../assets/videos/video3.mp4";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 
 const HeroSection = () => {
@@ -28,7 +28,7 @@ const HeroSection = () => {
     >
       <section className="w-full h-[92vh]  relative overflow-hidden text-wrap ">
         <h1
-          className={`absolute top-0 left-0 w-full h-full flex flex-col  items-center justify-center uppercase text-[54px] font-bold text-center xl:dark:bg-[#282828]  dark:text-white z-20`}
+          className={`absolute top-0 left-0 w-full h-full flex flex-col  items-center justify-center uppercase text-[54px] font-bold text-center xl:dark:bg-[#282828]  dark:text-white z-20 textAnimation`}
         >
           <span className="-mt-32 dark:text-white">
             {labels?.HOME_PAGE_TITLE1}
@@ -65,7 +65,7 @@ const HeroSection = () => {
       </div>
 
       <div className="bg-orange-300 dark:bg-orange-500  absolute bottom-0 flex items-center justify-center h-[8vh] w-full font-semibold z-50">
-        <p className="flex items-center gap-1 text-lg">
+        <p className="flex items-center gap-1 text-lg textAnimation">
           {labels?.HOME_PAGE_FOOTER}
         </p>
       </div>

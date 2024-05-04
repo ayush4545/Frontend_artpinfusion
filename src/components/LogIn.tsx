@@ -25,6 +25,7 @@ type Data={
 const LogIn = (props: Props) => {
   const { onClose, handleSwitchToSignUp } = props;
   const [eyeOpen, setEyeOpen] = useState<boolean>(true);
+  const [isLogging, setIsLogging] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { loginSchema } = config.utils.yup;
   const { BACKEND_END_POINTS } = config.constant.api;
@@ -42,6 +43,7 @@ const LogIn = (props: Props) => {
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async ({ access_token }) => {
+      setIsLogging(true)
       const userInfo = await getGoogleUserInfo(
         access_token
       );
@@ -59,10 +61,14 @@ const LogIn = (props: Props) => {
         labels?.WELCOME_USER_TOAST_MESSAGE(userLogin?.data?.data?._doc?.name),
         "success"
       );
+      setIsLogging(false)
       window.location.reload();
     },
-    onError: (error) =>
-      toastPopup(error?.error_description as string, "warning"),
+    onError: (error) =>{
+      setIsLogging(false)
+      toastPopup(error?.error_description as string, "warning")
+    }
+      
   });
 
   const handleSignUp = (e: React.MouseEvent<HTMLButtonElement,Event>) => {
@@ -73,6 +79,7 @@ const LogIn = (props: Props) => {
   const onSubmitHandler = async (data:Data) => {
     try {
       if (data.password && data.emailId) {
+        setIsLogging(true)
         const res = await axios.post(BACKEND_END_POINTS.LOGIN, data);
         const resData = await res?.data;
 
@@ -95,6 +102,8 @@ const LogIn = (props: Props) => {
       if (error?.response?.status === 404) {
         toastPopup(labels?.USER_NOT_EXIST_TOAST_MESSAGE, "warning");
       }
+    }finally{
+      setIsLogging(false)
     }
   };
 
@@ -171,8 +180,8 @@ const LogIn = (props: Props) => {
               </p>
             </div>
 
-            <button className="w-[55%] bg-[#FF8C00] hover:bg-[#FF5E0E] text-white rounded-[20px] p-2 px-4 mt-5">
-              {labels?.LOG_IN}
+            <button className="w-[55%] bg-[#FF8C00] hover:bg-[#FF5E0E] text-white rounded-[20px] p-2 px-4 mt-5" disabled={isLogging}>
+              {isLogging ? "Logging..." : labels?.LOG_IN}
             </button>
           </form>
 

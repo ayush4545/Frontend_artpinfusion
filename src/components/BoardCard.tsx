@@ -5,7 +5,7 @@ import { MdEdit } from "react-icons/md";
 import EditBoardPopup from "./EditBoardPopup";
 import { useAppSelector } from "../hooks/reduxHooks";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 type Props = {
   board: BoardType;
   username: string;
@@ -28,18 +28,12 @@ const BoardCard = (props: Props) => {
     <>
       <Link
         to={`/${username}/${boardName}`}
-        className="w-full aspect-square rounded-2xl overflow-hidden"
+        className="w-full aspect-square rounded-2xl overflow-hidden textAnimation"
         state={{
           boardId: board?._id,
         }}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        onTouchStart={() => {
-          setIsHover(true);
-        }}
-        onTouchEnd={() => {
-          setIsHover(false);
-        }}
       >
         <div className="w-full h-4/6  relative rounded-2xl overflow-hidden  cursor-pointer">
           {pinsArr.map((val) => (

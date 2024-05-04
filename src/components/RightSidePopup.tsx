@@ -5,7 +5,7 @@ import config from "../config";
 import axios from "axios";
 import { removeUser } from "../redux/user.slice";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif";
 import { labels } from "../config/constants/text.constant";
 type Props = {
   setShowPopup: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,6 +46,8 @@ const RightSidePopup = (props: Props) => {
       <p className="text-sm mb-2 pl-3">{labels?.CURRENTLY_IN}</p>
       <Link
         to={`/${user?.username}`}
+        state={user?._id}
+        // onClick={()=>}
         className="flex w-full bg-[#E9E9E9] p-1  items-center rounded-lg gap-3 py-2 pl-3"
       >
         <img

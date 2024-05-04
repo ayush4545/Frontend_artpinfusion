@@ -20,7 +20,7 @@ import ChooseBoardPopover from "../components/ChooseBoardPopover";
 import ShowBoardName from "../components/ShowBoardName";
 import Loader from "../components/Loader";
 import ShareModal from "../components/ShareModal";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 type PinData = {
@@ -88,6 +88,7 @@ const PinDetails = () => {
   useEffect(() => {
     if (id) {
       fetchPin();
+      document.documentElement.scrollTop = 0;
     }
   }, [id]);
 
@@ -287,14 +288,11 @@ const PinDetails = () => {
     }
   };
 
-  useEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.documentElement.scrollIntoView({ behavior: "smooth" });
-  }, []);
+
   return (
     <div className="w-screen absolute top-[12vh] homeSection  dark:bg-[#282828] min-h-[88%] flex flex-col items-center justify-center gap-10 snap-y snap-proximity">
       <div
-        className="fixed w-12 aspect-square rounded-full  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer left-2 top-32 bg-white"
+        className="fixed w-12 aspect-square rounded-full  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer left-2 top-32 bg-white z-50"
         onClick={() => {
           navigate(-1);
         }}
@@ -343,7 +341,7 @@ const PinDetails = () => {
                       title={pinData.pin.sourceLink}
                       className="rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer"
                     >
-                      <MdOutlineArrowOutward className="text-black text-2xl dark:text-white" />
+                      <MdOutlineArrowOutward className="text-black text-2xl dark:text-white dark:hover:text-black" />
                     </a>
                   )}
 
@@ -359,7 +357,7 @@ const PinDetails = () => {
                     }}
                     title={labels?.DONWLOAD}
                   >
-                    <MdOutlineFileDownload className="text-black text-2xl dark:text-white" />
+                    <MdOutlineFileDownload className="text-black text-2xl dark:text-white dark:hover:text-black" />
                   </div>
                   <div
                     className="relative rounded-full w-10 aspect-square  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer"
@@ -371,7 +369,7 @@ const PinDetails = () => {
                     }}
                     title={labels?.SHARE}
                   >
-                    <MdShare className="text-black text-2xl dark:text-white" />
+                    <MdShare className="text-black text-2xl dark:text-white dark:hover:text-black" />
                     {openShareModel && (
                       <ShareModal
                         // @ts-ignore
@@ -386,7 +384,6 @@ const PinDetails = () => {
 
                 <div className="flex items-center gap-3 relative">
                   <ShowBoardName
-                    // @ts-ignore
                     loggedInUser={loggedInUser}
                     isPinSaved={isPinSaved}
                     selectedBoardDetails={selectedBoardDetails}
@@ -398,15 +395,15 @@ const PinDetails = () => {
                     onClick={handleSavePin}
                   >
                     {isPinSaved ? (
-                      <RiUnpinFill className="text-black text-lg dark:text-white" />
+                      <RiUnpinFill className="text-black text-lg dark:text-white dark:hover:text-black" />
                     ) : (
-                      <BsFillPinAngleFill className="text-black text-lg dark:text-white" />
+                      <BsFillPinAngleFill className="text-black text-lg dark:text-white dark:hover:text-black" />
                     )}
                   </div>
 
                   {/* board popover */}
                   {openBoardPopover && (
-                    <div className="absolute top-12 left-[50%] -translate-x-[50%] z-50 lg:left-0 lg:translate-x-0">
+                    <div className="absolute top-12 -translate-x-[50%]  md:left-[50%] md:-translate-x-[50%] z-50 lg:left-0 lg:translate-x-0">
                       <ChooseBoardPopover
                         // @ts-ignore
                         handleSave={handleSavePin}

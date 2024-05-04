@@ -5,7 +5,7 @@ import { FaCircleArrowUp } from "react-icons/fa6";
 import config from "../config";
 import CreatePinChooseBoard from "../components/CreatePinChooseBoard";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 type pinData = {
   title: string;
@@ -26,6 +26,7 @@ const CreatePin = () => {
   const { toastPopup } = config.utils.toastMessage;
   const [files, setFiles] = useState<File[]>([]);
   const imageRef = useRef<HTMLInputElement | null>(null);
+  const [showPublishingText,setShowPublishingText]=useState<boolean>(false)
   const [selectedImage, setSelectedImage] = useState<
     string | ArrayBuffer | null
   >(null);
@@ -95,6 +96,7 @@ const CreatePin = () => {
     const token = getCookie(labels?.ACCESS_TOKEN);
     try {
       setBtnDisabled(true);
+      setShowPublishingText(true)
       await axios.post(BACKEND_END_POINTS.CREATE_PIN, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -113,7 +115,6 @@ const CreatePin = () => {
       });
       setSelectedBoard(null);
       imageRef.current = null;
-      setBtnDisabled(false);
     } catch (error: unknown) {
        // @ts-ignore
       if (error?.response?.status === 401) {
@@ -127,6 +128,9 @@ const CreatePin = () => {
       if (error?.response?.status === 500) {
         toastPopup(labels?.NOT_PUBLISHED_ERROR, "error");
       }
+    }finally{
+      setBtnDisabled(false);
+      setShowPublishingText(false)
     }
   };
 
@@ -147,16 +151,17 @@ const CreatePin = () => {
   }, []);
 
   return (
-    <div className="relative top-[12vh] w-full h-full dark:bg-[#282828]">
+    <div className="relative top-[12vh] w-full min-h-[88%] dark:bg-[#282828]">
       <div className="fixed top-[12vh] w-full py-5 px-5 border-b-[1px] border-gray-300 flex justify-between items-center z-40 bg-white dark:bg-[#282828] dark:text-white">
         <p className="text-xl font-semibold text-black dark:text-white">
           {labels?.CREATE_PIN}
         </p>
         {selectedImage && (
-          <div>
+          <div className="flex gap-2">
+            {showPublishingText && <p className="self-end text-md text-[#bfbdbd]">publishing...</p>}
             <button
               className={`bg-[#FF8C00] ${
-                btnDisabled ? "opacity-80" : "hover:bg-[#FF5E0E] "
+                btnDisabled ? "bg-orange-200 text-white" : "hover:bg-[#FF5E0E] "
               }text-white rounded-[20px] p-2 px-4 font-semibold`}
               onClick={handleCreatePin}
               disabled={btnDisabled}

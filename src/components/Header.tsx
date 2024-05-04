@@ -10,7 +10,7 @@ import RightSidePopup from "./RightSidePopup";
 import ModeToggle from "./ModeToggle";
 import { WithErrorBoundariesWrapper } from "./WithErrorBoundaries";
 import { BsFillPinAngleFill } from "react-icons/bs";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 
 const Header = () => {

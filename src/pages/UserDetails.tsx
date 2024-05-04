@@ -13,7 +13,7 @@ import { setHoverOn } from "../redux/hoverOn.slice";
 import ShareModal from "../components/ShareModal";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 import NotFound from "../components/NotFound";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 import { routePaths } from "../config/constants/route.constant";
 const Pins = React.lazy(() => import("../components/Pins"));
@@ -130,8 +130,8 @@ const UserDetails = () => {
   }, []);
 
   return (
-    <div className="w-screen absolute top-[12vh] dark:bg-[#282828]">
-      <div className="flex flex-col items-center w-full p-3">
+    <div className="w-screen absolute top-[12vh] dark:bg-[#282828] min-h-[88%]">
+      <div className="flex flex-col items-center w-full p-3 ">
         {userData ? (
           <>
             <div className="flex flex-col items-center">
@@ -303,11 +303,11 @@ const UserDetails = () => {
                     />
                   </Suspense>
                 ) : (
-                  <div className="text-center">
-                    <p className="text-center">{labels?.NO_PIN_CREATED}</p>
+                  <div className="text-center flex flex-col items-center gap-5">
+                    <p className="text-center dark:text-white">{labels?.NO_PIN_CREATED}</p>
                     <Link
                       to={routePaths?.CREATE_PIN}
-                      className="rounded-3xl px-3 py-2 font-bold cursor-pointer bg-[#FF8C00] hover:bg-[#FF5E0E] text-white"
+                      className="rounded-3xl px-3 py-2 font-bold cursor-pointer bg-[#FF8C00] hover:bg-[#FF5E0E] text-white w-32"
                     >
                       {labels?.CREATE_PIN}
                     </Link>
@@ -322,7 +322,7 @@ const UserDetails = () => {
                     isNotLoggedInUser={isNotLoggedInUser}
                   />
                 ) : (
-                  <p className="text-center">
+                  <p className="text-center dark:text-white">
                     {labels?.NO_PIN_SAVE_MESSAGE(userData?.name)}
                   </p>
                 ))}

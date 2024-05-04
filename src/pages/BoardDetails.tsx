@@ -13,7 +13,7 @@ import { setHoverOn } from "../redux/hoverOn.slice";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
 import { PiPlusBold } from "react-icons/pi";
 import ViewOption from "../components/ViewOption";
-import ErrorImage from "../assets/404Page.gif";
+import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 import ShareModal from "../components/ShareModal";
 import { MdEdit } from "react-icons/md";
@@ -93,7 +93,7 @@ const BoardDetails = () => {
   }, []);
   return (
     <>
-      <div className="w-screen absolute top-[12vh] dark:bg-[#282828] p-5 -z-10">
+      <div className="w-screen absolute top-[12vh] dark:bg-[#282828] p-5 -z-10 min-h-[88%]">
         {boardData ? (
           <>
             <div className="w-full h-auto flex flex-col items-center gap-3">
