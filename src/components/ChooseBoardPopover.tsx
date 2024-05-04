@@ -92,7 +92,7 @@ const ChooseBoardPopover = (props: Props) => {
         <div
           className="absolute w-[100%] bottom-0 left-0 right-1 h-[15%] flex items-center px-5 gap-4 hover:bg-[#dddcdc] shadow-3xl"
           onClick={() => {
-            handleOpenCreateBoardModelAndclosePopOver?.();
+            handleOpenCreateBoardModelAndclosePopOver();
           }}
         >
           <div className="w-10 h-10 rounded-md bg-[#e9e9e9] flex items-center justify-center overflow-hidden">

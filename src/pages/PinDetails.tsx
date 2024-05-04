@@ -23,6 +23,7 @@ import ShareModal from "../components/ShareModal";
 import ErrorImage from "../assets/images/notFound.gif"
 import { labels } from "../config/constants/text.constant";
 import { WithErrorBoundariesWrapper } from "../components/WithErrorBoundaries";
+import BoardModel from "../components/BoardModel";
 type PinData = {
   pin: PinType;
   exploreMore: PinType[];
@@ -39,6 +40,8 @@ const PinDetails = () => {
   const loggedInUser = useAppSelector((state) => state.user);
   const [pinData, setPinData] = useState<PinData | null>(null);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [openCreateBoardModel, setOpenCreateBoardModel] =
+    useState<boolean>(false);
   const [openShareModel, setOpenShareModel] = useState<boolean>(false);
   const isAuthenticate = useAuth();
   const [isPinSaved, setIsPinSaved] = useState<boolean>(false);
@@ -290,6 +293,8 @@ const PinDetails = () => {
 
 
   return (
+    <>
+    
     <div className="w-screen absolute top-[12vh] homeSection  dark:bg-[#282828] min-h-[88%] flex flex-col items-center justify-center gap-10 snap-y snap-proximity">
       <div
         className="fixed w-12 aspect-square rounded-full  flex items-center justify-center hover:bg-[#e9e9e9] transition-all cursor-pointer left-2 top-32 bg-white z-50"
@@ -409,6 +414,10 @@ const PinDetails = () => {
                         handleSave={handleSavePin}
                         boards={loggedInUser?.board}
                         setSelectedBoardDetails={setSelectedBoardDetails}
+                        handleOpenCreateBoardModelAndclosePopOver={() => {
+                          setOpenCreateBoardModel(true);
+                          setOpenBoardPopover(false);
+                        }}
                         pinId={pinData?.pin?._id}
                       />
                     </div>
@@ -526,7 +535,18 @@ const PinDetails = () => {
         </div>
       )}
     </div>
+    {openCreateBoardModel && (
+        <BoardModel
+          onClose={() => setOpenCreateBoardModel(false)}
+          title={labels?.CREATE_BOARD}
+          isSavedButtonModel={true}
+          pinId={id}
+          setSelectedBoardDetails={setSelectedBoardDetails}
+        />
+      )}
+    </>
   );
+  
 };
 
 export default WithErrorBoundariesWrapper(PinDetails);
