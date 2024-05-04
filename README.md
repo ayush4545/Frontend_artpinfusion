@@ -1,30 +1,32 @@
-# React + TypeScript + Vite
+# Pin It
+![alt text](./public/home.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![alt text](./public/home2.png)
 
-Currently, two official plugins are available:
+"Pin It" is a full-stack web application built with modern technologies to provide users with a platform for creating, sharing, and discovering visual content.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Demo Link
 
-## Expanding the ESLint configuration
+- [Demo Link](https://pin-it-by-ayush-mishra.netlify.app/)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+# Technology Used
+- Frontend
+  - Reactjs
+  - Redux
+  - React Hook form
+  - Tailwind Css
+  - Yup
+  - Typescript
+  - Google Login
+- Backend
+  - Nodejs
+  - Express
+  - MongoDB
+  - Mongoose
+  - JWT
+  - Bcrypt
+  - Cloudinary
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
